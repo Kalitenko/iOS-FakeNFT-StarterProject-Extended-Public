@@ -23,5 +23,5 @@ struct TestCatalogView: View {
 }
 
 private enum Constants {
-    static let openNftTitle = NSLocalizedString("Catalog.openNft", comment: "")
+    static let openNftTitle = L10n.OldStrings.openNFT
 }
