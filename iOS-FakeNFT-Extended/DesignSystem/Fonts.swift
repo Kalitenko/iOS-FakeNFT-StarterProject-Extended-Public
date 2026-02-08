@@ -1,8 +1,8 @@
 import SwiftUI
 
 extension Font {
-    static let largeHeader = Font.system(size: 34, weight: .bold)
-    static let bigHeader = Font.system(size: 32, weight: .bold)
+    static let bigHeader = Font.system(size: 34, weight: .bold)
+    static let header = Font.system(size: 32, weight: .bold)
 
     static let bigTitle = Font.system(size: 22, weight: .bold)
     static let title = Font.system(size: 17, weight: .bold)
