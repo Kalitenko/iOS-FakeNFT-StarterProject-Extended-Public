@@ -44,6 +44,7 @@
 		EA5560A52F3A0C4900797C6B /* CartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA5560A42F3A0C4900797C6B /* CartView.swift */; };
 		EA5561DA2F3A234300797C6B /* NFTCartCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA5561D92F3A234300797C6B /* NFTCartCell.swift */; };
 		EA5561DC2F3A24AA00797C6B /* NFTModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA5561DB2F3A242200797C6B /* NFTModel.swift */; };
+		EA5561DE2F3A499600797C6B /* CartViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA5561DD2F3A499100797C6B /* CartViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -102,6 +103,7 @@
 		EA5560A42F3A0C4900797C6B /* CartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CartView.swift; sourceTree = "<group>"; };
 		EA5561D92F3A234300797C6B /* NFTCartCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NFTCartCell.swift; sourceTree = "<group>"; };
 		EA5561DB2F3A242200797C6B /* NFTModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NFTModel.swift; sourceTree = "<group>"; };
+		EA5561DD2F3A499100797C6B /* CartViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CartViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -327,6 +329,7 @@
 		EA5560A32F3A0C0500797C6B /* Cart */ = {
 			isa = PBXGroup;
 			children = (
+				EA5561DD2F3A499100797C6B /* CartViewModel.swift */,
 				EA5561DB2F3A242200797C6B /* NFTModel.swift */,
 				EA5560A42F3A0C4900797C6B /* CartView.swift */,
 				EA5561D92F3A234300797C6B /* NFTCartCell.swift */,
@@ -518,6 +521,7 @@
 				EA5561DA2F3A234300797C6B /* NFTCartCell.swift in Sources */,
 				ABC5E1D32C320438002B4068 /* NftDetailAssembly.swift in Sources */,
 				ABC5E1A12C31F6D7002B4068 /* Nft.swift in Sources */,
+				EA5561DE2F3A499600797C6B /* CartViewModel.swift in Sources */,
 				EA3CE9BD2F387D7B005CFF7D /* ActionButton.swift in Sources */,
 				ABC5E1AE2C31FB7F002B4068 /* NftByIdRequest.swift in Sources */,
 				ABC5E1DB2C3204CE002B4068 /* UIView+Constraints.swift in Sources */,

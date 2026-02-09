@@ -8,43 +8,43 @@
 import SwiftUI
 
 struct CartView: View {
+    @State private var viewModel: CartViewModel
+
+    init(viewModel: CartViewModel = CartViewModel()) {
+        _viewModel = State(initialValue: viewModel)
+    }
+
     var body: some View {
         NavigationStack {
             VStack {
                 itemsList
-
-                Text("")
+                    .padding(.top, 20)
             }
             .background(.appBackground)
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button {
+
+                    } label: {
+                        Image(.sort)
+                            .foregroundStyle(.appTextPrimary)
+                    }
+                }
+            }
         }
     }
 
     private var itemsList: some View {
         List {
-            NFTCartCell(nft: NFTModel(
-                name: "April",
-                price: "1,78 ETH",
-                rating: 4,
-                image: Image(.april))
-            )
-            NFTCartCell(nft: NFTModel(
-                name: "April",
-                price: "1,78 ETH",
-                rating: 4,
-                image: Image(.april))
-            )
-        }
-        .listStyle(.inset)
-        .toolbar {
-            ToolbarItem(placement: .topBarTrailing) {
-                Button {
-
-                } label: {
-                    Image(.sort)
-                        .foregroundStyle(.appTextPrimary)
-                }
+            ForEach(viewModel.itemsMock) { nft in
+                NFTCartCell(nft: nft)
+                    .listRowSeparator(.hidden)
+                    .listRowInsets(.init())
+                    .listRowBackground(Color.clear)
             }
+
         }
+        .listStyle(.plain)
         .scrollContentBackground(.hidden)
     }
 }
