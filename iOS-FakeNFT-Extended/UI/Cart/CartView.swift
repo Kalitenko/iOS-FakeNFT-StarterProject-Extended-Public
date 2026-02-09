@@ -13,7 +13,7 @@ struct CartView: View {
             VStack {
                 itemsList
 
-                Text("Итоги")
+                Text("")
             }
             .background(.appBackground)
         }
@@ -21,8 +21,18 @@ struct CartView: View {
 
     private var itemsList: some View {
         List {
-            Text("Cell 1")
-            Text("Cell 2")
+            NFTCartCell(nft: NFTModel(
+                name: "April",
+                price: "1,78 ETH",
+                rating: 4,
+                image: Image(.april))
+            )
+            NFTCartCell(nft: NFTModel(
+                name: "April",
+                price: "1,78 ETH",
+                rating: 4,
+                image: Image(.april))
+            )
         }
         .listStyle(.inset)
         .toolbar {
