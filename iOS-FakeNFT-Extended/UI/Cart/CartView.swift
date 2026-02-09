@@ -19,6 +19,7 @@ struct CartView: View {
             VStack {
                 itemsList
                     .padding(.top, 20)
+                summaryPanel
             }
             .background(.appBackground)
             .toolbar {
@@ -46,6 +47,35 @@ struct CartView: View {
         }
         .listStyle(.plain)
         .scrollContentBackground(.hidden)
+    }
+
+    private var summaryPanel: some View {
+        HStack(spacing: 24) {
+            VStack(alignment: .leading, spacing: 2) {
+                Text(verbatim: "\(viewModel.itemsAmount) NFT")
+                    .font(.text)
+                    .foregroundStyle(.appTextPrimary)
+                Text(verbatim: "\(viewModel.totalPrice) ETH")
+                    .font(.title)
+                    .foregroundStyle(.appGreen)
+            }
+
+            Button(action: {
+
+            }, label: {
+                Text(L10n.Cart.totalToPay)
+                    .font(.title)
+                    .frame(maxWidth: .infinity)
+                    .frame(height: 44)
+                    .foregroundStyle(.appBackground)
+                    .background(.appTextPrimary)
+                    .clipShape(RoundedRectangle(cornerRadius: 16))
+            })
+        }
+        .padding(16)
+        .frame(height: 76)
+        .background(.appSurfaceBackground)
+        .clipShape(.rect(topLeadingRadius: 12, topTrailingRadius: 12))
     }
 }
 

@@ -16,6 +16,14 @@ final class CartViewModel {
         NFTModel(name: "Spring", price: "1,78 ETH", rating: 5, image: Image(.spring))
     ]
 
+    var itemsAmount: Int {
+        return itemsMock.count
+    }
+
+    var totalPrice: String {
+        return "5,34"
+    }
+
     init(items: [NFTModel] = []) {
         self.items = items
     }
