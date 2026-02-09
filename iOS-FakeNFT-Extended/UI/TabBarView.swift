@@ -11,6 +11,15 @@ struct TabBarView: View {
                     )
                 }
                 .backgroundStyle(.background)
+            CartView()
+                .tabItem {
+                    Label {
+                        Text(L10n.TabBar.cart)
+                    } icon: {
+                        Image(.cart)
+                    }
+                }
         }
+        .tint(.appBlue)
     }
 }
