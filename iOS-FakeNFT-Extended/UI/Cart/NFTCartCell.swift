@@ -29,7 +29,7 @@ struct NFTCartCell: View {
     }
 
     private var image: some View {
-        Image(.april)
+        nft.image
             .resizable()
             .scaledToFit()
             .frame(width: 108, height: 108)
@@ -62,6 +62,7 @@ struct NFTCartCell: View {
                 .frame(width: 16, height: 18.56)
                 .foregroundStyle(.appTextPrimary)
         }
+        .buttonStyle(.plain)
     }
 }
 

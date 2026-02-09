@@ -6,7 +6,8 @@
 //
 import SwiftUI
 
-struct NFTModel {
+struct NFTModel: Identifiable {
+    let id = UUID()
     let name: String
     let price: String
     let rating: Int
