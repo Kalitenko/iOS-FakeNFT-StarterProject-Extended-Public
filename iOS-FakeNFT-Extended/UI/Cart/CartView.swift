@@ -16,7 +16,7 @@ struct CartView: View {
 
     var body: some View {
         NavigationStack {
-            VStack {
+            VStack(spacing: 0) {
                 itemsList
                     .padding(.top, 20)
                 summaryPanel
