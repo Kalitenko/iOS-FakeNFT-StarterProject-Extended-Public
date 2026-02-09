@@ -9,7 +9,33 @@ import SwiftUI
 
 struct CartView: View {
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        NavigationStack {
+            VStack {
+                itemsList
+
+                Text("Итоги")
+            }
+            .background(.appBackground)
+        }
+    }
+
+    private var itemsList: some View {
+        List {
+            Text("Cell 1")
+            Text("Cell 2")
+        }
+        .listStyle(.inset)
+        .toolbar {
+            ToolbarItem(placement: .topBarTrailing) {
+                Button {
+
+                } label: {
+                    Image(.sort)
+                        .foregroundStyle(.appTextPrimary)
+                }
+            }
+        }
+        .scrollContentBackground(.hidden)
     }
 }
 
