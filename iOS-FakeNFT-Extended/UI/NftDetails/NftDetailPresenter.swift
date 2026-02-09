@@ -43,19 +43,19 @@ final class NftDetailPresenterImpl: NftDetailPresenter {
 
     private func stateDidChange() async {
         switch state {
-            case .initial:
-                assertionFailure("can't move to initial state")
-            case .loading:
-                view?.showLoading()
-                await loadNft()
-            case .data(let nft):
-                view?.hideLoading()
-                let cellModels = nft.images.map { NftDetailCellModel(url: $0) }
-                view?.displayCells(cellModels)
-            case .failed(let error):
-                let errorModel = makeErrorModel(error)
-                view?.hideLoading()
-                view?.showError(errorModel)
+        case .initial:
+            assertionFailure("can't move to initial state")
+        case .loading:
+            view?.showLoading()
+            await loadNft()
+        case .data(let nft):
+            view?.hideLoading()
+            let cellModels = nft.images.map { NftDetailCellModel(url: $0) }
+            view?.displayCells(cellModels)
+        case .failed(let error):
+            let errorModel = makeErrorModel(error)
+            view?.hideLoading()
+            view?.showError(errorModel)
         }
     }
 
@@ -71,13 +71,13 @@ final class NftDetailPresenterImpl: NftDetailPresenter {
     private func makeErrorModel(_ error: Error) -> ErrorModel {
         let message: String
         switch error {
-            case is NetworkClientError:
-                message = NSLocalizedString("Error.network", comment: "")
-            default:
-                message = NSLocalizedString("Error.unknown", comment: "")
+        case is NetworkClientError:
+            message = L10n.OldStrings.network
+        default:
+            message = L10n.OldStrings.unknown
         }
 
-        let actionText = NSLocalizedString("Error.repeat", comment: "")
+        let actionText = L10n.OldStrings.repeat
         return ErrorModel(message: message, actionText: actionText) { [weak self] in
             self?.state = .loading
         }
