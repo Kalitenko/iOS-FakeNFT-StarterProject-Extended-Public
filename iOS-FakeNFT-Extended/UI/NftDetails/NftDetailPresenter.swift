@@ -72,12 +72,12 @@ final class NftDetailPresenterImpl: NftDetailPresenter {
         let message: String
         switch error {
         case is NetworkClientError:
-            message = NSLocalizedString("Error.network", comment: "")
+            message = L10n.OldStrings.network
         default:
-            message = NSLocalizedString("Error.unknown", comment: "")
+            message = L10n.OldStrings.unknown
         }
 
-        let actionText = NSLocalizedString("Error.repeat", comment: "")
+        let actionText = L10n.OldStrings.repeat
         return ErrorModel(message: message, actionText: actionText) { [weak self] in
             self?.state = .loading
         }
