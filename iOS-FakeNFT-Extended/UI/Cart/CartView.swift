@@ -10,6 +10,7 @@ import SwiftUI
 struct CartView: View {
     @State private var viewModel: CartViewModel
     @State private var selectedNFT: NFTModel?
+    @State private var isSortingPresented = false
 
     init(viewModel: CartViewModel = CartViewModel()) {
         _viewModel = State(initialValue: viewModel)
@@ -33,11 +34,30 @@ struct CartView: View {
                 }
             }
         }
+        .confirmationDialog(
+            L10n.Sort.title,
+            isPresented: $isSortingPresented,
+            titleVisibility: .visible
+        ) {
+            Button(L10n.Sort.byPrice) {
+                isSortingPresented = false
+            }
+
+            Button(L10n.Sort.byRating) {
+                isSortingPresented = false
+            }
+
+            Button(L10n.Sort.byName) {
+                isSortingPresented = false
+            }
+
+            Button(L10n.Common.close, role: .cancel) {
+                isSortingPresented = false
+            }
+        }
         .fullScreenCover(
             item: $selectedNFT,
-            onDismiss: {
-                selectedNFT = nil
-            },
+            onDismiss: { selectedNFT = nil },
             content: { nft in
                 DeleteView(
                     nft: nft,
@@ -107,7 +127,7 @@ struct CartView: View {
 
     private var sortButton: some View {
         Button {
-
+            isSortingPresented = true
         } label: {
             Image(.sort)
                 .foregroundStyle(.appTextPrimary)
