@@ -9,6 +9,7 @@ import SwiftUI
 
 struct NFTCartCell: View {
     let nft: NFTModel
+    let onRemove: () -> Void
 
     var body: some View {
         HStack(spacing: 20) {
@@ -54,9 +55,7 @@ struct NFTCartCell: View {
     }
 
     private var removeButton: some View {
-        Button {
-
-        } label: {
+        Button(action: onRemove) {
             Image(.cartRemove)
                 .resizable()
                 .frame(width: 16, height: 18.56)
@@ -85,6 +84,7 @@ struct StarRatingView: View {
         name: "April",
         price: "1,78 ETH",
         rating: 4,
-        image: Image(.april))
+        image: Image(.april)),
+                onRemove: { }
     )
 }

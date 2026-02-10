@@ -10,23 +10,27 @@ import SwiftUI
 final class CartViewModel {
     var items: [NFTModel]
 
-    var itemsMock: [NFTModel] = [
+    let itemsMock: [NFTModel] = [
         NFTModel(name: "April", price: "1,78 ETH", rating: 1, image: Image(.april)),
         NFTModel(name: "Greena", price: "1,78 ETH", rating: 3, image: Image(.greena)),
         NFTModel(name: "Spring", price: "1,78 ETH", rating: 5, image: Image(.spring))
     ]
 
-    var isEmpty: Bool { itemsMock.isEmpty }
+    var isEmpty: Bool { items.isEmpty }
 
     var itemsAmount: Int {
-        return itemsMock.count
+        items.count
     }
 
     var totalPrice: String {
-        return "5,34"
+        "5,34"
     }
 
     init(items: [NFTModel] = []) {
-        self.items = items
+        self.items = itemsMock
+    }
+
+    func remove(_ nft: NFTModel) {
+        items.removeAll { $0.id == nft.id }
     }
 }

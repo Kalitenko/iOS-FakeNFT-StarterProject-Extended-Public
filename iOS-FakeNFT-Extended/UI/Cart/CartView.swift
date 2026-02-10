@@ -9,6 +9,8 @@ import SwiftUI
 
 struct CartView: View {
     @State private var viewModel: CartViewModel
+    @State private var isDeleting = false
+    @State private var selectedNFT: NFTModel?
 
     init(viewModel: CartViewModel = CartViewModel()) {
         _viewModel = State(initialValue: viewModel)
@@ -16,18 +18,30 @@ struct CartView: View {
 
     var body: some View {
         NavigationStack {
-            Group {
-                if viewModel.isEmpty {
-                    emptyState
-                } else {
-                    VStack(spacing: 0) {
-                        itemsList
-                            .padding(.top, 20)
-                        summaryPanel
+            ZStack {
+                Group {
+                    if viewModel.isEmpty {
+                        emptyState
+                    } else {
+                        VStack(spacing: 0) {
+                            itemsList
+                                .padding(.top, 20)
+                            summaryPanel
+                        }
                     }
                 }
+                .background(.appBackground)
+
+                if isDeleting, let nft = selectedNFT {
+                    DeleteView(
+                        nft: nft,
+                        onDelete: { confirmDelete(nft) },
+                        onCancel: { hideConfirmation() }
+                    )
+                    .transition(.opacity)
+                    .zIndex(1)
+                }
             }
-            .background(.appBackground)
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
                     if !viewModel.isEmpty {
@@ -35,6 +49,7 @@ struct CartView: View {
                     }
                 }
             }
+            .animation(.easeInOut(duration: 0.2), value: isDeleting)
         }
     }
 
@@ -47,11 +62,13 @@ struct CartView: View {
 
     private var itemsList: some View {
         List {
-            ForEach(viewModel.itemsMock) { nft in
-                NFTCartCell(nft: nft)
-                    .listRowSeparator(.hidden)
-                    .listRowInsets(.init())
-                    .listRowBackground(Color.clear)
+            ForEach(viewModel.items) { nft in
+                NFTCartCell(nft: nft) {
+                    showConfirmation(for: nft)
+                }
+                .listRowSeparator(.hidden)
+                .listRowInsets(.init())
+                .listRowBackground(Color.clear)
             }
 
         }
@@ -95,6 +112,23 @@ struct CartView: View {
             Image(.sort)
                 .foregroundStyle(.appTextPrimary)
         }
+    }
+
+    private func showConfirmation(for nft: NFTModel) {
+        selectedNFT = nft
+        isDeleting = true
+    }
+
+    private func hideConfirmation() {
+        isDeleting = false
+        selectedNFT = nil
+    }
+
+    private func confirmDelete(_ nft: NFTModel) {
+        withAnimation(.easeInOut(duration: 0.2)) {
+            viewModel.remove(nft)
+        }
+        hideConfirmation()
     }
 }
 
