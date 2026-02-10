@@ -16,18 +16,33 @@ struct CartView: View {
 
     var body: some View {
         NavigationStack {
-            VStack(spacing: 0) {
-                itemsList
-                    .padding(.top, 20)
-                summaryPanel
+            Group {
+                if viewModel.isEmpty {
+                    emptyState
+                } else {
+                    VStack(spacing: 0) {
+                        itemsList
+                            .padding(.top, 20)
+                        summaryPanel
+                    }
+                }
             }
             .background(.appBackground)
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
-                    sortButton
+                    if !viewModel.isEmpty {
+                        sortButton
+                    }
                 }
             }
         }
+    }
+
+    private var emptyState: some View {
+        Text(L10n.Cart.emptyCart)
+            .font(.title)
+            .foregroundStyle(.appTextPrimary)
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
     }
 
     private var itemsList: some View {

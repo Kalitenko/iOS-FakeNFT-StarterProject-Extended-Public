@@ -8,13 +8,15 @@ import SwiftUI
 
 @Observable
 final class CartViewModel {
-    var items: [NFTModel] = []
+    var items: [NFTModel]
 
     var itemsMock: [NFTModel] = [
         NFTModel(name: "April", price: "1,78 ETH", rating: 1, image: Image(.april)),
         NFTModel(name: "Greena", price: "1,78 ETH", rating: 3, image: Image(.greena)),
         NFTModel(name: "Spring", price: "1,78 ETH", rating: 5, image: Image(.spring))
     ]
+
+    var isEmpty: Bool { itemsMock.isEmpty }
 
     var itemsAmount: Int {
         return itemsMock.count
