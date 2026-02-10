@@ -24,12 +24,7 @@ struct CartView: View {
             .background(.appBackground)
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
-                    Button {
-
-                    } label: {
-                        Image(.sort)
-                            .foregroundStyle(.appTextPrimary)
-                    }
+                    sortButton
                 }
             }
         }
@@ -76,6 +71,15 @@ struct CartView: View {
         .frame(height: 76)
         .background(.appSurfaceBackground)
         .clipShape(.rect(topLeadingRadius: 12, topTrailingRadius: 12))
+    }
+
+    private var sortButton: some View {
+        Button {
+
+        } label: {
+            Image(.sort)
+                .foregroundStyle(.appTextPrimary)
+        }
     }
 }
 
