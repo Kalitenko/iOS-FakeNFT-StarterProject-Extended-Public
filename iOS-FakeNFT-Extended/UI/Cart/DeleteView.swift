@@ -16,7 +16,6 @@ struct DeleteView: View {
         ZStack {
             Rectangle()
                 .fill(.ultraThinMaterial)
-                .blur(radius: 40)
                 .ignoresSafeArea()
 
             VStack(spacing: 20) {

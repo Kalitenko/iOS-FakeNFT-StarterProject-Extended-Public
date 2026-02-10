@@ -9,7 +9,6 @@ import SwiftUI
 
 struct CartView: View {
     @State private var viewModel: CartViewModel
-    @State private var isDeleting = false
     @State private var selectedNFT: NFTModel?
 
     init(viewModel: CartViewModel = CartViewModel()) {
@@ -18,39 +17,41 @@ struct CartView: View {
 
     var body: some View {
         NavigationStack {
-            ZStack {
-                Group {
-                    if viewModel.isEmpty {
-                        emptyState
-                    } else {
-                        VStack(spacing: 0) {
-                            itemsList
-                                .padding(.top, 20)
-                            summaryPanel
-                        }
-                    }
-                }
-                .background(.appBackground)
-
-                if isDeleting, let nft = selectedNFT {
-                    DeleteView(
-                        nft: nft,
-                        onDelete: { confirmDelete(nft) },
-                        onCancel: { hideConfirmation() }
-                    )
-                    .transition(.opacity)
-                    .zIndex(1)
+            VStack(spacing: 0) {
+                if viewModel.isEmpty {
+                    emptyState
+                } else {
+                    itemsList
+                        .padding(.top, 20)
+                    summaryPanel
                 }
             }
+            .background(.appBackground)
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
-                    if !viewModel.isEmpty {
-                        sortButton
-                    }
+                    sortButton
                 }
             }
-            .animation(.easeInOut(duration: 0.2), value: isDeleting)
         }
+        .fullScreenCover(
+            item: $selectedNFT,
+            onDismiss: {
+                selectedNFT = nil
+            },
+            content: { nft in
+                DeleteView(
+                    nft: nft,
+                    onDelete: {
+                        viewModel.remove(nft)
+                        selectedNFT = nil
+                    },
+                    onCancel: {
+                        selectedNFT = nil
+                    }
+                )
+                .presentationBackground(.clear)
+            }
+        )
     }
 
     private var emptyState: some View {
@@ -64,13 +65,12 @@ struct CartView: View {
         List {
             ForEach(viewModel.items) { nft in
                 NFTCartCell(nft: nft) {
-                    showConfirmation(for: nft)
+                    selectedNFT = nft
                 }
                 .listRowSeparator(.hidden)
                 .listRowInsets(.init())
                 .listRowBackground(Color.clear)
             }
-
         }
         .listStyle(.plain)
         .scrollContentBackground(.hidden)
@@ -114,21 +114,11 @@ struct CartView: View {
         }
     }
 
-    private func showConfirmation(for nft: NFTModel) {
-        selectedNFT = nft
-        isDeleting = true
-    }
-
-    private func hideConfirmation() {
-        isDeleting = false
-        selectedNFT = nil
-    }
-
     private func confirmDelete(_ nft: NFTModel) {
         withAnimation(.easeInOut(duration: 0.2)) {
             viewModel.remove(nft)
         }
-        hideConfirmation()
+        selectedNFT = nil
     }
 }
 
