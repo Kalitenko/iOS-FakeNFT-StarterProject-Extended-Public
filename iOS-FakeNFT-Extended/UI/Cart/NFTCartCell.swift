@@ -17,7 +17,7 @@ struct NFTCartCell: View {
             VStack(alignment: .leading, spacing: 0) {
                 name
                     .padding(.bottom, 4)
-                StarRatingView(rating: nft.rating)
+                RatingView(rating: nft.rating)
                     .padding(.bottom, 12)
                 price
             }
@@ -65,7 +65,7 @@ struct NFTCartCell: View {
     }
 }
 
-struct StarRatingView: View {
+struct RatingView: View {
     let rating: Int
     var body: some View {
         HStack(spacing: 2) {
