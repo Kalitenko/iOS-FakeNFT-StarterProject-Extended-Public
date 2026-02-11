@@ -39,6 +39,7 @@
 		ABC5E1E42C32055B002B4068 /* ErrorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABC5E1E32C32055B002B4068 /* ErrorView.swift */; };
 		ABC5E1E62C320585002B4068 /* LinePageControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABC5E1E52C320585002B4068 /* LinePageControl.swift */; };
 		ABC5E1E82C320610002B4068 /* NftDetailBridgeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABC5E1E72C320610002B4068 /* NftDetailBridgeView.swift */; };
+		C2E5A96E2F3C521E00632512 /* StarRatingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2E5A96D2F3C521E00632512 /* StarRatingView.swift */; };
 		EA3CE9BD2F387D7B005CFF7D /* ActionButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA3CE9BC2F387D7B005CFF7D /* ActionButton.swift */; };
 /* End PBXBuildFile section */
 
@@ -93,6 +94,7 @@
 		ABC5E1E32C32055B002B4068 /* ErrorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorView.swift; sourceTree = "<group>"; };
 		ABC5E1E52C320585002B4068 /* LinePageControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinePageControl.swift; sourceTree = "<group>"; };
 		ABC5E1E72C320610002B4068 /* NftDetailBridgeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NftDetailBridgeView.swift; sourceTree = "<group>"; };
+		C2E5A96D2F3C521E00632512 /* StarRatingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarRatingView.swift; sourceTree = "<group>"; };
 		EA3CE9BC2F387D7B005CFF7D /* ActionButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionButton.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -310,6 +312,7 @@
 			isa = PBXGroup;
 			children = (
 				EA3CE9BC2F387D7B005CFF7D /* ActionButton.swift */,
+				C2E5A96D2F3C521E00632512 /* StarRatingView.swift */,
 			);
 			path = UIElements;
 			sourceTree = "<group>";
@@ -500,6 +503,7 @@
 				ABC5E1DB2C3204CE002B4068 /* UIView+Constraints.swift in Sources */,
 				ABC5E16C2C31F5AF002B4068 /* iOS_FakeNFT_ExtendedApp.swift in Sources */,
 				ABC5E1CB2C3203FC002B4068 /* NftDetailCellModel.swift in Sources */,
+				C2E5A96E2F3C521E00632512 /* StarRatingView.swift in Sources */,
 				ABC5E1AB2C31FACD002B4068 /* NftService.swift in Sources */,
 				ABC5E1B22C31FBD4002B4068 /* ExampleRequest.swift in Sources */,
 				ABC5E1CD2C32040C002B4068 /* NftImageCollectionViewCell.swift in Sources */,
