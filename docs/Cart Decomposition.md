@@ -8,6 +8,10 @@
 
 Ссылка на доску: https://github.com/users/Kalitenko/projects/1/views/1
 
+Тип вёрстки: SwiftUI
+
+Архитектура: MVVM 
+
 # Декомпозиция эпика Корзина
 
 ## Модуль 1:
