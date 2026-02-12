@@ -10,22 +10,26 @@ import Foundation
 struct CatalogItem {
     let id: String
     let name: String
+    let description: String
     let count: Int
     let cover: String
+    let elements: [CollectionItem]
 }
 
 extension CatalogItem {
+    private static let description = "Персиковый — как облака над закатным солнцем в океане. В этой коллекции совмещены трогательная нежность и живая игривость сказочных зефирных зверей."
+    
     static let mockItems: [CatalogItem] = [
-        CatalogItem(id: "1", name: "Beige", count: 21, cover: "Beige"),
-        CatalogItem(id: "2", name: "Blue", count: 15, cover: "Blue"),
-        CatalogItem(id: "3", name: "Brown", count: 24, cover: "Brown"),
-        CatalogItem(id: "4", name: "Gray", count: 60, cover: "Gray"),
-        CatalogItem(id: "5", name: "Green", count: 12, cover: "Green"),
-        CatalogItem(id: "6", name: "Peach", count: 33, cover: "Peach"),
-        CatalogItem(id: "7", name: "Pink", count: 42, cover: "Pink"),
-        CatalogItem(id: "8", name: "White", count: 21, cover: "White"),
-        CatalogItem(id: "9", name: "Yellow", count: 24, cover: "Yellow")
+        CatalogItem(id: "1", name: "Beige", description: description, count: 21, cover: "Beige", elements: CollectionItem.mockItems),
+        CatalogItem(id: "2", name: "Blue", description: description, count: 15, cover: "Blue", elements: CollectionItem.mockItems),
+        CatalogItem(id: "3", name: "Brown", description: description, count: 24, cover: "Brown", elements: []),
+        CatalogItem(id: "4", name: "Gray", description: description, count: 60, cover: "Gray", elements: CollectionItem.mockItems),
+        CatalogItem(id: "5", name: "Green", description: description, count: 12, cover: "Green", elements: CollectionItem.mockItems),
+        CatalogItem(id: "6", name: "Peach", description: description, count: 33, cover: "Peach", elements: CollectionItem.mockItems),
+        CatalogItem(id: "7", name: "Pink", description: description, count: 42, cover: "Pink", elements: CollectionItem.mockItems),
+        CatalogItem(id: "8", name: "White", description: description, count: 21, cover: "White", elements: CollectionItem.mockItems),
+        CatalogItem(id: "9", name: "Yellow", description: description, count: 24, cover: "Yellow", elements: CollectionItem.mockItems)
     ]
     
-    static let mock = CatalogItem(id: "6", name: "Peach", count: 33, cover: "Peach")
+    static let mock = CatalogItem(id: "6", name: "Peach", description: description, count: 33, cover: "Peach", elements: CollectionItem.mockItems)
 }
