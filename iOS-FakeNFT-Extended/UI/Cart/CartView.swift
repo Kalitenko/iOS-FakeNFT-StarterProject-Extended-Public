@@ -18,7 +18,7 @@ struct CartView: View {
 
     var body: some View {
         NavigationStack {
-            VStack(spacing: 0) {
+            VStack(spacing: .zero) {
                 if viewModel.isEmpty {
                     emptyState
                 } else {
@@ -39,21 +39,7 @@ struct CartView: View {
             isPresented: $isSortingPresented,
             titleVisibility: .visible
         ) {
-            Button(L10n.Sort.byPrice) {
-                isSortingPresented = false
-            }
-
-            Button(L10n.Sort.byRating) {
-                isSortingPresented = false
-            }
-
-            Button(L10n.Sort.byName) {
-                isSortingPresented = false
-            }
-
-            Button(L10n.Common.close, role: .cancel) {
-                isSortingPresented = false
-            }
+            sortDialogButtons
         }
         .fullScreenCover(
             item: $selectedNFT,
@@ -107,9 +93,9 @@ struct CartView: View {
                     .foregroundStyle(.appGreen)
             }
 
-            Button(action: {
+            Button {
 
-            }, label: {
+            } label: {
                 Text(L10n.Cart.totalToPay)
                     .font(.title)
                     .frame(maxWidth: .infinity)
@@ -117,7 +103,7 @@ struct CartView: View {
                     .foregroundStyle(.appBackground)
                     .background(.appTextPrimary)
                     .clipShape(RoundedRectangle(cornerRadius: 16))
-            })
+            }
         }
         .padding(16)
         .frame(height: 76)
@@ -131,6 +117,23 @@ struct CartView: View {
         } label: {
             Image(.sort)
                 .foregroundStyle(.appTextPrimary)
+        }
+    }
+
+    private var sortDialogButtons: some View {
+        Group {
+            Button(L10n.Sort.byPrice) {
+                isSortingPresented = false
+            }
+            Button(L10n.Sort.byRating) {
+                isSortingPresented = false
+            }
+            Button(L10n.Sort.byName) {
+                isSortingPresented = false
+            }
+            Button(L10n.Common.close, role: .cancel) {
+                isSortingPresented = false
+            }
         }
     }
 
