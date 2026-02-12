@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct CollectionItem {
+struct CollectionItem: Hashable {
     let id: String
     let name: String
     let imageURLs: [String]
@@ -38,7 +38,7 @@ extension CollectionItem {
                 "Peach_Archie_3"
             ],
             rating: Int.random(in: 1...5),
-            price: Decimal(Double.random(in: 0...25)),
+            price: 12.345,
             isFavorite: Bool.random()
         ),
         CollectionItem(
@@ -50,7 +50,7 @@ extension CollectionItem {
                 "Peach_Art_3"
             ],
             rating: Int.random(in: 1...5),
-            price: Decimal(Double.random(in: 0...25)),
+            price: 6.789,
             isFavorite: Bool.random(),
             isInCart: true
         ),
@@ -161,6 +161,14 @@ extension CollectionItem {
             ],
             rating: Int.random(in: 1...5),
             price: Decimal(Double.random(in: 0...25)),
+            isFavorite: Bool.random()
+        ),
+        CollectionItem(
+            id: "12",
+            name: "TEST",
+            imageURLs: [],
+            rating: Int.random(in: 1...5),
+            price: 0,
             isFavorite: Bool.random()
         )
     ]

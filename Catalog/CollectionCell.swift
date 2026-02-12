@@ -58,7 +58,7 @@ struct CollectionCell: View {
     
     private var caption: some View {
         HStack {
-            VStack(spacing: 4) {
+            VStack(alignment: .leading, spacing: 4) {
                 Text(item.name)
                     .font(.title)
                 Text("\(item.price, format: .number) ETH")
@@ -80,18 +80,23 @@ struct CollectionCell: View {
 }
 
 #Preview {
-    HStack(spacing: 4) {
-        CollectionCell(item: CollectionItem.mockIsLikedAndInCart)
-            .background(.green)
-            .padding(8)
-            .background(.yellow)
-        CollectionCell(item: CollectionItem.mockIsNotLikedAndInCart)
-            .border(.orange)
-            .padding(8)
+    VStack(spacing: 16) {
+        CollectionCell(item: CollectionItem.mockItems[6])
+            .padding(16)
             .border(.red)
-        CollectionCell(item: CollectionItem.mockWithoutImages)
-            .border(.orange)
-            .padding(8)
-            .border(.red)
+        HStack(spacing: 4) {
+            CollectionCell(item: CollectionItem.mockIsLikedAndInCart)
+                .background(.green)
+                .padding(8)
+                .background(.yellow)
+            CollectionCell(item: CollectionItem.mockIsNotLikedAndInCart)
+                .border(.orange)
+                .padding(8)
+                .border(.red)
+            CollectionCell(item: CollectionItem.mockWithoutImages)
+                .border(.orange)
+                .padding(8)
+                .border(.red)
+        }
     }
 }
