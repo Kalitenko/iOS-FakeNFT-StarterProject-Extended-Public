@@ -11,7 +11,6 @@ struct CollectionCell: View {
     
     let item: CollectionItem
     private let imageSize: CGFloat = 108
-    private let iconContainerSize: CGFloat = 40
     
     var body: some View {
         VStack {
@@ -42,11 +41,9 @@ struct CollectionCell: View {
     }
     
     private var heart: some View {
-        HStack {
-            Image(item.isFavorite ? .favoritesActive : .favoritesInactive)
-                .foregroundStyle(item.isFavorite ? .appRed : .appWhite)
-        }
-        .frame(width: iconContainerSize, height: iconContainerSize)
+        LikeButton(isFavorite: item.isFavorite,
+                   action: { print("Like tapped. Item.name: \(self.item.name)") }
+        )
     }
     
     private var bottom: some View {
@@ -72,10 +69,9 @@ struct CollectionCell: View {
     }
     
     private var cart: some View {
-        HStack {
-            Image(item.isInCart ? .cartRemove : .cartAdd)
-        }
-        .frame(width: iconContainerSize, height: iconContainerSize)
+        CartButton(isInCart: item.isInCart,
+                   action: { print("Add to cart tapped. Item.name: \(self.item.name)") }
+        )
     }
 }
 
