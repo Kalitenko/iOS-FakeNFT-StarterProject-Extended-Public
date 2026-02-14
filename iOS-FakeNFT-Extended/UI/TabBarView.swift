@@ -33,7 +33,7 @@ struct TabBarView: View {
                     }
                 }
             NavigationStack {
-                CatalogView(items: CatalogItem.mockItems, action: { print("Action button tapped!")})
+                CatalogView(items: CatalogItem.mockItems)
                     .customBackground()
             }
             .tabItem {
