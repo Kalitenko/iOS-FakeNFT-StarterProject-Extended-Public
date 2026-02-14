@@ -19,8 +19,7 @@ struct CollectionView: View {
                 .padding(.vertical, 20)
         }
         .ignoresSafeArea(.container, edges: .top)
-        .navigationBarTitleDisplayMode(.inline)
-        .toolbarBackground(.hidden, for: .navigationBar)
+        .customNavigationBar()
     }
     
     private var collectionInfo: some View {
@@ -44,12 +43,23 @@ struct CollectionView: View {
             Text(collection.name)
                 .font(.bigTitle)
             VStack(alignment: .leading, spacing: 5) {
-                Text("\(L10n.Catalog.collectionAuthor): ")
+                author
                 Text(collection.description)
             }
             .font(.smallText)
         }
         .foregroundStyle(.appTextPrimary)
+    }
+    
+    private var author: some View {
+        HStack(spacing: 4) {
+            Text("\(L10n.Catalog.collectionAuthor): ")
+            NavigationLink("\(collection.author)") {
+                AuthorWebsiteView(author: collection.author, website: collection.website)
+                    .customBackground()
+            }
+            .foregroundStyle(.appBlue)
+        }
     }
     
     private var grid: some View {
@@ -76,6 +86,7 @@ struct CollectionView: View {
     NavigationStack {
         NavigationLink("Open") {
             CollectionView(collection: CatalogItem.mock)
+                .customBackground()
         }
     }
 }

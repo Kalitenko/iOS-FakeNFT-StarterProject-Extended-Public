@@ -15,18 +15,12 @@ struct CatalogView: View {
     var body: some View {
         CatalogListView(items: items)
             .padding(.horizontal, 16)
-            .toolbar(content: {
-                ToolbarItem(placement: .topBarTrailing) {
-                    sortButton
-                }
-            })
-    }
-    
-    private var sortButton: some View {
-        Button(action: action, label: {
-            Image(.sort)
-                .foregroundStyle(.appTextPrimary)
-        })
+            .customNavigationBar(hidesLeading: true,
+                                 trailingAction: action)
+            .navigationDestination(for: CatalogItem.self) { item in
+                CollectionView(collection: item)
+                    .customBackground()
+            }
     }
 }
 
@@ -35,5 +29,6 @@ struct CatalogView: View {
         CatalogView(items: CatalogItem.mockItems) {
             print("Action button tapped!")
         }
+        .customBackground(color: .purple)
     }
 }
