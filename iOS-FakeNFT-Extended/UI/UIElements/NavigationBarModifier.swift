@@ -18,41 +18,84 @@ struct NavigationBarModifier: ViewModifier {
     let trailingAction: (() -> Void)?
     
     func body(content: Content) -> some View {
-        content
-            .navigationBarBackButtonHidden(true)
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbarBackground(.appBackground, for: .navigationBar)
-            .toolbarBackground(
-                hidesBackground ? .hidden : .automatic,
-                for: .navigationBar
-            )
-            .toolbar {
-                if !hidesLeading {
-                    ToolbarItem(placement: .topBarLeading) {
-                        Button {
-                            leadingAction?() ?? dismiss()
-                        } label: {
-                            Image(systemName: "chevron.left")
-                        }
-                    }
-                }
-                
-                if let title {
-                    ToolbarItem(placement: .principal) {
-                        Text(title)
-                    }
-                }
-                
-                if let trailingAction {
-                    ToolbarItem(placement: .topBarTrailing) {
-                        Button(action: trailingAction) {
-                            Image(.sort)
-                        }
-                    }
+        if #available(iOS 26.0, *) {
+            content
+                .navigationBarBackButtonHidden(true)
+                .navigationBarTitleDisplayMode(.inline)
+                .toolbarBackground(.appBackground, for: .navigationBar)
+                .toolbarBackground(
+                    hidesBackground ? .hidden : .visible,
+                    for: .navigationBar
+                )
+                .toolbar { toolbarContent }
+                .foregroundStyle(.appTextPrimary)
+                .font(.title)
+        } else {
+            content
+                .navigationBarBackButtonHidden(true)
+                .navigationBarTitleDisplayMode(.inline)
+                .toolbarBackground(.appBackground, for: .navigationBar)
+                .toolbarBackground(
+                    hidesBackground ? .hidden : .automatic,
+                    for: .navigationBar
+                )
+                .toolbar { toolbarContent }
+                .foregroundStyle(.appTextPrimary)
+                .font(.title)
+        }
+    }
+    
+    @ToolbarContentBuilder
+    private var toolbarContent: some ToolbarContent {
+        if !hidesLeading {
+            ToolbarItem(placement: .topBarLeading) {
+                Button {
+                    leadingAction?() ?? dismiss()
+                } label: {
+                    Image(systemName: "chevron.left")
                 }
             }
-            .foregroundStyle(.appTextPrimary)
-            .font(.title)
+        }
+        
+        if let title {
+            ToolbarItem(placement: .principal) {
+                Text(title)
+            }
+        }
+        
+        if let trailingAction {
+            ToolbarItem(placement: .topBarTrailing) {
+                Button(action: trailingAction) {
+                    Image(.sort)
+                }
+            }
+        }
+        
+    }
+}
+
+extension View {
+    func customNavigationBarApplyingIOS26(
+        title: String? = nil,
+        hidesLeading: Bool = false,
+        leadingAction: (() -> Void)? = nil,
+        trailingAction: (() -> Void)? = nil
+    ) -> some View {
+        let backgroundHidden: Bool = {
+            if #available(iOS 26.0, *) {
+                return true
+            } else {
+                return false
+            }
+        }()
+        
+        return self.customNavigationBar(
+            title: title,
+            hidesBackground: backgroundHidden,
+            hidesLeading: hidesLeading,
+            leadingAction: leadingAction,
+            trailingAction: trailingAction
+        )
     }
 }
 
@@ -142,12 +185,57 @@ extension View {
                         .padding()
                         .background(.gray.opacity(0.2))
                 }
+                .background(.purple)
             }
+            .background(.cyan)
             .padding()
         }
         .customNavigationBar(
             title: "Скрытый NavBar",
             hidesBackground: true
+        )
+    }
+}
+
+#Preview("Видимость navbar при прокрутке") {
+    NavigationStack {
+        ScrollView {
+            VStack(spacing: 50) {
+                ForEach(0..<30) { index in
+                    Text("Item \(index)")
+                        .frame(maxWidth: .infinity)
+                        .padding()
+                        .background(.gray.opacity(0.2))
+                }
+                .background(.purple)
+            }
+            .background(.white)
+            .padding()
+        }
+        .customNavigationBar(
+            title: "Видимый NavBar",
+            hidesBackground: false
+        )
+    }
+}
+
+#Preview("Видимость navbar при прокрутке для iOS 26") {
+    NavigationStack {
+        ScrollView {
+            VStack(spacing: 50) {
+                ForEach(0..<30) { index in
+                    Text("Item \(index)")
+                        .frame(maxWidth: .infinity)
+                        .padding()
+                        .background(.gray.opacity(0.2))
+                }
+                .background(.purple)
+            }
+            .background(.white)
+            .padding()
+        }
+        .customNavigationBarApplyingIOS26(
+            title: "Видимый NavBar"
         )
     }
 }

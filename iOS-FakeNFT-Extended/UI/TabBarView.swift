@@ -32,15 +32,17 @@ struct TabBarView: View {
                         Image(systemName: "person.crop.circle.fill")
                     }
                 }
-            MockCatalogView()
-                .customBackground(color: .pink)
-                .tabItem {
-                    Label {
-                        Text(L10n.TabBar.catalog)
-                    } icon: {
-                        Image(systemName: "rectangle.stack.fill")
-                    }
+            NavigationStack {
+                CatalogView(items: CatalogItem.mockItems)
+                    .customBackground()
+            }
+            .tabItem {
+                Label {
+                    Text(L10n.TabBar.catalog)
+                } icon: {
+                    Image(systemName: "rectangle.stack.fill")
                 }
+            }
             MockCartView()
                 .customBackground(color: .indigo)
                 .tabItem {

@@ -39,17 +39,23 @@
 		ABC5E1E42C32055B002B4068 /* ErrorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABC5E1E32C32055B002B4068 /* ErrorView.swift */; };
 		ABC5E1E62C320585002B4068 /* LinePageControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABC5E1E52C320585002B4068 /* LinePageControl.swift */; };
 		ABC5E1E82C320610002B4068 /* NftDetailBridgeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABC5E1E72C320610002B4068 /* NftDetailBridgeView.swift */; };
-		C266D5E42F3F166A00B47E7C /* NavigationBarModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = C266D5E32F3F166A00B47E7C /* NavigationBarModifier.swift */; };
-		C25A8C262F3FBCAB00B0462E /* LikeButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = C25A8C252F3FBCAB00B0462E /* LikeButton.swift */; };
-		C25A8C282F3FBCD300B0462E /* CartButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = C25A8C272F3FBCD300B0462E /* CartButton.swift */; };
-		C20076A82F3F2F3500C217BF /* MockCatalogView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C20076A72F3F2F3500C217BF /* MockCatalogView.swift */; };
 		C20076AA2F3F2F7700C217BF /* MockProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C20076A92F3F2F7700C217BF /* MockProfileView.swift */; };
 		C20076AC2F3F2F9700C217BF /* MockCartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C20076AB2F3F2F9700C217BF /* MockCartView.swift */; };
 		C20076AE2F3F2FAD00C217BF /* MockStatisticsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C20076AD2F3F2FAD00C217BF /* MockStatisticsView.swift */; };
 		C20076C12F3F38AE00C217BF /* CustomBackgroundModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = C20076C02F3F38AE00C217BF /* CustomBackgroundModifier.swift */; };
-		C2E5A96E2F3C521E00632512 /* StarRatingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2E5A96D2F3C521E00632512 /* StarRatingView.swift */; };
-		ABC5E1EB2C32084F002B4068 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = ABC5E1E92C32084F002B4068 /* Localizable.strings */; };
 		C234CDF72F388EC600E6C9EE /* ProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C234CDF62F388EC600E6C9EE /* ProgressView.swift */; };
+		C25A8C262F3FBCAB00B0462E /* LikeButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = C25A8C252F3FBCAB00B0462E /* LikeButton.swift */; };
+		C25A8C282F3FBCD300B0462E /* CartButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = C25A8C272F3FBCD300B0462E /* CartButton.swift */; };
+		C25A8CD12F40A1D300B0462E /* AuthorWebsiteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C25A8CD02F40A1D300B0462E /* AuthorWebsiteView.swift */; };
+		C266D5572F3DF23900B47E7C /* CollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C266D5562F3DF23900B47E7C /* CollectionView.swift */; };
+		C266D5E42F3F166A00B47E7C /* NavigationBarModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = C266D5E32F3F166A00B47E7C /* NavigationBarModifier.swift */; };
+		C2E5A7E32F3B3A6500632512 /* CatalogItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2E5A7E22F3B3A6500632512 /* CatalogItem.swift */; };
+		C2E5A7E62F3B40E400632512 /* CatalogView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2E5A7E52F3B40E400632512 /* CatalogView.swift */; };
+		C2E5A7E82F3B41A500632512 /* CatalogItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2E5A7E72F3B41A500632512 /* CatalogItemView.swift */; };
+		C2E5A7EA2F3B4FB800632512 /* CatalogListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2E5A7E92F3B4FB800632512 /* CatalogListView.swift */; };
+		C2E5A8FB2F3B7D3F00632512 /* CollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2E5A8FA2F3B7D3F00632512 /* CollectionCell.swift */; };
+		C2E5A8FD2F3B7D5500632512 /* CollectionItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2E5A8FC2F3B7D5500632512 /* CollectionItem.swift */; };
+		C2E5A96E2F3C521E00632512 /* StarRatingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2E5A96D2F3C521E00632512 /* StarRatingView.swift */; };
 		EA3CE9BD2F387D7B005CFF7D /* ActionButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA3CE9BC2F387D7B005CFF7D /* ActionButton.swift */; };
 /* End PBXBuildFile section */
 
@@ -104,17 +110,23 @@
 		ABC5E1E32C32055B002B4068 /* ErrorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorView.swift; sourceTree = "<group>"; };
 		ABC5E1E52C320585002B4068 /* LinePageControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinePageControl.swift; sourceTree = "<group>"; };
 		ABC5E1E72C320610002B4068 /* NftDetailBridgeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NftDetailBridgeView.swift; sourceTree = "<group>"; };
-		C266D5E32F3F166A00B47E7C /* NavigationBarModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationBarModifier.swift; sourceTree = "<group>"; };
-		C25A8C252F3FBCAB00B0462E /* LikeButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikeButton.swift; sourceTree = "<group>"; };
-		C25A8C272F3FBCD300B0462E /* CartButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CartButton.swift; sourceTree = "<group>"; };
-		C20076A72F3F2F3500C217BF /* MockCatalogView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockCatalogView.swift; sourceTree = "<group>"; };
 		C20076A92F3F2F7700C217BF /* MockProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockProfileView.swift; sourceTree = "<group>"; };
 		C20076AB2F3F2F9700C217BF /* MockCartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockCartView.swift; sourceTree = "<group>"; };
 		C20076AD2F3F2FAD00C217BF /* MockStatisticsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockStatisticsView.swift; sourceTree = "<group>"; };
 		C20076C02F3F38AE00C217BF /* CustomBackgroundModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomBackgroundModifier.swift; sourceTree = "<group>"; };
-		C2E5A96D2F3C521E00632512 /* StarRatingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarRatingView.swift; sourceTree = "<group>"; };
-		ABC5E1EA2C32084F002B4068 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		C234CDF62F388EC600E6C9EE /* ProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressView.swift; sourceTree = "<group>"; };
+		C25A8C252F3FBCAB00B0462E /* LikeButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikeButton.swift; sourceTree = "<group>"; };
+		C25A8C272F3FBCD300B0462E /* CartButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CartButton.swift; sourceTree = "<group>"; };
+		C25A8CD02F40A1D300B0462E /* AuthorWebsiteView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthorWebsiteView.swift; sourceTree = "<group>"; };
+		C266D5562F3DF23900B47E7C /* CollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionView.swift; sourceTree = "<group>"; };
+		C266D5E32F3F166A00B47E7C /* NavigationBarModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationBarModifier.swift; sourceTree = "<group>"; };
+		C2E5A7E22F3B3A6500632512 /* CatalogItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatalogItem.swift; sourceTree = "<group>"; };
+		C2E5A7E52F3B40E400632512 /* CatalogView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatalogView.swift; sourceTree = "<group>"; };
+		C2E5A7E72F3B41A500632512 /* CatalogItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatalogItemView.swift; sourceTree = "<group>"; };
+		C2E5A7E92F3B4FB800632512 /* CatalogListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatalogListView.swift; sourceTree = "<group>"; };
+		C2E5A8FA2F3B7D3F00632512 /* CollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionCell.swift; sourceTree = "<group>"; };
+		C2E5A8FC2F3B7D5500632512 /* CollectionItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionItem.swift; sourceTree = "<group>"; };
+		C2E5A96D2F3C521E00632512 /* StarRatingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarRatingView.swift; sourceTree = "<group>"; };
 		EA3CE9BC2F387D7B005CFF7D /* ActionButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionButton.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -243,6 +255,7 @@
 		ABC5E19E2C31F6C1002B4068 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				C2E5A7E12F3B3A3100632512 /* Catalog */,
 				ABC5E19F2C31F6CB002B4068 /* Network */,
 			);
 			path = Models;
@@ -343,7 +356,12 @@
 		C20076A42F3F2ED000C217BF /* Catalog */ = {
 			isa = PBXGroup;
 			children = (
-				C20076A72F3F2F3500C217BF /* MockCatalogView.swift */,
+				C2E5A7E52F3B40E400632512 /* CatalogView.swift */,
+				C2E5A7E72F3B41A500632512 /* CatalogItemView.swift */,
+				C2E5A7E92F3B4FB800632512 /* CatalogListView.swift */,
+				C2E5A8FA2F3B7D3F00632512 /* CollectionCell.swift */,
+				C266D5562F3DF23900B47E7C /* CollectionView.swift */,
+				C25A8CD02F40A1D300B0462E /* AuthorWebsiteView.swift */,
 			);
 			path = Catalog;
 			sourceTree = "<group>";
@@ -362,6 +380,15 @@
 				C20076AD2F3F2FAD00C217BF /* MockStatisticsView.swift */,
 			);
 			path = Statistics;
+			sourceTree = "<group>";
+		};
+		C2E5A7E12F3B3A3100632512 /* Catalog */ = {
+			isa = PBXGroup;
+			children = (
+				C2E5A7E22F3B3A6500632512 /* CatalogItem.swift */,
+				C2E5A8FC2F3B7D5500632512 /* CollectionItem.swift */,
+			);
+			path = Catalog;
 			sourceTree = "<group>";
 		};
 		EA3CE9BB2F387D69005CFF7D /* UIElements */ = {
@@ -542,21 +569,27 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C2E5A8FD2F3B7D5500632512 /* CollectionItem.swift in Sources */,
 				ABC5E1992C31F666002B4068 /* Fonts.swift in Sources */,
 				ABC5E1CF2C32041D002B4068 /* NftDetailViewController.swift in Sources */,
 				ABC5E1B72C31FC70002B4068 /* ServicesAssembly.swift in Sources */,
 				ABC5E19D2C31F6A6002B4068 /* NftStorage.swift in Sources */,
+				C2E5A7E62F3B40E400632512 /* CatalogView.swift in Sources */,
+				C25A8CD12F40A1D300B0462E /* AuthorWebsiteView.swift in Sources */,
 				ABC5E1E82C320610002B4068 /* NftDetailBridgeView.swift in Sources */,
 				ABC5E1E62C320585002B4068 /* LinePageControl.swift in Sources */,
 				C20076AA2F3F2F7700C217BF /* MockProfileView.swift in Sources */,
 				C20076AE2F3F2FAD00C217BF /* MockStatisticsView.swift in Sources */,
+				C2E5A7EA2F3B4FB800632512 /* CatalogListView.swift in Sources */,
+				C2E5A7E32F3B3A6500632512 /* CatalogItem.swift in Sources */,
 				ABC5E1DD2C3204DC002B4068 /* CellsReusingUtils.swift in Sources */,
 				ABC5E1B52C31FC57002B4068 /* TabBarView.swift in Sources */,
+				C2E5A8FB2F3B7D3F00632512 /* CollectionCell.swift in Sources */,
 				ABC5E1E42C32055B002B4068 /* ErrorView.swift in Sources */,
 				ABC5E1A62C31F815002B4068 /* NetworkRequest.swift in Sources */,
 				ABC5E1D52C320446002B4068 /* NftDetailInput.swift in Sources */,
 				ABC5E16E2C31F5AF002B4068 /* ContentView.swift in Sources */,
-				C20076A82F3F2F3500C217BF /* MockCatalogView.swift in Sources */,
+				C266D5572F3DF23900B47E7C /* CollectionView.swift in Sources */,
 				ABC5E1B92C31FD51002B4068 /* TestCatalogView.swift in Sources */,
 				ABC5E1DF2C3204FB002B4068 /* LoadingView.swift in Sources */,
 				C234CDF72F388EC600E6C9EE /* ProgressView.swift in Sources */,
@@ -568,6 +601,7 @@
 				ABC5E1D32C320438002B4068 /* NftDetailAssembly.swift in Sources */,
 				ABC5E1A12C31F6D7002B4068 /* Nft.swift in Sources */,
 				EA3CE9BD2F387D7B005CFF7D /* ActionButton.swift in Sources */,
+				C2E5A7E82F3B41A500632512 /* CatalogItemView.swift in Sources */,
 				ABC5E1AE2C31FB7F002B4068 /* NftByIdRequest.swift in Sources */,
 				ABC5E1DB2C3204CE002B4068 /* UIView+Constraints.swift in Sources */,
 				ABC5E16C2C31F5AF002B4068 /* iOS_FakeNFT_ExtendedApp.swift in Sources */,
