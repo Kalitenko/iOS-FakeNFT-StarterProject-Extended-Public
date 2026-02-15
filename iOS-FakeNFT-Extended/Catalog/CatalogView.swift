@@ -16,12 +16,17 @@ struct CatalogView: View {
     var body: some View {
         CatalogListView(items: items)
             .padding(.horizontal, 16)
-            .customNavigationBar(hidesLeading: true,
-                                 trailingAction: { showSortMenu = true }
+            .padding(.bottom, 20)
+            .customNavigationBarApplyingIOS26(
+                hidesLeading: true,
+                trailingAction: {
+                    showSortMenu = true
+                }
             )
             .navigationDestination(for: CatalogItem.self) { item in
                 CollectionView(collection: item)
                     .customBackground()
+                    .toolbar(.hidden, for: .tabBar)
             }
             .confirmationDialog(L10n.Sort.title, isPresented: $showSortMenu, titleVisibility: .visible) {
                 Button(L10n.Sort.byTitle) { print(L10n.Sort.byTitle) }

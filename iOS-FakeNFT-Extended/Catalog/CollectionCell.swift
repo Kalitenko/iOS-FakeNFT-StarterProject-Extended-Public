@@ -33,7 +33,7 @@ struct CollectionCell: View {
     }
     
     private var rawImage: Image {
-        if let imageName = item.imageURLs.first {
+        if let imageName = item.imagesUrlsStrings.first {
             Image(imageName)
         } else {
             Image(systemName: "photo.fill")
@@ -42,7 +42,7 @@ struct CollectionCell: View {
     
     private var heart: some View {
         LikeButton(isFavorite: item.isFavorite,
-                   action: { print("Like tapped. Item.name: \(self.item.name)") }
+                   action: { print("Like tapped. Item.name: \(item.name)") }
         )
     }
     
@@ -59,6 +59,8 @@ struct CollectionCell: View {
                 Text(item.name)
                     .font(.title)
                 Text("\(item.price, format: .number) ETH")
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.5)
                     .font(.description)
             }
             Spacer()
@@ -70,7 +72,7 @@ struct CollectionCell: View {
     
     private var cart: some View {
         CartButton(isInCart: item.isInCart,
-                   action: { print("Add to cart tapped. Item.name: \(self.item.name)") }
+                   action: { print("Add to cart tapped. Item.name: \(item.name)") }
         )
     }
 }

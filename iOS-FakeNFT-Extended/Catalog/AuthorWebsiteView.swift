@@ -19,7 +19,7 @@ struct AuthorWebsiteView: View {
             + Text(" с адресом ")
             + Text(website).foregroundStyle(.appRed)
         }
-        .customNavigationBar()
+        .customNavigationBarApplyingIOS26()
     }
 }
 

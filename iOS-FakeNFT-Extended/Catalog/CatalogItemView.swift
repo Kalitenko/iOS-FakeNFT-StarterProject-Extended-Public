@@ -13,7 +13,7 @@ struct CatalogItemView: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: 4) {
-            Image(item.name)
+            Image(item.cover)
                 .resizable()
                 .scaledToFill()
                 .frame(height: 140, alignment: .top)

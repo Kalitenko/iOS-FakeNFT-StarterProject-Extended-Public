@@ -13,24 +13,23 @@ struct CollectionView: View {
     
     var body: some View {
         ScrollView {
-            collectionInfo
-            grid
+            collectionCover
+            collectionContent
+                .padding(.top, 16)
                 .padding(.horizontal, 16)
-                .padding(.vertical, 20)
         }
         .ignoresSafeArea(.container, edges: .top)
-        .customNavigationBar()
+        .customNavigationBarApplyingIOS26()
     }
     
-    private var collectionInfo: some View {
-        VStack(spacing: 16) {
-            cover
+    private var collectionContent: some View {
+        VStack(spacing: 24) {
             caption
-                .padding(.horizontal, 16)
+            grid
         }
     }
     
-    private var cover: some View {
+    private var collectionCover: some View {
         Image(collection.cover)
             .resizable()
             .scaledToFit()
@@ -42,13 +41,14 @@ struct CollectionView: View {
         VStack(alignment: .leading, spacing: 8) {
             Text(collection.name)
                 .font(.bigTitle)
+            
             VStack(alignment: .leading, spacing: 5) {
                 author
                 Text(collection.description)
             }
             .font(.smallText)
         }
-        .foregroundStyle(.appTextPrimary)
+        .frame(maxWidth: .infinity, alignment: .leading)
     }
     
     private var author: some View {
