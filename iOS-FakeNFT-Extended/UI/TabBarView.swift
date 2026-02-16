@@ -23,7 +23,7 @@ struct TabBarView: View {
     
     var body: some View {
         TabView {
-            MockProfileView()
+            ProfileView()
                 .customBackground(color: .purple)
                 .tabItem {
                     Label {
