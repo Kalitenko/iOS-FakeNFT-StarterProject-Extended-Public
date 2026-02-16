@@ -15,8 +15,7 @@ struct CollectionView: View {
         ScrollView {
             collectionCover
             collectionContent
-                .padding(.top, 16)
-                .padding(.horizontal, 16)
+                .padding([.top, .horizontal], 16)
         }
         .ignoresSafeArea(.container, edges: .top)
         .customNavigationBarApplyingIOS26()
@@ -79,13 +78,13 @@ struct CollectionView: View {
 }
 
 #Preview("Экран коллекции") {
-    CollectionView(collection: CatalogItem.mock)
+    CollectionView(collection: MockData.Catalog.mock)
 }
 
 #Preview("Экран коллекции в навигации") {
     NavigationStack {
         NavigationLink("Open") {
-            CollectionView(collection: CatalogItem.mock)
+            CollectionView(collection: MockData.Catalog.mock)
                 .customBackground()
         }
     }

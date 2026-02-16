@@ -38,7 +38,7 @@ struct CatalogView: View {
 
 #Preview {
     NavigationStack {
-        CatalogView(items: CatalogItem.mockItems)
+        CatalogView(items: MockData.Catalog.mockItems)
             .customBackground(color: .purple)
     }
 }

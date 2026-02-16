@@ -31,7 +31,7 @@ struct CatalogListView: View {
 
 #Preview {
     NavigationStack {
-        CatalogListView(items: CatalogItem.mockItems)
+        CatalogListView(items: MockData.Catalog.mockItems)
             .background(.green)
             .padding(16)
             .background(.yellow)

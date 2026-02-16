@@ -18,31 +18,14 @@ struct NavigationBarModifier: ViewModifier {
     let trailingAction: (() -> Void)?
     
     func body(content: Content) -> some View {
-        if #available(iOS 26.0, *) {
-            content
-                .navigationBarBackButtonHidden(true)
-                .navigationBarTitleDisplayMode(.inline)
-                .toolbarBackground(.appBackground, for: .navigationBar)
-                .toolbarBackground(
-                    hidesBackground ? .hidden : .visible,
-                    for: .navigationBar
-                )
-                .toolbar { toolbarContent }
-                .foregroundStyle(.appTextPrimary)
-                .font(.title)
-        } else {
-            content
-                .navigationBarBackButtonHidden(true)
-                .navigationBarTitleDisplayMode(.inline)
-                .toolbarBackground(.appBackground, for: .navigationBar)
-                .toolbarBackground(
-                    hidesBackground ? .hidden : .automatic,
-                    for: .navigationBar
-                )
-                .toolbar { toolbarContent }
-                .foregroundStyle(.appTextPrimary)
-                .font(.title)
-        }
+        content
+            .navigationBarBackButtonHidden(true)
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbarBackground(.appBackground, for: .navigationBar)
+            .applyToolbarVisibility(hidesBackground: hidesBackground)
+            .toolbar { toolbarContent }
+            .foregroundStyle(.appTextPrimary)
+            .font(.title)
     }
     
     @ToolbarContentBuilder
@@ -71,6 +54,23 @@ struct NavigationBarModifier: ViewModifier {
             }
         }
         
+    }
+}
+
+extension View {
+    @ViewBuilder
+    func applyToolbarVisibility(hidesBackground: Bool) -> some View {
+        if #available(iOS 26.0, *) {
+            self.toolbarBackground(
+                hidesBackground ? .hidden : .visible,
+                for: .navigationBar
+            )
+        } else {
+            self.toolbarBackground(
+                hidesBackground ? .hidden : .automatic,
+                for: .navigationBar
+            )
+        }
     }
 }
 

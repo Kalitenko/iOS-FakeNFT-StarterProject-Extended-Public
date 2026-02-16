@@ -79,19 +79,19 @@ struct CollectionCell: View {
 
 #Preview {
     VStack(spacing: 16) {
-        CollectionCell(item: CollectionItem.mockItems[6])
+        CollectionCell(item: MockData.Collections.mockItems[6])
             .padding(16)
             .border(.red)
         HStack(spacing: 4) {
-            CollectionCell(item: CollectionItem.mockIsLikedAndInCart)
+            CollectionCell(item: MockData.Collections.mockIsLikedAndInCart)
                 .background(.green)
                 .padding(8)
                 .background(.yellow)
-            CollectionCell(item: CollectionItem.mockIsNotLikedAndInCart)
+            CollectionCell(item: MockData.Collections.mockIsNotLikedAndInCart)
                 .border(.orange)
                 .padding(8)
                 .border(.red)
-            CollectionCell(item: CollectionItem.mockWithoutImages)
+            CollectionCell(item: MockData.Collections.mockWithoutImages)
                 .border(.orange)
                 .padding(8)
                 .border(.red)

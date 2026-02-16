@@ -32,7 +32,7 @@ struct CatalogItemView: View {
 }
 
 #Preview {
-    CatalogItemView(item: CatalogItem.mock)
+    CatalogItemView(item: MockData.Catalog.mock)
         .padding(16)
         .background(Color(.yellow))
 }

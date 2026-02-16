@@ -33,7 +33,7 @@ struct TabBarView: View {
                     }
                 }
             NavigationStack {
-                CatalogView(items: CatalogItem.mockItems)
+                CatalogView(items: MockData.Catalog.mockItems)
                     .customBackground()
             }
             .tabItem {
