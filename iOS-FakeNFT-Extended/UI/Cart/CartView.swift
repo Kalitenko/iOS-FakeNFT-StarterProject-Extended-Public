@@ -21,7 +21,8 @@ struct CartView: View {
             VStack(spacing: .zero) {
                 if viewModel.isLoading {
                     LoadingPlaceholderView()
-                } else if let message = viewModel.errorMessage {
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                } else if viewModel.errorMessage != nil {
                     // show error
                 } else if viewModel.isEmpty {
                     emptyState
@@ -33,8 +34,10 @@ struct CartView: View {
             }
             .background(.appBackground)
             .toolbar {
-                ToolbarItem(placement: .topBarTrailing) {
-                    sortButton
+                if viewModel.isShowingToolbar {
+                    ToolbarItem(placement: .topBarTrailing) {
+                        sortButton
+                    }
                 }
             }
         }

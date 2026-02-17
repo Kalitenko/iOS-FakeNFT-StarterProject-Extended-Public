@@ -39,7 +39,7 @@ struct NFTCartCell: View {
     }
 
     private var name: some View {
-        Text(nft.name)
+        Text(nft.name.capitalized)
             .font(.title)
             .foregroundStyle(.appTextPrimary)
     }

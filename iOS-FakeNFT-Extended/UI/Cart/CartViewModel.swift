@@ -13,7 +13,9 @@ final class CartViewModel {
     var isLoading: Bool = false
     var errorMessage: String?
 
-    var isEmpty: Bool { !isLoading && items.isEmpty }
+    var isEmpty: Bool { items.isEmpty }
+
+    var isShowingToolbar: Bool { !isEmpty && errorMessage == nil }
 
     var itemsAmount: Int { items.count }
 
@@ -38,7 +40,7 @@ final class CartViewModel {
         do {
             items = try await cartService.loadCartItems()
         } catch {
-            errorMessage = "Не удалось загрузить корзину: \(error)"
+            errorMessage = "Не удалось получить данные: \(error)"
             items = []
         }
         isLoading = false
