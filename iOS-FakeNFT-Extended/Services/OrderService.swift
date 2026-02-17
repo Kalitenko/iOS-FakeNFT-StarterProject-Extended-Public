@@ -9,8 +9,7 @@ protocol OrderService {
     func loadOrder() async throws -> OrderDTO
 }
 
-@MainActor
-final class OrderServiceImpl: OrderService {
+actor OrderServiceImpl: OrderService {
     private let networkClient: NetworkClient
 
     init(networkClient: NetworkClient) {

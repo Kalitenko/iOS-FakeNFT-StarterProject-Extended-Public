@@ -6,7 +6,7 @@
 //
 import SwiftUI
 
-@Observable
+@Observable @MainActor
 final class CartViewModel {
     private let cartService: CartService
     var items: [NFTModel] = []

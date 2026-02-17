@@ -11,8 +11,7 @@ protocol CartService {
     func loadCartItems() async throws -> [NFTModel]
 }
 
-@MainActor
-final class CartServiceImpl: CartService {
+actor CartServiceImpl: CartService {
     private let orderService: OrderService
     private let nftService: NftService
 

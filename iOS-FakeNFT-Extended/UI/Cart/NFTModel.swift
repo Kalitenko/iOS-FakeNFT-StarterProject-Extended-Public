@@ -6,7 +6,7 @@
 //
 import Foundation
 
-struct NFTModel: Identifiable, Hashable {
+struct NFTModel: Identifiable, Hashable, Sendable {
     let id: String
     let name: String
     let price: String
