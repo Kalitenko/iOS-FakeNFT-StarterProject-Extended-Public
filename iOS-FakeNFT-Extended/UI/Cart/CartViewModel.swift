@@ -8,29 +8,51 @@ import SwiftUI
 
 @Observable
 final class CartViewModel {
-    var items: [NFTModel]
+    private let cartService: CartService
+    var items: [NFTModel] = []
+    var isLoading: Bool = false
+    var errorMessage: String?
 
-    let itemsMock: [NFTModel] = [
-        NFTModel(name: "April", price: "1,78 ETH", rating: 1, image: Image(.april)),
-        NFTModel(name: "Greena", price: "1,78 ETH", rating: 3, image: Image(.greena)),
-        NFTModel(name: "Spring", price: "1,78 ETH", rating: 5, image: Image(.spring))
-    ]
+    var isEmpty: Bool { !isLoading && items.isEmpty }
 
-    var isEmpty: Bool { items.isEmpty }
-
-    var itemsAmount: Int {
-        items.count
-    }
+    var itemsAmount: Int { items.count }
 
     var totalPrice: String {
-        "5,34"
+        let sum = items.compactMap { parseETH($0.price) }.reduce(0, +)
+
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .decimal
+        formatter.minimumFractionDigits = 2
+        formatter.maximumFractionDigits = 2
+        formatter.decimalSeparator = ","
+        return formatter.string(from: NSNumber(value: sum)) ?? "\(sum)"
     }
 
-    init(items: [NFTModel] = []) {
-        self.items = itemsMock
+    init(cartService: CartService) {
+        self.cartService = cartService
+    }
+
+    func load() async {
+        isLoading = true
+        errorMessage = nil
+        do {
+            items = try await cartService.loadCartItems()
+        } catch {
+            errorMessage = "Не удалось загрузить корзину: \(error)"
+            items = []
+        }
+        isLoading = false
     }
 
     func remove(_ nft: NFTModel) {
         items.removeAll { $0.id == nft.id }
+    }
+
+    private func parseETH(_ text: String) -> Double? {
+        let cleaned = text
+            .replacingOccurrences(of: " ETH", with: "")
+            .replacingOccurrences(of: " ", with: "")
+            .replacingOccurrences(of: ",", with: ".")
+        return Double(cleaned)
     }
 }

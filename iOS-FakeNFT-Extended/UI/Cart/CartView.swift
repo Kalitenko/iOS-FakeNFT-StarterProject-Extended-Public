@@ -12,14 +12,18 @@ struct CartView: View {
     @State private var selectedNFT: NFTModel?
     @State private var isSortingPresented = false
 
-    init(viewModel: CartViewModel = CartViewModel()) {
+    init(viewModel: CartViewModel) {
         _viewModel = State(initialValue: viewModel)
     }
 
     var body: some View {
         NavigationStack {
             VStack(spacing: .zero) {
-                if viewModel.isEmpty {
+                if viewModel.isLoading {
+                    LoadingPlaceholderView()
+                } else if let message = viewModel.errorMessage {
+                    // show error
+                } else if viewModel.isEmpty {
                     emptyState
                 } else {
                     itemsList
@@ -33,6 +37,9 @@ struct CartView: View {
                     sortButton
                 }
             }
+        }
+        .task {
+            await viewModel.load()
         }
         .confirmationDialog(
             L10n.Sort.title,
@@ -143,8 +150,4 @@ struct CartView: View {
         }
         selectedNFT = nil
     }
-}
-
-#Preview {
-    CartView()
 }

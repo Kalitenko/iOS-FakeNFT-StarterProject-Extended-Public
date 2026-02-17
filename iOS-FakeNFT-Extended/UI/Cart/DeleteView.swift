@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Kingfisher
 
 struct DeleteView: View {
     let nft: NFTModel
@@ -32,7 +33,7 @@ struct DeleteView: View {
     }
 
     private var image: some View {
-        nft.image
+        KFImage(nft.imageURL)
             .resizable()
             .scaledToFit()
             .frame(width: 108, height: 108)
@@ -78,9 +79,17 @@ struct DeleteView: View {
 }
 
 #Preview {
-    DeleteView(
-        nft: NFTModel(name: "", price: "", rating: 0, image: Image(.april)),
-        onDelete: { },
-        onCancel: { }
-    )
+    if let url = URL(string: "https://code.s3.yandex.net/Mobile/iOS/NFT/Pink/Lilo/1.png") {
+        DeleteView(
+            nft: NFTModel(
+                id: "",
+                name: "",
+                price: "",
+                rating: 0,
+                imageURL: url
+            ),
+            onDelete: { },
+            onCancel: { }
+        )
+    }
 }

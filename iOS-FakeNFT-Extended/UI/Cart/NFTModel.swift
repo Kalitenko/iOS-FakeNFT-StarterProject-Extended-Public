@@ -4,12 +4,12 @@
 //
 //  Created by Stepan Chuiko on 09.02.2026.
 //
-import SwiftUI
+import Foundation
 
-struct NFTModel: Identifiable {
-    let id = UUID()
+struct NFTModel: Identifiable, Hashable {
+    let id: String
     let name: String
     let price: String
     let rating: Int
-    let image: Image
+    let imageURL: URL
 }

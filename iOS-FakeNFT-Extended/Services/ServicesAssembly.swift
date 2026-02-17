@@ -21,4 +21,12 @@ final class ServicesAssembly {
             storage: nftStorage
         )
     }
+
+    var orderService: OrderService {
+        OrderServiceImpl(networkClient: networkClient)
+    }
+
+    var cartService: CartService {
+        CartServiceImpl(orderService: orderService, nftService: nftService)
+    }
 }

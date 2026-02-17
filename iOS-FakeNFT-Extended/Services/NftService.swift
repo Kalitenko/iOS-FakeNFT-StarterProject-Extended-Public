@@ -1,7 +1,7 @@
 import Foundation
 
 protocol NftService {
-    func loadNft(id: String) async throws -> Nft
+    func loadNft(id: String) async throws -> NftDTO
 }
 
 @MainActor
@@ -15,13 +15,13 @@ final class NftServiceImpl: NftService {
         self.networkClient = networkClient
     }
 
-    func loadNft(id: String) async throws -> Nft {
+    func loadNft(id: String) async throws -> NftDTO {
         if let nft = await storage.getNft(with: id) {
             return nft
         }
 
         let request = NFTRequest(id: id)
-        let nft: Nft = try await networkClient.send(request: request)
+        let nft: NftDTO = try await networkClient.send(request: request)
         await storage.saveNft(nft)
         return nft
     }
