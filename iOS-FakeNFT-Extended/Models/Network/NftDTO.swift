@@ -6,7 +6,7 @@
 //
 import Foundation
 
-struct NftDTO: Decodable {
+struct NftDTO: Decodable, Sendable {
     let createdAt: String?
     let name: String
     let images: [URL]
