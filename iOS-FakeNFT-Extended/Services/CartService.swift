@@ -9,6 +9,7 @@ import Foundation
 
 protocol CartService {
     func loadCartItems() async throws -> [NFTModel]
+    func updateCart(nftIDs: [String]) async throws -> OrderDTO
 }
 
 actor CartServiceImpl: CartService {
@@ -39,5 +40,9 @@ actor CartServiceImpl: CartService {
             items.sort { $0.name.localizedCaseInsensitiveCompare($1.name) == .orderedAscending }
             return items
         }
+    }
+
+    func updateCart(nftIDs: [String]) async throws -> OrderDTO {
+        try await orderService.updateOrder(nftIDs: nftIDs)
     }
 }

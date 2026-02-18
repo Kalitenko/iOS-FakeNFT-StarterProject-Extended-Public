@@ -11,6 +11,7 @@ final class CartViewModel {
     private let cartService: CartService
     var items: [NFTModel] = []
     var isLoading: Bool = false
+    var isUpdating: Bool = false
     var errorMessage: String?
 
     var isEmpty: Bool { items.isEmpty }
@@ -44,6 +45,24 @@ final class CartViewModel {
             items = []
         }
         isLoading = false
+    }
+
+    func deleteFromCart(nft: NFTModel) async {
+        guard !isUpdating else { return }
+        isUpdating = true
+        errorMessage = nil
+
+        let newIDs = items
+            .filter { $0.id != nft.id }
+            .map(\.id)
+
+        do {
+            _ = try await cartService.updateCart(nftIDs: newIDs)
+            items.removeAll { $0.id == nft.id }
+        } catch {
+            errorMessage = "Не удалось удалить товар: \(error)"
+        }
+        isUpdating = false
     }
 
     func remove(_ nft: NFTModel) {

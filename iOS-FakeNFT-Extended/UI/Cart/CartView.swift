@@ -22,8 +22,9 @@ struct CartView: View {
                 if viewModel.isLoading {
                     LoadingPlaceholderView()
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
-                } else if viewModel.errorMessage != nil {
+                } else if let message = viewModel.errorMessage {
                     // show error
+                    Text(message)
                 } else if viewModel.isEmpty {
                     emptyState
                 } else {
@@ -58,8 +59,10 @@ struct CartView: View {
                 DeleteView(
                     nft: nft,
                     onDelete: {
-                        viewModel.remove(nft)
-                        selectedNFT = nil
+                        Task {
+                            await viewModel.deleteFromCart(nft: nft)
+                            selectedNFT = nil
+                        }
                     },
                     onCancel: {
                         selectedNFT = nil
