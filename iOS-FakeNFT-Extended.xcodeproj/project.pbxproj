@@ -54,6 +54,10 @@
 		EA5561DA2F3A234300797C6B /* NFTCartCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA5561D92F3A234300797C6B /* NFTCartCell.swift */; };
 		EA5561DC2F3A24AA00797C6B /* NFTModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA5561DB2F3A242200797C6B /* NFTModel.swift */; };
 		EA5561DE2F3A499600797C6B /* CartViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA5561DD2F3A499100797C6B /* CartViewModel.swift */; };
+		EA7214DD2F45EB3A0005CEC2 /* CurrencyDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA7214DC2F45EB340005CEC2 /* CurrencyDTO.swift */; };
+		EA7214DF2F45ED130005CEC2 /* GetCurrenciesRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA7214DE2F45ED060005CEC2 /* GetCurrenciesRequest.swift */; };
+		EA7214E12F45EE370005CEC2 /* CurrencyService.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA7214E02F45EE320005CEC2 /* CurrencyService.swift */; };
+		EA7214E42F45FB720005CEC2 /* CurrencyModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA7214E32F45FB690005CEC2 /* CurrencyModel.swift */; };
 		EAD3DDF72F439D7600506D24 /* NavigationBarModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = EAD3DDF62F439D6E00506D24 /* NavigationBarModifier.swift */; };
 		EAD3DDF92F439E5F00506D24 /* ProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EAD3DDF82F439E5700506D24 /* ProgressView.swift */; };
 /* End PBXBuildFile section */
@@ -124,6 +128,10 @@
 		EA5561D92F3A234300797C6B /* NFTCartCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NFTCartCell.swift; sourceTree = "<group>"; };
 		EA5561DB2F3A242200797C6B /* NFTModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NFTModel.swift; sourceTree = "<group>"; };
 		EA5561DD2F3A499100797C6B /* CartViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CartViewModel.swift; sourceTree = "<group>"; };
+		EA7214DC2F45EB340005CEC2 /* CurrencyDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrencyDTO.swift; sourceTree = "<group>"; };
+		EA7214DE2F45ED060005CEC2 /* GetCurrenciesRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetCurrenciesRequest.swift; sourceTree = "<group>"; };
+		EA7214E02F45EE320005CEC2 /* CurrencyService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrencyService.swift; sourceTree = "<group>"; };
+		EA7214E32F45FB690005CEC2 /* CurrencyModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrencyModel.swift; sourceTree = "<group>"; };
 		EAD3DDF62F439D6E00506D24 /* NavigationBarModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationBarModifier.swift; sourceTree = "<group>"; };
 		EAD3DDF82F439E5700506D24 /* ProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -257,6 +265,7 @@
 		ABC5E19F2C31F6CB002B4068 /* Network */ = {
 			isa = PBXGroup;
 			children = (
+				EA7214DC2F45EB340005CEC2 /* CurrencyDTO.swift */,
 				EA2BD0142F44FEA600400179 /* UpdateOrderBody.swift */,
 				EA2BD00C2F44613400400179 /* NftDTO.swift */,
 				EA2BD0082F44606E00400179 /* OrderDTO.swift */,
@@ -277,6 +286,7 @@
 		ABC5E1A92C31FABA002B4068 /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				EA7214E02F45EE320005CEC2 /* CurrencyService.swift */,
 				EA2BD0122F4465B100400179 /* CartService.swift */,
 				EA2BD00E2F44630600400179 /* OrderService.swift */,
 				ABC5E1AC2C31FB6C002B4068 /* Requests */,
@@ -289,6 +299,7 @@
 		ABC5E1AC2C31FB6C002B4068 /* Requests */ = {
 			isa = PBXGroup;
 			children = (
+				EA7214DE2F45ED060005CEC2 /* GetCurrenciesRequest.swift */,
 				EA2BD0162F44FEDA00400179 /* UpdateOrderRequest.swift */,
 				EA2BD00A2F4460A500400179 /* GetOrderRequest.swift */,
 				ABC5E1B12C31FBD4002B4068 /* ExampleRequest.swift */,
@@ -360,7 +371,8 @@
 		EA5560A32F3A0C0500797C6B /* Cart */ = {
 			isa = PBXGroup;
 			children = (
-				EA2BD0102F44646C00400179 /* NFTModelMapper.swift */,
+				EA7214E32F45FB690005CEC2 /* CurrencyModel.swift */,
+				EA7214E22F45FA7E0005CEC2 /* Helpers */,
 				EA5561DD2F3A499100797C6B /* CartViewModel.swift */,
 				EA5561DB2F3A242200797C6B /* NFTModel.swift */,
 				EA5560A42F3A0C4900797C6B /* CartView.swift */,
@@ -368,6 +380,14 @@
 				EA10219B2F3B224F00487E64 /* DeleteView.swift */,
 			);
 			path = Cart;
+			sourceTree = "<group>";
+		};
+		EA7214E22F45FA7E0005CEC2 /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				EA2BD0102F44646C00400179 /* NFTModelMapper.swift */,
+			);
+			path = Helpers;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -546,6 +566,7 @@
 				ABC5E1E82C320610002B4068 /* NftDetailBridgeView.swift in Sources */,
 				ABC5E1E62C320585002B4068 /* LinePageControl.swift in Sources */,
 				ABC5E1DD2C3204DC002B4068 /* CellsReusingUtils.swift in Sources */,
+				EA7214DD2F45EB3A0005CEC2 /* CurrencyDTO.swift in Sources */,
 				EA2BD00B2F4460AC00400179 /* GetOrderRequest.swift in Sources */,
 				ABC5E1B52C31FC57002B4068 /* TabBarView.swift in Sources */,
 				EA2BD0092F44607300400179 /* OrderDTO.swift in Sources */,
@@ -567,6 +588,7 @@
 				ABC5E1AE2C31FB7F002B4068 /* NftByIdRequest.swift in Sources */,
 				ABC5E1DB2C3204CE002B4068 /* UIView+Constraints.swift in Sources */,
 				ABC5E16C2C31F5AF002B4068 /* iOS_FakeNFT_ExtendedApp.swift in Sources */,
+				EA7214E42F45FB720005CEC2 /* CurrencyModel.swift in Sources */,
 				ABC5E1CB2C3203FC002B4068 /* NftDetailCellModel.swift in Sources */,
 				ABC5E1AB2C31FACD002B4068 /* NftService.swift in Sources */,
 				ABC5E1B22C31FBD4002B4068 /* ExampleRequest.swift in Sources */,
@@ -574,7 +596,9 @@
 				ABC5E1CD2C32040C002B4068 /* NftImageCollectionViewCell.swift in Sources */,
 				ABC5E1A82C31FA90002B4068 /* DateFormatters+Presets.swift in Sources */,
 				EA2BD0172F44FEE000400179 /* UpdateOrderRequest.swift in Sources */,
+				EA7214DF2F45ED130005CEC2 /* GetCurrenciesRequest.swift in Sources */,
 				EA10219C2F3B224F00487E64 /* DeleteView.swift in Sources */,
+				EA7214E12F45EE370005CEC2 /* CurrencyService.swift in Sources */,
 				ABC5E1D12C32042C002B4068 /* NftDetailPresenter.swift in Sources */,
 				EA2BD00D2F44613F00400179 /* NftDTO.swift in Sources */,
 				ABC5E1B02C31FB90002B4068 /* RequestConstants.swift in Sources */,

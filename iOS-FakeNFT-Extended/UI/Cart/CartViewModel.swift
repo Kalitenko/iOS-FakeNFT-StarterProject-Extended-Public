@@ -65,8 +65,14 @@ final class CartViewModel {
         isUpdating = false
     }
 
-    func remove(_ nft: NFTModel) {
-        items.removeAll { $0.id == nft.id }
+    func loadCurrencies() async {
+        var currencies = [CurrencyModel]()
+        do {
+            currencies = try await cartService.getCurrencies()
+        } catch {
+            errorMessage = "Не удалось получить список валют \(error)"
+        }
+        print(currencies.first)
     }
 
     private func parseETH(_ text: String) -> Double? {

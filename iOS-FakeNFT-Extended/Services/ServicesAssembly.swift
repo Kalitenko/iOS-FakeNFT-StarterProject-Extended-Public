@@ -26,7 +26,11 @@ final class ServicesAssembly {
         OrderServiceImpl(networkClient: networkClient)
     }
 
+    var currencyService: CurrencyService {
+        CurrencyServiceImpl(networkClient: networkClient)
+    }
+
     var cartService: CartService {
-        CartServiceImpl(orderService: orderService, nftService: nftService)
+        CartServiceImpl(orderService: orderService, nftService: nftService, currencyService: currencyService)
     }
 }

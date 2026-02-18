@@ -107,7 +107,9 @@ struct CartView: View {
             }
 
             Button {
-
+                Task {
+                    await viewModel.loadCurrencies()
+                }
             } label: {
                 Text(L10n.Cart.totalToPay)
                     .font(.title)
@@ -148,12 +150,5 @@ struct CartView: View {
                 isSortingPresented = false
             }
         }
-    }
-
-    private func confirmDelete(_ nft: NFTModel) {
-        withAnimation(.easeInOut(duration: 0.2)) {
-            viewModel.remove(nft)
-        }
-        selectedNFT = nil
     }
 }
