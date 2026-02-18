@@ -26,3 +26,9 @@ final class NftServiceImpl: NftService {
         return nft
     }
 }
+
+final class MockNftService: NftService {
+    func loadNft(id: String) async throws -> Nft {
+        Nft(id: id, images: [])
+    }
+}

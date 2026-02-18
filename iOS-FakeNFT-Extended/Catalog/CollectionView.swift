@@ -9,7 +9,11 @@ import SwiftUI
 
 struct CollectionView: View {
     
-    let collection: CatalogItem
+    @State private var viewModel: CollectionViewModel
+    
+    init(viewModel: CollectionViewModel) {
+        _viewModel = State(wrappedValue: viewModel)
+    }
     
     var body: some View {
         ScrollView {
@@ -19,6 +23,9 @@ struct CollectionView: View {
         }
         .ignoresSafeArea(.container, edges: .top)
         .customNavigationBarApplyingIOS26()
+        .task {
+            await viewModel.loadData()
+        }
     }
     
     private var collectionContent: some View {
@@ -29,7 +36,7 @@ struct CollectionView: View {
     }
     
     private var collectionCover: some View {
-        Image(collection.cover)
+        Image(viewModel.collectionInfo.cover)
             .resizable()
             .scaledToFit()
             .frame(maxWidth: .infinity)
@@ -38,12 +45,12 @@ struct CollectionView: View {
     
     private var caption: some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text(collection.name)
+            Text(viewModel.collectionInfo.name)
                 .font(.bigTitle)
             
             VStack(alignment: .leading, spacing: 5) {
                 author
-                Text(collection.description)
+                Text(viewModel.collectionInfo.description)
             }
             .font(.smallText)
         }
@@ -53,8 +60,8 @@ struct CollectionView: View {
     private var author: some View {
         HStack(spacing: 4) {
             Text("\(L10n.Catalog.collectionAuthor): ")
-            NavigationLink("\(collection.author)") {
-                AuthorWebsiteView(author: collection.author, website: collection.website)
+            NavigationLink("\(viewModel.collectionInfo.author)") {
+                AuthorWebsiteView(author: viewModel.collectionInfo.author, website: viewModel.collectionInfo.website)
                     .customBackground()
             }
             .foregroundStyle(.appBlue)
@@ -70,7 +77,7 @@ struct CollectionView: View {
         ]
         
         return LazyVGrid(columns: columns, spacing: 8) {
-            ForEach(collection.elements, id: \.self) { item in
+            ForEach(viewModel.items, id: \.self) { item in
                 CollectionCell(item: item)
             }
         }
@@ -78,13 +85,13 @@ struct CollectionView: View {
 }
 
 #Preview("Экран коллекции") {
-    CollectionView(collection: MockData.Catalog.mock)
+    CollectionView(viewModel: .mock())
 }
 
 #Preview("Экран коллекции в навигации") {
     NavigationStack {
         NavigationLink("Open") {
-            CollectionView(collection: MockData.Catalog.mock)
+            CollectionView(viewModel: .mock())
                 .customBackground()
         }
     }

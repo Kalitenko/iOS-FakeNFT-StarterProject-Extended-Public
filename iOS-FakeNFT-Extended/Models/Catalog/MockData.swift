@@ -13,29 +13,29 @@ enum MockData {
         private static let description = "Персиковый — как облака над закатным солнцем в океане. В этой коллекции совмещены трогательная нежность и живая игривость сказочных зефирных зверей."
         
         static let mockItems: [CatalogItem] = [
-            CatalogItem(id: "1", name: "Beige", description: description, count: 21, cover: "Beige", elements: Collections.mockItems, author: "John Doe", website: "mock.author"),
-            CatalogItem(id: "2", name: "Blue", description: description, count: 15, cover: "Blue", elements: Collections.mockItems, author: "John Doe", website: "mock.author"),
-            CatalogItem(id: "3", name: "Brown", description: description, count: 24, cover: "Brown", elements: [], author: "John Doe", website: "mock.author"),
-            CatalogItem(id: "4", name: "Gray", description: description, count: 60, cover: "Gray", elements: Collections.mockItems, author: "John Doe", website: "mock.author"),
-            CatalogItem(id: "5", name: "Green", description: description, count: 12, cover: "Green", elements: Collections.mockItems, author: "John Doe", website: "mock.author"),
-            CatalogItem(id: "6", name: "Peach", description: description, count: 33, cover: "Peach", elements: Collections.mockItems, author: "John Doe", website: "mock.author"),
-            CatalogItem(id: "7", name: "Pink", description: description, count: 42, cover: "Pink", elements: Collections.mockItems, author: "John Doe", website: "mock.author"),
-            CatalogItem(id: "8", name: "White", description: description, count: 21, cover: "White", elements: Collections.mockItems, author: "John Doe", website: "mock.author"),
-            CatalogItem(id: "9", name: "Yellow", description: description, count: 24, cover: "Yellow", elements: Collections.mockItems, author: "John Doe", website: "mock.author"),
-            CatalogItem(id: "10", name: "Test Dark", description: description, count: 0, cover: "Test Dark", elements: Collections.mockItems, author: "John Doe", website: "mock.author"),
-            CatalogItem(id: "11", name: "Test Dark", description: description, count: 0, cover: "Test Dark", elements: Collections.mockItems, author: "John Doe", website: "mock.author"),
-            CatalogItem(id: "12", name: "Test Light", description: description, count: 0, cover: "Test Light", elements: Collections.mockItems, author: "John Doe", website: "mock.author"),
-            CatalogItem(id: "13", name: "Test Dark", description: description, count: 0, cover: "Test Dark", elements: Collections.mockItems, author: "John Doe", website: "mock.author"),
-            CatalogItem(id: "14", name: "Test Light", description: description, count: 0, cover: "Test Light", elements: Collections.mockItems, author: "John Doe", website: "mock.author"),
-            CatalogItem(id: "15", name: "Test Dark", description: description, count: 0, cover: "Test Dark", elements: Collections.mockItems, author: "John Doe", website: "mock.author"),
-            CatalogItem(id: "16", name: "Test Dark", description: description, count: 0, cover: "Test Dark", elements: Collections.mockItems, author: "John Doe", website: "mock.author"),
-            CatalogItem(id: "17", name: "Test Light", description: description, count: 0, cover: "Test Light", elements: Collections.mockItems, author: "John Doe", website: "mock.author"),
-            CatalogItem(id: "18", name: "Test Dark", description: description, count: 0, cover: "Test Dark", elements: Collections.mockItems, author: "John Doe", website: "mock.author"),
-            CatalogItem(id: "19", name: "Test Light", description: description, count: 0, cover: "Test Light", elements: Collections.mockItems, author: "John Doe", website: "mock.author"),
-            CatalogItem(id: "20", name: "Test Dark", description: description, count: 0, cover: "Test Dark", elements: Collections.mockItems, author: "John Doe", website: "mock.author")
+            CatalogItem(id: "1", name: "Beige", description: description, count: 21, cover: "Beige", nftIDs: [], author: "John Doe", website: "mock.author"),
+            CatalogItem(id: "2", name: "Blue", description: description, count: 15, cover: "Blue", nftIDs: [], author: "John Doe", website: "mock.author"),
+            CatalogItem(id: "3", name: "Brown", description: description, count: 24, cover: "Brown", nftIDs: [], author: "John Doe", website: "mock.author"),
+            CatalogItem(id: "4", name: "Gray", description: description, count: 60, cover: "Gray", nftIDs: [], author: "John Doe", website: "mock.author"),
+            CatalogItem(id: "5", name: "Green", description: description, count: 12, cover: "Green", nftIDs: [], author: "John Doe", website: "mock.author"),
+            CatalogItem(id: "6", name: "Peach", description: description, count: 33, cover: "Peach", nftIDs: [], author: "John Doe", website: "mock.author"),
+            CatalogItem(id: "7", name: "Pink", description: description, count: 42, cover: "Pink", nftIDs: [], author: "John Doe", website: "mock.author"),
+            CatalogItem(id: "8", name: "White", description: description, count: 21, cover: "White", nftIDs: [], author: "John Doe", website: "mock.author"),
+            CatalogItem(id: "9", name: "Yellow", description: description, count: 24, cover: "Yellow", nftIDs: [], author: "John Doe", website: "mock.author"),
+            CatalogItem(id: "10", name: "Test Dark", description: description, count: 0, cover: "Test Dark", nftIDs: [], author: "John Doe", website: "mock.author"),
+            CatalogItem(id: "11", name: "Test Dark", description: description, count: 0, cover: "Test Dark", nftIDs: [], author: "John Doe", website: "mock.author"),
+            CatalogItem(id: "12", name: "Test Light", description: description, count: 0, cover: "Test Light", nftIDs: [], author: "John Doe", website: "mock.author"),
+            CatalogItem(id: "13", name: "Test Dark", description: description, count: 0, cover: "Test Dark", nftIDs: [], author: "John Doe", website: "mock.author"),
+            CatalogItem(id: "14", name: "Test Light", description: description, count: 0, cover: "Test Light", nftIDs: [], author: "John Doe", website: "mock.author"),
+            CatalogItem(id: "15", name: "Test Dark", description: description, count: 0, cover: "Test Dark", nftIDs: [], author: "John Doe", website: "mock.author"),
+            CatalogItem(id: "16", name: "Test Dark", description: description, count: 0, cover: "Test Dark", nftIDs: [], author: "John Doe", website: "mock.author"),
+            CatalogItem(id: "17", name: "Test Light", description: description, count: 0, cover: "Test Light", nftIDs: [], author: "John Doe", website: "mock.author"),
+            CatalogItem(id: "18", name: "Test Dark", description: description, count: 0, cover: "Test Dark", nftIDs: [], author: "John Doe", website: "mock.author"),
+            CatalogItem(id: "19", name: "Test Light", description: description, count: 0, cover: "Test Light", nftIDs: [], author: "John Doe", website: "mock.author"),
+            CatalogItem(id: "20", name: "Test Dark", description: description, count: 0, cover: "Test Dark", nftIDs: [], author: "John Doe", website: "mock.author")
         ]
         
-        static let mock = CatalogItem(id: "6", name: "Peach", description: description, count: 33, cover: "Peach", elements: Collections.mockItems, author: "John Doe", website: "mock.author")
+        static let mock = CatalogItem(id: "6", name: "Peach", description: description, count: 33, cover: "Peach", nftIDs: [], author: "John Doe", website: "mock.author")
     }
     
     enum Collections {

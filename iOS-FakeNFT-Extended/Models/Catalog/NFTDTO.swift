@@ -18,3 +18,20 @@ struct NFTDTO: Decodable, Hashable, Sendable {
     let website: String
     let createdAt: String
 }
+
+extension NFTDTO {
+    func toDomain(
+        isFavorite: Bool = false,
+        isInCart: Bool = false
+    ) -> CollectionItem {
+        CollectionItem(
+            id: id,
+            name: name,
+            imageURLs: images,
+            rating: rating,
+            price: price,
+            isFavorite: isFavorite,
+            isInCart: isInCart
+        )
+    }
+}
