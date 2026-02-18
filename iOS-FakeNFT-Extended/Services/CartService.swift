@@ -11,17 +11,25 @@ protocol CartService {
     func loadCartItems() async throws -> [NFTModel]
     func updateCart(nftIDs: [String]) async throws -> OrderDTO
     func getCurrencies() async throws -> [CurrencyModel]
+    func completeOrder(nftIDs: [String]) async throws -> Bool
 }
 
 actor CartServiceImpl: CartService {
     private let orderService: OrderService
     private let currencyService: CurrencyService
     private let nftService: NftService
+    private let paymentService: PaymentService
 
-    init(orderService: OrderService, nftService: NftService, currencyService: CurrencyService) {
+    init(
+        orderService: OrderService,
+        nftService: NftService,
+        currencyService: CurrencyService,
+        paymentService: PaymentService
+    ) {
         self.orderService = orderService
         self.nftService = nftService
         self.currencyService = currencyService
+        self.paymentService = paymentService
     }
 
     func loadCartItems() async throws -> [NFTModel] {
@@ -63,5 +71,15 @@ actor CartServiceImpl: CartService {
         }
 
         return models
+    }
+
+    func completeOrder(nftIDs: [String]) async throws -> Bool {
+        guard !nftIDs.isEmpty else { return true }
+
+        try await paymentService.completeOrder(nftIDs: nftIDs)
+
+        // To clean cart
+
+        return true
     }
 }

@@ -9,6 +9,7 @@ import SwiftUI
 @Observable @MainActor
 final class CartViewModel {
     private let cartService: CartService
+
     var items: [NFTModel] = []
     var isLoading: Bool = false
     var isUpdating: Bool = false
@@ -65,6 +66,7 @@ final class CartViewModel {
         isUpdating = false
     }
 
+    // Test example
     func loadCurrencies() async {
         var currencies = [CurrencyModel]()
         do {
@@ -72,7 +74,21 @@ final class CartViewModel {
         } catch {
             errorMessage = "Не удалось получить список валют \(error)"
         }
-        print(currencies.first)
+        print(currencies.first ?? "")
+    }
+
+    // Test example
+    func completeOrder() async {
+        guard !isUpdating else { return }
+        isUpdating = true
+        errorMessage = nil
+
+        do {
+            _ = try await cartService.completeOrder(nftIDs: items.map(\.id))
+        } catch {
+            errorMessage = "Не удалось выполнить заказ \(error)"
+        }
+        isUpdating = false
     }
 
     private func parseETH(_ text: String) -> Double? {

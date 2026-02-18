@@ -108,7 +108,8 @@ struct CartView: View {
 
             Button {
                 Task {
-                    await viewModel.loadCurrencies()
+                    // await viewModel.loadCurrencies()
+                    await viewModel.completeOrder()
                 }
             } label: {
                 Text(L10n.Cart.totalToPay)
