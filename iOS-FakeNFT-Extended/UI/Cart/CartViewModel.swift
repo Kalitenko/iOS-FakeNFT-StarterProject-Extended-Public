@@ -17,7 +17,7 @@ final class CartViewModel {
 
     var isEmpty: Bool { items.isEmpty }
 
-    var isShowingToolbar: Bool { !isEmpty && errorMessage == nil }
+    var isShowingToolbar: Bool { !isEmpty }
 
     var itemsAmount: Int { items.count }
 
@@ -43,6 +43,7 @@ final class CartViewModel {
             items = try await cartService.loadCartItems()
         } catch {
             errorMessage = "Не удалось получить данные: \(error)"
+            print(errorMessage ?? "")
             items = []
         }
         isLoading = false
@@ -62,6 +63,7 @@ final class CartViewModel {
             items.removeAll { $0.id == nft.id }
         } catch {
             errorMessage = "Не удалось удалить товар: \(error)"
+            print(errorMessage ?? "")
         }
         isUpdating = false
     }
@@ -73,6 +75,7 @@ final class CartViewModel {
             currencies = try await cartService.getCurrencies()
         } catch {
             errorMessage = "Не удалось получить список валют \(error)"
+            print(errorMessage ?? "")
         }
         print(currencies.first ?? "")
     }
@@ -84,9 +87,10 @@ final class CartViewModel {
         errorMessage = nil
 
         do {
-            let success = try await cartService.completeOrder(nftIDs: items.map(\.id), currencyID: "2")
+            _ = try await cartService.completeOrder(nftIDs: items.map(\.id), currencyID: "2")
         } catch {
             errorMessage = "Не удалось выполнить заказ \(error)"
+            print(errorMessage ?? "")
         }
         isUpdating = false
     }

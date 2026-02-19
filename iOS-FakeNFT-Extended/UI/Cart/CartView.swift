@@ -12,6 +12,16 @@ struct CartView: View {
     @State private var selectedNFT: NFTModel?
     @State private var isSortingPresented = false
 
+    private var isErrorAlertPresented: Binding<Bool> {
+        Binding {
+            viewModel.errorMessage != nil
+        } set: { isPresented in
+            if !isPresented {
+                viewModel.errorMessage = nil
+            }
+        }
+    }
+
     init(viewModel: CartViewModel) {
         _viewModel = State(initialValue: viewModel)
     }
@@ -22,9 +32,6 @@ struct CartView: View {
                 if viewModel.isLoading {
                     LoadingPlaceholderView()
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
-                } else if let message = viewModel.errorMessage {
-                    // show error
-                    Text(message)
                 } else if viewModel.isEmpty {
                     emptyState
                 } else {
@@ -44,6 +51,13 @@ struct CartView: View {
         }
         .task {
             await viewModel.load()
+        }
+        .alert(
+            L10n.Alerts.dataLoadFailed,
+            isPresented: isErrorAlertPresented
+        ) {
+            Button(L10n.Common.retry) { Task { await viewModel.load() } }
+            Button(L10n.Common.cancel, role: .cancel) { viewModel.errorMessage = nil }
         }
         .confirmationDialog(
             L10n.Sort.title,
@@ -109,7 +123,8 @@ struct CartView: View {
             Button {
                 Task {
                     // await viewModel.loadCurrencies()
-                    await viewModel.completeOrder()
+                    // await viewModel.completeOrder()
+                    viewModel.errorMessage = "Не удалось получить данные: Forbidden(403)"
                 }
             } label: {
                 Text(L10n.Cart.totalToPay)
