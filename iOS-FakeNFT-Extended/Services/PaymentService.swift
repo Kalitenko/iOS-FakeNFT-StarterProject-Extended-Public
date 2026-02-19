@@ -10,6 +10,7 @@ import Foundation
 protocol PaymentService {
     func completeOrder(nftID: String) async throws
     func completeOrder(nftIDs: [String]) async throws
+    func makePayment(currencyID: String) async throws -> PaymentDTO
 }
 
 actor PaymentServiceImpl: PaymentService {
@@ -30,5 +31,11 @@ actor PaymentServiceImpl: PaymentService {
         for id in nftIDs {
             try await completeOrder(nftID: id)
         }
+    }
+
+    func makePayment(currencyID: String) async throws -> PaymentDTO {
+        let request = PurchaseRequest(currencyID: currencyID)
+        let paymentResult: PaymentDTO = try await networkClient.send(request: request)
+        return paymentResult
     }
 }

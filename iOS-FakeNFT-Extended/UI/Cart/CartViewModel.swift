@@ -84,7 +84,7 @@ final class CartViewModel {
         errorMessage = nil
 
         do {
-            _ = try await cartService.completeOrder(nftIDs: items.map(\.id))
+            let success = try await cartService.completeOrder(nftIDs: items.map(\.id), currencyID: "2")
         } catch {
             errorMessage = "Не удалось выполнить заказ \(error)"
         }
