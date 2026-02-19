@@ -10,7 +10,7 @@ import Foundation
 struct NFTDTO: Decodable, Hashable, Sendable {
     let id: String
     let name: String
-    let images: [String]
+    let images: [URL]
     let description: String
     let rating: Int
     let price: Decimal
@@ -27,7 +27,7 @@ extension NFTDTO {
         CollectionItem(
             id: id,
             name: name,
-            imageURLs: images,
+            imageURLs: images.map(ImageSource.remote),
             rating: rating,
             price: price,
             isFavorite: isFavorite,

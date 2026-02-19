@@ -36,9 +36,7 @@ struct CollectionView: View {
     }
     
     private var collectionCover: some View {
-        Image(viewModel.collectionInfo.cover)
-            .resizable()
-            .scaledToFit()
+        AppImageView(source: viewModel.collectionInfo.cover)
             .frame(maxWidth: .infinity)
             .clipped()
     }
@@ -77,7 +75,7 @@ struct CollectionView: View {
         ]
         
         return LazyVGrid(columns: columns, spacing: 8) {
-            ForEach(viewModel.items, id: \.self) { item in
+            ForEach(viewModel.items, id: \.id) { item in
                 CollectionCell(item: item)
             }
         }

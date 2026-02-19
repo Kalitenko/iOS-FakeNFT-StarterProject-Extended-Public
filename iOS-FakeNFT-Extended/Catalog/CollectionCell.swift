@@ -19,24 +19,24 @@ struct CollectionCell: View {
         }
     }
     
-    private var image: some View {
-        ZStack(alignment: .topTrailing) {
-            rawImage
-                .resizable()
-                .scaledToFill()
-                .frame(width: imageSize, height: imageSize)
-                .clipped()
-                .clipShape(RoundedRectangle(cornerRadius: 12))
-                .foregroundStyle(.appGrey)
-            heart
-        }
+    var firstImage: ImageSource {
+        item.imagesUrlsStrings.first ?? .empty
     }
     
-    private var rawImage: Image {
-        if let imageName = item.imagesUrlsStrings.first {
-            Image(imageName)
-        } else {
-            Image(systemName: "photo.fill")
+    private var image: some View {
+        ZStack(alignment: .topTrailing) {
+            AppImageView(
+                source: firstImage,
+                size: CGSize(width: imageSize, height: imageSize)
+            )
+            .frame(width: imageSize, height: imageSize)
+            .clipShape(RoundedRectangle(cornerRadius: 12))
+            .scaledToFill()
+            .frame(width: imageSize, height: imageSize)
+            .clipped()
+            .clipShape(RoundedRectangle(cornerRadius: 12))
+
+            heart
         }
     }
     
@@ -57,6 +57,8 @@ struct CollectionCell: View {
         HStack {
             VStack(alignment: .leading, spacing: 4) {
                 Text(item.name)
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.5)
                     .font(.title)
                 Text("\(item.price, format: .number) ETH")
                     .lineLimit(1)
