@@ -12,10 +12,16 @@ import SwiftUI
 @Observable
 final class CatalogViewModel {
     
+    enum CatalogViewModelState {
+        case loading
+        case loaded([CatalogItem])
+        case error(String)
+    }
+    
     let catalogService: CatalogServiceProtocol
     
-    var catalog: [CatalogItem] = []
-    
+    var state: CatalogViewModelState = .loading
+        
     init(
         catalogService: CatalogServiceProtocol
     ) {
@@ -23,10 +29,13 @@ final class CatalogViewModel {
     }
     
     func loadData() async {
+        state = .loading
         do {
-            catalog = try await catalogService.fetchCatalog(page: 0, limit: 20)
+            let catalog = try await catalogService.fetchCatalog(page: 0, limit: 20)
+            state = .loaded(catalog)
         } catch {
             print(error)
+            state = .error(error.localizedDescription)
         }
     }
 }

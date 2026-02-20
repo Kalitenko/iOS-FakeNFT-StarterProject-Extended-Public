@@ -32,7 +32,7 @@ enum MockData {
             CatalogItem(id: "17", name: "Test Light", description: description, count: 0, cover: .local("Test Light"), nftIDs: [], author: "John Doe", website: "mock.author"),
             CatalogItem(id: "18", name: "Test Dark", description: description, count: 0, cover: .local("Test Dark"), nftIDs: [], author: "John Doe", website: "mock.author"),
             CatalogItem(id: "19", name: "Test Light", description: description, count: 0, cover: .local("Test Light"), nftIDs: [], author: "John Doe", website: "mock.author"),
-            CatalogItem(id: "20", name: "Test Dark", description: description, count: 0, cover: .local("Test Dark"), nftIDs: [], author: "John Doe", website: "mock.author")
+            CatalogItem(id: "20", name: "Test", description: description, count: 0, cover: .local("Test"), nftIDs: [], author: "John Doe", website: "mock.author")
         ]
         
         static let mock = CatalogItem(id: "6", name: "Peach", description: description, count: 33, cover: .local("Peach"), nftIDs: [], author: "John Doe", website: "mock.author")

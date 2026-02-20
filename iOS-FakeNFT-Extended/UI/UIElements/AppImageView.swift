@@ -24,45 +24,54 @@ struct AppImageView: View {
         self.size = size
     }
     
+    @State private var hasError = false
+    
     var body: some View {
         switch source {
+            
         case .local(let name):
             Image(name)
                 .resizable()
                 .scaledToFill()
             
         case .remote(let url):
-            let scale = UIScreen.main.scale
-            
-            let image = KFImage(url)
-                .placeholder {
-                    placeholderImage
-                }
-            
-            if let size {
-                image.setProcessor(
-                    DownsamplingImageProcessor(
-                        size: CGSize(
-                            width: size.width * scale,
-                            height: size.height * scale
-                        )
-                    )
-                )
-            }
-            image
-                .resizable()
-                .scaledToFill()
+            remoteImage(url)
             
         case .empty:
             placeholderImage
         }
     }
     
+    @ViewBuilder
+    private func remoteImage(_ url: URL) -> some View {
+        
+        if hasError {
+            placeholderImage
+        } else {
+            KFImage(url)
+                .placeholder {
+                    ZStack {
+                        Color(.appGrey)
+                        CircularProgressView()
+                    }
+                }
+                .onFailure { _ in
+                    hasError = true
+                }
+                .resizable()
+                .scaledToFill()
+        }
+    }
+    
     private var placeholderImage: some View {
-        Image(systemName: "photo.fill")
-            .resizable()
-            .scaledToFit()
-            .foregroundStyle(.appGrey)
+        ZStack {
+            Color(.appGrey.opacity(0.2))
+            Image(systemName: "photo.fill")
+                .resizable()
+                .scaledToFit()
+                .foregroundStyle(.appGrey)
+                .padding(20)
+        }
     }
 }
 
