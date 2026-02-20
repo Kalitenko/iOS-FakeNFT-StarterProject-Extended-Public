@@ -11,7 +11,7 @@ struct NFTCollectionDTO: Decodable, Hashable, Sendable {
     let id: String
     let name: String
     let description: String
-    let cover: String
+    let cover: URL
     let nfts: [String]
     let author: String
     let website: String
@@ -19,16 +19,26 @@ struct NFTCollectionDTO: Decodable, Hashable, Sendable {
 }
 
 extension NFTCollectionDTO {
+    
     func toDomain() -> CatalogItem {
-        CatalogItem(
+        let uniqueNFTs = nfts.uniquedPreservingOrder()
+        
+        return CatalogItem(
             id: id,
             name: name,
             description: description,
-            count: nfts.count,
-            cover: cover,
-            nftIDs: nfts,
+            count: uniqueNFTs.count,
+            cover: .remote(cover),
+            nftIDs: uniqueNFTs,
             author: author,
             website: website
         )
+    }
+}
+
+extension Array where Element: Hashable {
+    func uniquedPreservingOrder() -> [Element] {
+        var seen = Set<Element>()
+        return filter { seen.insert($0).inserted }
     }
 }

@@ -64,6 +64,7 @@
 		C2E5A8FD2F3B7D5500632512 /* CollectionItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2E5A8FC2F3B7D5500632512 /* CollectionItem.swift */; };
 		C2E5A96E2F3C521E00632512 /* StarRatingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2E5A96D2F3C521E00632512 /* StarRatingView.swift */; };
 		C2F4FCE12F46409300372066 /* CollectionViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2F4FCE02F46409300372066 /* CollectionViewModel.swift */; };
+		C2F4FCE32F46F63B00372066 /* AppImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2F4FCE22F46F63B00372066 /* AppImageView.swift */; };
 		EA3CE9BD2F387D7B005CFF7D /* ActionButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA3CE9BC2F387D7B005CFF7D /* ActionButton.swift */; };
 /* End PBXBuildFile section */
 
@@ -143,6 +144,7 @@
 		C2E5A8FC2F3B7D5500632512 /* CollectionItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionItem.swift; sourceTree = "<group>"; };
 		C2E5A96D2F3C521E00632512 /* StarRatingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarRatingView.swift; sourceTree = "<group>"; };
 		C2F4FCE02F46409300372066 /* CollectionViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionViewModel.swift; sourceTree = "<group>"; };
+		C2F4FCE22F46F63B00372066 /* AppImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppImageView.swift; sourceTree = "<group>"; };
 		EA3CE9BC2F387D7B005CFF7D /* ActionButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionButton.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -425,6 +427,7 @@
 				C25A8C252F3FBCAB00B0462E /* LikeButton.swift */,
 				C25A8C272F3FBCD300B0462E /* CartButton.swift */,
 				C20076C02F3F38AE00C217BF /* CustomBackgroundModifier.swift */,
+				C2F4FCE22F46F63B00372066 /* AppImageView.swift */,
 			);
 			path = UIElements;
 			sourceTree = "<group>";
@@ -614,6 +617,7 @@
 				ABC5E1B52C31FC57002B4068 /* TabBarView.swift in Sources */,
 				C2E5A8FB2F3B7D3F00632512 /* CollectionCell.swift in Sources */,
 				ABC5E1E42C32055B002B4068 /* ErrorView.swift in Sources */,
+				C2F4FCE32F46F63B00372066 /* AppImageView.swift in Sources */,
 				ABC5E1A62C31F815002B4068 /* NetworkRequest.swift in Sources */,
 				ABC5E1D52C320446002B4068 /* NftDetailInput.swift in Sources */,
 				ABC5E16E2C31F5AF002B4068 /* ContentView.swift in Sources */,

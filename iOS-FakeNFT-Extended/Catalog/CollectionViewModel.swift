@@ -28,9 +28,27 @@ final class CollectionViewModel {
     
     func loadData() async {
         do {
-            items = try await catalogService.fetchNFTs(page: 0, limit: 20)
+            try await loadNFTs()
         } catch {
             print(error)
+        }
+    }
+
+    func loadNFTs() async throws {
+        try await withThrowingTaskGroup(of: CollectionItem.self) { group in
+            
+            for id in collectionInfo.nftIDs {
+                group.addTask {
+                    try await self.catalogService.fetchNFTById(id)
+                }
+            }
+            
+            var result: [CollectionItem] = []
+
+            for try await item in group {
+                result.append(item)
+            }
+            self.items = result
         }
     }
 }
