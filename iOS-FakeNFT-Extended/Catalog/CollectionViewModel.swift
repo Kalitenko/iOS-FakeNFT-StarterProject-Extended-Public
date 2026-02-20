@@ -12,11 +12,19 @@ import SwiftUI
 @Observable
 final class CollectionViewModel {
     
+    enum CollectionViewModelState {
+        case loading
+        case loaded([CollectionItem])
+        case error(String)
+    }
+    
+    var state: CollectionViewModelState = .loading
+    
     private let catalogService: CatalogServiceProtocol
     
     let collectionInfo: CatalogItem
     
-    var items: [CollectionItem] = []
+    private var items: [CollectionItem] = []
     
     init(
         catalogService: CatalogServiceProtocol,
@@ -27,10 +35,13 @@ final class CollectionViewModel {
     }
     
     func loadData() async {
+        state = .loading
         do {
             try await loadNFTs()
+            state = .loaded(items)
         } catch {
             print(error)
+            state = .error(error.localizedDescription)
         }
     }
 

@@ -17,7 +17,26 @@ struct CatalogView: View {
     }
     
     var body: some View {
-        CatalogListView(items: viewModel.catalog)
+        Group {
+            switch viewModel.state {
+            case .loading:
+                CircularProgressView()
+                
+            case .loaded(let items):
+                catalogContent(items)
+                
+            case .error:
+                // TODO: обработать ошибку
+                catalogContent([])
+            }
+        }
+        .task {
+            await viewModel.loadData()
+        }
+    }
+    
+    private func catalogContent(_ items: [CatalogItem]) -> some View {
+        CatalogListView(items: items)
             .padding(.horizontal, 16)
             .padding(.bottom, 20)
             .customNavigationBarApplyingIOS26(
@@ -35,9 +54,6 @@ struct CatalogView: View {
                 Button(L10n.Sort.byTitle) { print(L10n.Sort.byTitle) }
                 Button(L10n.Sort.byNFTCount) { print(L10n.Sort.byNFTCount) }
                 Button(L10n.Common.close, role: .cancel) { }
-            }
-            .task {
-                await viewModel.loadData()
             }
     }
 }

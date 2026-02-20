@@ -31,7 +31,19 @@ struct CollectionView: View {
     private var collectionContent: some View {
         VStack(spacing: 24) {
             caption
-            grid
+            Group {
+                switch viewModel.state {
+                case .loading:
+                    LoadingPlaceholderView()
+                    
+                case .loaded(let items):
+                    grid(items)
+                    
+                case .error:
+                    // TODO: обработать ошибку
+                    grid([])
+                }
+            }
         }
     }
     
@@ -66,7 +78,7 @@ struct CollectionView: View {
         }
     }
     
-    private var grid: some View {
+    private func grid(_ items: [CollectionItem]) -> some View {
         
         let columns = [
             GridItem(.flexible()),
@@ -75,7 +87,7 @@ struct CollectionView: View {
         ]
         
         return LazyVGrid(columns: columns, spacing: 8) {
-            ForEach(viewModel.items, id: \.id) { item in
+            ForEach(items, id: \.id) { item in
                 CollectionCell(item: item)
             }
         }
