@@ -20,11 +20,7 @@ enum NFTModelMapper {
     }
 
     private static func formatETH(_ value: Double) -> String {
-        let formatter = NumberFormatter()
-        formatter.numberStyle = .decimal
-        formatter.maximumFractionDigits = 2
-        formatter.minimumFractionDigits = 2
-        formatter.decimalSeparator = ","
+        let formatter = NumberFormatterManager.formatter
         let number = formatter.string(from: NSNumber(value: value)) ?? "\(value)"
         return "\(number) ETH"
     }

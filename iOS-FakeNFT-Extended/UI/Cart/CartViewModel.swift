@@ -24,11 +24,7 @@ final class CartViewModel {
     var totalPrice: String {
         let sum = items.compactMap { parseETH($0.price) }.reduce(0, +)
 
-        let formatter = NumberFormatter()
-        formatter.numberStyle = .decimal
-        formatter.minimumFractionDigits = 2
-        formatter.maximumFractionDigits = 2
-        formatter.decimalSeparator = ","
+        let formatter = NumberFormatterManager.formatter
         return formatter.string(from: NSNumber(value: sum)) ?? "\(sum)"
     }
 
