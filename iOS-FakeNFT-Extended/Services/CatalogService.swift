@@ -8,13 +8,12 @@
 import Foundation
 
 protocol CatalogServiceProtocol: Sendable {
-    func fetchCatalog(page: Int, limit: Int) async throws -> [NFTCollectionDTO]
-    func fetchCollectionById(_ id: String) async throws -> NFTCollectionDTO
-    func fetchNFTs(page: Int, limit: Int) async throws -> [NFTDTO]
-    func fetchNFTById(_ id: String) async throws -> NFTDTO
+    func fetchCatalog(page: Int, limit: Int) async throws -> [CatalogItem]
+    func fetchCollectionById(_ id: String) async throws -> CatalogItem
+    func fetchNFTs(page: Int, limit: Int) async throws -> [CollectionItem]
+    func fetchNFTById(_ id: String) async throws -> CollectionItem
 }
 
-@MainActor
 final class CatalogService: CatalogServiceProtocol {
     
     private let networkClient: NetworkClient
@@ -23,23 +22,46 @@ final class CatalogService: CatalogServiceProtocol {
         self.networkClient = networkClient
     }
     
-    func fetchCatalog(page: Int, limit: Int) async throws -> [NFTCollectionDTO] {
+    func fetchCatalog(page: Int, limit: Int) async throws -> [CatalogItem] {
         let request = CatalogRequest(pageNumber: page, pageSize: limit)
-        return try await networkClient.send(request: request)
+        let dto: [NFTCollectionDTO] = try await networkClient.send(request: request)
+        return dto.map { $0.toDomain() }
     }
     
-    func fetchCollectionById(_ id: String) async throws -> NFTCollectionDTO {
+    func fetchCollectionById(_ id: String) async throws -> CatalogItem {
         let request = CollectionByIdRequest(id: id)
-        return try await networkClient.send(request: request)
+        let dto: NFTCollectionDTO = try await networkClient.send(request: request)
+        return dto.toDomain()
     }
     
-    func fetchNFTs(page: Int, limit: Int) async throws -> [NFTDTO] {
+    func fetchNFTs(page: Int, limit: Int) async throws -> [CollectionItem] {
         let request = NFTSRequest(pageNumber: page, pageSize: limit)
-        return try await networkClient.send(request: request)
+        let dto: [NFTDTO] = try await networkClient.send(request: request)
+        return dto.map { $0.toDomain() }
     }
     
-    func fetchNFTById(_ id: String) async throws -> NFTDTO {
+    func fetchNFTById(_ id: String) async throws -> CollectionItem {
         let request = NFTByIdRequest(id: id)
-        return try await networkClient.send(request: request)
+        let dto: NFTDTO = try await networkClient.send(request: request)
+        return dto.toDomain()
+    }
+}
+
+final class MockCatalogService: CatalogServiceProtocol {
+    
+    func fetchCatalog(page: Int, limit: Int) async throws -> [CatalogItem] {
+        MockData.Catalog.mockItems
+    }
+    
+    func fetchCollectionById(_ id: String) async throws -> CatalogItem {
+        MockData.Catalog.mock
+    }
+    
+    func fetchNFTs(page: Int, limit: Int) async throws -> [CollectionItem] {
+        MockData.Collections.mockItems
+    }
+    
+    func fetchNFTById(_ id: String) async throws -> CollectionItem {
+        MockData.Collections.mockIsNotLikedAndInCart
     }
 }

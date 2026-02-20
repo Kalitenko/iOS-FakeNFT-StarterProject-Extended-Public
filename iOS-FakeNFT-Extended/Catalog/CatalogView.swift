@@ -10,11 +10,14 @@ import SwiftUI
 struct CatalogView: View {
     
     @State private var showSortMenu = false
+    @State private var viewModel: CatalogViewModel
     
-    let items: [CatalogItem]
+    init(viewModel: CatalogViewModel) {
+        _viewModel = State(wrappedValue: viewModel)
+    }
     
     var body: some View {
-        CatalogListView(items: items)
+        CatalogListView(items: viewModel.catalog)
             .padding(.horizontal, 16)
             .padding(.bottom, 20)
             .customNavigationBarApplyingIOS26(
@@ -24,7 +27,7 @@ struct CatalogView: View {
                 }
             )
             .navigationDestination(for: CatalogItem.self) { item in
-                CollectionView(collection: item)
+                CollectionView(viewModel: CollectionViewModel(catalogService: viewModel.catalogService, collectionInfo: item))
                     .customBackground()
                     .toolbar(.hidden, for: .tabBar)
             }
@@ -33,12 +36,15 @@ struct CatalogView: View {
                 Button(L10n.Sort.byNFTCount) { print(L10n.Sort.byNFTCount) }
                 Button(L10n.Common.close, role: .cancel) { }
             }
+            .task {
+                await viewModel.loadData()
+            }
     }
 }
 
 #Preview {
     NavigationStack {
-        CatalogView(items: MockData.Catalog.mockItems)
+        CatalogView(viewModel: .mock())
             .customBackground(color: .purple)
     }
 }

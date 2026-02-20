@@ -17,3 +17,18 @@ struct NFTCollectionDTO: Decodable, Hashable, Sendable {
     let website: String
     let createdAt: String
 }
+
+extension NFTCollectionDTO {
+    func toDomain() -> CatalogItem {
+        CatalogItem(
+            id: id,
+            name: name,
+            description: description,
+            count: nfts.count,
+            cover: cover,
+            nftIDs: nfts,
+            author: author,
+            website: website
+        )
+    }
+}
