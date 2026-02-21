@@ -2,6 +2,8 @@ import SwiftUI
 
 struct TabBarView: View {
     
+    @Environment(ServicesAssembly.self) private var services
+    
     init() {
         let appearance = UITabBarAppearance()
         appearance.configureWithOpaqueBackground()
@@ -33,7 +35,7 @@ struct TabBarView: View {
                     }
                 }
             NavigationStack {
-                CatalogView(items: MockData.Catalog.mockItems)
+                CatalogView(viewModel: CatalogViewModel(catalogService: services.catalogService))
                     .customBackground()
             }
             .tabItem {
@@ -63,8 +65,4 @@ struct TabBarView: View {
                 }
         }
     }
-}
-
-#Preview {
-    TabBarView()
 }

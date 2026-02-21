@@ -10,13 +10,13 @@ import Foundation
 struct CollectionItem: Hashable {
     let id: String
     let name: String
-    let imagesUrlsStrings: [String]
+    let imagesUrlsStrings: [ImageSource]
     let rating: Int
     let price: Decimal
     let isFavorite: Bool
     let isInCart: Bool
     
-    init(id: String, name: String, imageURLs: [String], rating: Int, price: Decimal, isFavorite: Bool, isInCart: Bool = false) {
+    init(id: String, name: String, imageURLs: [ImageSource], rating: Int, price: Decimal, isFavorite: Bool, isInCart: Bool = false) {
         self.id = id
         self.name = name
         self.imagesUrlsStrings = imageURLs

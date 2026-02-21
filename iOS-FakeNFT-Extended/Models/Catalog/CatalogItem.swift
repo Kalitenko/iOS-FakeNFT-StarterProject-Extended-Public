@@ -12,8 +12,8 @@ struct CatalogItem: Hashable {
     let name: String
     let description: String
     let count: Int
-    let cover: String
-    let elements: [CollectionItem]
+    let cover: ImageSource
+    let nftIDs: [String]
     let author: String
     let website: String
 }

@@ -10,10 +10,32 @@ import SwiftUI
 struct CatalogView: View {
     
     @State private var showSortMenu = false
+    @State private var viewModel: CatalogViewModel
     
-    let items: [CatalogItem]
+    init(viewModel: CatalogViewModel) {
+        _viewModel = State(wrappedValue: viewModel)
+    }
     
     var body: some View {
+        Group {
+            switch viewModel.state {
+            case .loading:
+                CircularProgressView()
+                
+            case .loaded(let items):
+                catalogContent(items)
+                
+            case .error:
+                // TODO: обработать ошибку
+                catalogContent([])
+            }
+        }
+        .task {
+            await viewModel.loadData()
+        }
+    }
+    
+    private func catalogContent(_ items: [CatalogItem]) -> some View {
         CatalogListView(items: items)
             .padding(.horizontal, 16)
             .padding(.bottom, 20)
@@ -24,7 +46,7 @@ struct CatalogView: View {
                 }
             )
             .navigationDestination(for: CatalogItem.self) { item in
-                CollectionView(collection: item)
+                CollectionView(viewModel: CollectionViewModel(catalogService: viewModel.catalogService, collectionInfo: item))
                     .customBackground()
                     .toolbar(.hidden, for: .tabBar)
             }
@@ -38,7 +60,7 @@ struct CatalogView: View {
 
 #Preview {
     NavigationStack {
-        CatalogView(items: MockData.Catalog.mockItems)
+        CatalogView(viewModel: .mock())
             .customBackground(color: .purple)
     }
 }
