@@ -35,10 +35,3 @@ extension NFTCollectionDTO {
         )
     }
 }
-
-extension Array where Element: Hashable {
-    func uniquedPreservingOrder() -> [Element] {
-        var seen = Set<Element>()
-        return filter { seen.insert($0).inserted }
-    }
-}
