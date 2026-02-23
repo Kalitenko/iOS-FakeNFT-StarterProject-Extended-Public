@@ -1,6 +1,8 @@
 import SwiftUI
 
 struct TabBarView: View {
+    @Environment(ServicesAssembly.self) var servicesAssembly
+
     var body: some View {
         TabView {
             TestCatalogView()
@@ -11,7 +13,7 @@ struct TabBarView: View {
                     )
                 }
                 .backgroundStyle(.background)
-            CartView()
+            CartView(viewModel: CartViewModel(cartService: servicesAssembly.cartService))
                 .tabItem {
                     Label {
                         Text(L10n.TabBar.cart)

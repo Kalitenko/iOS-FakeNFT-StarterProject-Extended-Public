@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Kingfisher
 
 struct NFTCartCell: View {
     let nft: NFTModel
@@ -30,7 +31,7 @@ struct NFTCartCell: View {
     }
 
     private var image: some View {
-        nft.image
+        KFImage(nft.imageURL)
             .resizable()
             .scaledToFit()
             .frame(width: 108, height: 108)
@@ -38,7 +39,7 @@ struct NFTCartCell: View {
     }
 
     private var name: some View {
-        Text(nft.name)
+        Text(nft.name.capitalized)
             .font(.title)
             .foregroundStyle(.appTextPrimary)
     }
@@ -80,11 +81,16 @@ struct RatingView: View {
 }
 
 #Preview {
-    NFTCartCell(nft: NFTModel(
-        name: "April",
-        price: "1,78 ETH",
-        rating: 4,
-        image: Image(.april)),
-                onRemove: { }
-    )
+    if let imageURL = URL(string: "https://code.s3.yandex.net/Mobile/iOS/NFT/Pink/Lilo/1.png") {
+        NFTCartCell(
+            nft: NFTModel(
+                id: "",
+                name: "April",
+                price: "1,78 ETH",
+                rating: 4,
+                imageURL: imageURL
+            ),
+            onRemove: { }
+        )
+    }
 }

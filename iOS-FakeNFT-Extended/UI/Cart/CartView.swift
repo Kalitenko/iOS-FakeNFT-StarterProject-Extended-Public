@@ -12,16 +12,30 @@ struct CartView: View {
     @State private var selectedNFT: NFTModel?
     @State private var isSortingPresented = false
 
-    init(viewModel: CartViewModel = CartViewModel()) {
+    private var isErrorAlertPresented: Binding<Bool> {
+        Binding {
+            viewModel.errorMessage != nil
+        } set: { isPresented in
+            if !isPresented {
+                viewModel.errorMessage = nil
+            }
+        }
+    }
+
+    init(viewModel: CartViewModel) {
         _viewModel = State(initialValue: viewModel)
     }
 
     var body: some View {
         NavigationStack {
             VStack(spacing: .zero) {
-                if viewModel.isEmpty {
+                switch viewModel.state {
+                case .loading:
+                    LoadingPlaceholderView()
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                case .empty:
                     emptyState
-                } else {
+                case .content, .updating:
                     itemsList
                         .padding(.top, 20)
                     summaryPanel
@@ -29,10 +43,22 @@ struct CartView: View {
             }
             .background(.appBackground)
             .toolbar {
-                ToolbarItem(placement: .topBarTrailing) {
-                    sortButton
+                if viewModel.isShowingToolbar {
+                    ToolbarItem(placement: .topBarTrailing) {
+                        sortButton
+                    }
                 }
             }
+        }
+        .task {
+            await viewModel.load()
+        }
+        .alert(
+            L10n.Alerts.dataLoadFailed,
+            isPresented: isErrorAlertPresented
+        ) {
+            Button(L10n.Common.retry) { Task { await viewModel.load() } }
+            Button(L10n.Common.cancel, role: .cancel) { viewModel.errorMessage = nil }
         }
         .confirmationDialog(
             L10n.Sort.title,
@@ -48,8 +74,10 @@ struct CartView: View {
                 DeleteView(
                     nft: nft,
                     onDelete: {
-                        viewModel.remove(nft)
-                        selectedNFT = nil
+                        Task {
+                            await viewModel.deleteFromCart(nft: nft)
+                            selectedNFT = nil
+                        }
                     },
                     onCancel: {
                         selectedNFT = nil
@@ -94,7 +122,11 @@ struct CartView: View {
             }
 
             Button {
-
+                Task {
+                    // await viewModel.loadCurrencies()
+                    // await viewModel.completeOrder()
+                    viewModel.errorMessage = "Не удалось получить данные: Forbidden(403)"
+                }
             } label: {
                 Text(L10n.Cart.totalToPay)
                     .font(.title)
@@ -136,15 +168,4 @@ struct CartView: View {
             }
         }
     }
-
-    private func confirmDelete(_ nft: NFTModel) {
-        withAnimation(.easeInOut(duration: 0.2)) {
-            viewModel.remove(nft)
-        }
-        selectedNFT = nil
-    }
-}
-
-#Preview {
-    CartView()
 }
