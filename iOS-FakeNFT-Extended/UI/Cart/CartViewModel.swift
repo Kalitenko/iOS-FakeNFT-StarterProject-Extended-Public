@@ -8,6 +8,26 @@ import SwiftUI
 
 @Observable @MainActor
 final class CartViewModel {
+    enum CartState {
+        case loading
+        case empty
+        case content
+        case updating
+    }
+
+    var state: CartState {
+        if isLoading {
+            return .loading
+        }
+        if items.isEmpty {
+            return .empty
+        }
+        if isUpdating {
+            return .updating
+        }
+        return .content
+    }
+
     private let cartService: CartServiceProtocol
 
     var items: [NFTModel] = []

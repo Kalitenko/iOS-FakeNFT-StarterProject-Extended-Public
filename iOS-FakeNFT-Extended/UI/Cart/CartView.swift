@@ -29,12 +29,13 @@ struct CartView: View {
     var body: some View {
         NavigationStack {
             VStack(spacing: .zero) {
-                if viewModel.isLoading {
+                switch viewModel.state {
+                case .loading:
                     LoadingPlaceholderView()
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
-                } else if viewModel.isEmpty {
+                case .empty:
                     emptyState
-                } else {
+                case .content, .updating:
                     itemsList
                         .padding(.top, 20)
                     summaryPanel
