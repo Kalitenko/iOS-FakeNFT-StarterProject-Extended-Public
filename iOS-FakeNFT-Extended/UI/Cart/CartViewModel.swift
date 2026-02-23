@@ -8,7 +8,7 @@ import SwiftUI
 
 @Observable @MainActor
 final class CartViewModel {
-    private let cartService: CartService
+    private let cartService: CartServiceProtocol
 
     var items: [NFTModel] = []
     var isLoading: Bool = false
@@ -28,7 +28,7 @@ final class CartViewModel {
         return formatter.string(from: NSNumber(value: sum)) ?? "\(sum)"
     }
 
-    init(cartService: CartService) {
+    init(cartService: CartServiceProtocol) {
         self.cartService = cartService
     }
 

@@ -7,11 +7,11 @@
 
 import Foundation
 
-protocol CurrencyService {
+protocol CurrencyServiceProtocol {
     func getCurrencies() async throws -> [CurrencyDTO]
 }
 
-actor CurrencyServiceImpl: CurrencyService {
+actor CurrencyService: CurrencyServiceProtocol {
     private let networkClient: NetworkClient
 
     init(networkClient: NetworkClient) {

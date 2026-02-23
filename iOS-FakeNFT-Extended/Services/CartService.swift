@@ -7,24 +7,24 @@
 
 import Foundation
 
-protocol CartService {
+protocol CartServiceProtocol {
     func loadCartItems() async throws -> [NFTModel]
     func updateCart(nftIDs: [String]) async throws -> OrderDTO
     func getCurrencies() async throws -> [CurrencyModel]
     func completeOrder(nftIDs: [String], currencyID: String) async throws -> Bool
 }
 
-actor CartServiceImpl: CartService {
-    private let orderService: OrderService
-    private let currencyService: CurrencyService
+actor CartService: CartServiceProtocol {
+    private let orderService: OrderServiceProtocol
+    private let currencyService: CurrencyServiceProtocol
     private let nftService: NftService
-    private let paymentService: PaymentService
+    private let paymentService: PaymentServiceProtocol
 
     init(
-        orderService: OrderService,
+        orderService: OrderServiceProtocol,
         nftService: NftService,
-        currencyService: CurrencyService,
-        paymentService: PaymentService
+        currencyService: CurrencyServiceProtocol,
+        paymentService: PaymentServiceProtocol
     ) {
         self.orderService = orderService
         self.nftService = nftService

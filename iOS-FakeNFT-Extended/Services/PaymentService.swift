@@ -7,13 +7,13 @@
 
 import Foundation
 
-protocol PaymentService {
+protocol PaymentServiceProtocol {
     func completeOrder(nftID: String) async throws
     func completeOrder(nftIDs: [String]) async throws
     func makePayment(currencyID: String) async throws -> PaymentDTO
 }
 
-actor PaymentServiceImpl: PaymentService {
+actor PaymentService: PaymentServiceProtocol {
     private let networkClient: NetworkClient
 
     init(networkClient: NetworkClient) {

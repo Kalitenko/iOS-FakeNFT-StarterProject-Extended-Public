@@ -5,12 +5,12 @@
 //  Created by Stepan Chuiko on 17.02.2026.
 //
 
-protocol OrderService {
+protocol OrderServiceProtocol {
     func loadOrder() async throws -> OrderDTO
     func updateOrder(nftIDs: [String]) async throws -> OrderDTO
 }
 
-actor OrderServiceImpl: OrderService {
+actor OrderService: OrderServiceProtocol {
     private let networkClient: NetworkClient
 
     init(networkClient: NetworkClient) {

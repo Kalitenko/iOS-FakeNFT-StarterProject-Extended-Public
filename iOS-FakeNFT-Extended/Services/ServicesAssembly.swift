@@ -22,20 +22,20 @@ final class ServicesAssembly {
         )
     }
 
-    var orderService: OrderService {
-        OrderServiceImpl(networkClient: networkClient)
+    var orderService: OrderServiceProtocol {
+        OrderService(networkClient: networkClient)
     }
 
-    var currencyService: CurrencyService {
-        CurrencyServiceImpl(networkClient: networkClient)
+    var currencyService: CurrencyServiceProtocol {
+        CurrencyService(networkClient: networkClient)
     }
 
-    var paymentService: PaymentService {
-        PaymentServiceImpl(networkClient: networkClient)
+    var paymentService: PaymentServiceProtocol {
+        PaymentService(networkClient: networkClient)
     }
 
-    var cartService: CartService {
-        CartServiceImpl(
+    var cartService: CartServiceProtocol {
+        CartService(
             orderService: orderService,
             nftService: nftService,
             currencyService: currencyService,
