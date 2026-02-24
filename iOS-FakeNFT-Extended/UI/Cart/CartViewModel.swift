@@ -93,7 +93,7 @@ final class CartViewModel {
             errorMessage = "Не удалось получить список валют \(error)"
             print(errorMessage ?? "")
         }
-        print(currencies.first ?? "")
+        print(currencies)
     }
 
     // Test example

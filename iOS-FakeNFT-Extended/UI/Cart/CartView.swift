@@ -123,9 +123,9 @@ struct CartView: View {
 
             Button {
                 Task {
-                    // await viewModel.loadCurrencies()
+                    await viewModel.loadCurrencies()
                     // await viewModel.completeOrder()
-                    viewModel.errorMessage = "Не удалось получить данные: Forbidden(403)"
+                    // viewModel.errorMessage = "Не удалось получить данные: Forbidden(403)"
                 }
             } label: {
                 Text(L10n.Cart.totalToPay)

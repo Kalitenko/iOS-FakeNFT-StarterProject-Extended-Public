@@ -9,7 +9,7 @@ import SwiftUI
 import Kingfisher
 
 struct CurrencyCell: View {
-    let currency: CurrencyDTO
+    let currency: CurrencyModel?
     let isSelected: Bool
 
     var body: some View {
@@ -34,7 +34,7 @@ struct CurrencyCell: View {
     var image: some View {
         ZStack {
             Color(.appBlack)
-            KFImage(URL(string: currency.image))
+            KFImage(currency?.imageURL)
                 .resizable()
                 .scaledToFit()
         }
@@ -44,9 +44,9 @@ struct CurrencyCell: View {
 
     var title: some View {
         VStack(alignment: .leading, spacing: .zero) {
-            Text(currency.title)
+            Text(currency?.title ?? "")
                 .foregroundStyle(.appTextPrimary)
-            Text(currency.name)
+            Text(currency?.name ?? "")
                 .foregroundStyle(.appGreen)
         }
         .font(.smallText)
@@ -54,23 +54,27 @@ struct CurrencyCell: View {
 }
 
 #Preview("Default") {
-    CurrencyCell(currency: CurrencyDTO(
-        title: "Cardano",
-        name: "ADA",
-        image: "https://code.s3.yandex.net/Mobile/iOS/Currencies/Cardano_(ADA).png",
-        id: "1"),
-                 isSelected: false
+    CurrencyCell(
+        currency: CurrencyModel(
+            id: "1",
+            title: "Cardano",
+            name: "ADA",
+            imageURLString: "https://code.s3.yandex.net/Mobile/iOS/Currencies/Cardano_(ADA).png"
+        ),
+        isSelected: false
     )
     .frame(width: 168)
 }
 
 #Preview("Selected") {
-    CurrencyCell(currency: CurrencyDTO(
-        title: "Cardano",
-        name: "ADA",
-        image: "https://code.s3.yandex.net/Mobile/iOS/Currencies/Cardano_(ADA).png",
-        id: "1"),
-                 isSelected: true
+    CurrencyCell(
+        currency: CurrencyModel(
+            id: "0",
+            title: "Shiba_Inu",
+            name: "SHIB",
+            imageURLString: "https://code.s3.yandex.net/Mobile/iOS/Currencies/Shiba_Inu_(SHIB).png"
+        ),
+        isSelected: true
     )
     .frame(width: 168)
 }
