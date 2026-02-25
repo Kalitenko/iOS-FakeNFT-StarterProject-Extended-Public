@@ -15,6 +15,12 @@ final class CartViewModel {
         case updating
     }
 
+    enum CurrencyListState {
+        case loading
+        case empty
+        case content
+    }
+
     var state: CartState {
         if isLoading {
             return .loading
@@ -28,12 +34,29 @@ final class CartViewModel {
         return .content
     }
 
+    var currencyListState: CurrencyListState {
+        if isCurrenciesLoading {
+            return .loading
+        }
+        if currencies.isEmpty {
+            return .empty
+        }
+        return .content
+    }
+
     private let cartService: CartServiceProtocol
 
+    // MARK: - Cart state
     var items: [NFTModel] = []
     var isLoading: Bool = false
     var isUpdating: Bool = false
     var errorMessage: String?
+
+    // MARK: - Currency state
+    var currencies: [CurrencyModel] = []
+    var isCurrenciesLoading: Bool = false
+    var currencyErrorMessage: String?
+    var selectedCurrencyID: String?
 
     var isEmpty: Bool { items.isEmpty }
 
@@ -84,26 +107,40 @@ final class CartViewModel {
         isUpdating = false
     }
 
-    // Test example
     func loadCurrencies() async {
-        var currencies = [CurrencyModel]()
+        guard !isCurrenciesLoading else { return }
+        isCurrenciesLoading = true
+        currencyErrorMessage = nil
+
         do {
-            currencies = try await cartService.getCurrencies()
+            let loadedCurrencies = try await cartService.getCurrencies()
+            currencies = loadedCurrencies
         } catch {
-            errorMessage = "Не удалось получить список валют \(error)"
-            print(errorMessage ?? "")
+            currencies = []
+            currencyErrorMessage = "Не удалось получить список валют \(error)"
+            print(currencyErrorMessage ?? "")
         }
-        print(currencies)
+        isCurrenciesLoading = false
+    }
+
+    func selectCurrency(_ currency: CurrencyModel) {
+        selectedCurrencyID = currency.id
+    }
+
+    func isCurrencySelected(_ currency: CurrencyModel) -> Bool {
+        selectedCurrencyID == currency.id
     }
 
     // Test example
     func completeOrder() async {
         guard !isUpdating else { return }
+        guard let selectedCurrencyID else { return }
+
         isUpdating = true
         errorMessage = nil
 
         do {
-            _ = try await cartService.completeOrder(nftIDs: items.map(\.id), currencyID: "2")
+            _ = try await cartService.completeOrder(nftIDs: items.map(\.id), currencyID: selectedCurrencyID)
         } catch {
             errorMessage = "Не удалось выполнить заказ \(error)"
             print(errorMessage ?? "")

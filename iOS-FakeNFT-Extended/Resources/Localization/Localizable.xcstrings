@@ -409,6 +409,23 @@
         }
       }
     },
+    "cart.no_currencies" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No available currencies"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Нет доступных валют"
+          }
+        }
+      }
+    },
     "cart.pay" : {
       "extractionState" : "manual",
       "localizations" : {

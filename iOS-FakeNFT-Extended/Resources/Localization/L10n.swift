@@ -45,6 +45,7 @@ enum L10n {
         static let successTitle        = String(localized: "cart.payment_success")
         static let backToCart          = String(localized: "cart.back_to_cart")
         static let emptyCart           = String(localized: "cart.empty")
+        static let noCurrencies        = String(localized: "cart.no_currencies")
     }
     
     enum Profile {

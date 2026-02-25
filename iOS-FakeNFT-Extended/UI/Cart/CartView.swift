@@ -120,13 +120,15 @@ struct CartView: View {
                     .font(.title)
                     .foregroundStyle(.appGreen)
             }
-
-            Button {
-                Task {
-                    await viewModel.loadCurrencies()
-                    // await viewModel.completeOrder()
-                    // viewModel.errorMessage = "Не удалось получить данные: Forbidden(403)"
-                }
+            NavigationLink {
+//                Task {
+//                    await viewModel.loadCurrencies()
+//                     await viewModel.completeOrder()
+//                     viewModel.errorMessage = "Не удалось получить данные: Forbidden(403)"
+//                }
+                CurrencyListView(viewModel: viewModel)
+                    .customNavigationBar(title: L10n.Cart.choosePaymentMethod)
+                    .toolbar(.hidden, for: .tabBar)
             } label: {
                 Text(L10n.Cart.totalToPay)
                     .font(.title)
