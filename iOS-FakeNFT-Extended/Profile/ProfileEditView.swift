@@ -9,132 +9,166 @@ import SwiftUI
 import UIKit
 
 struct ProfileEditView: View {
-
+    
     @Environment(\.dismiss) private var dismiss
     @Binding var profile: UserProfile
-
+    
     // MARK: - Initial values (to detect changes)
     private let initialName: String
     private let initialAbout: String
     private let initialWebsite: String
-
+    private let initialPhotoURL: String?
+    private let initialIsPhotoRemoved: Bool
+    
     // MARK: - State (editable)
     @State private var name: String
     @State private var about: String
     @State private var website: String
-
+    
     // Photo (mock)
     @State private var isPhotoMenuPresented = false
-    @State private var photoURLText: String = "http://www.example.com"
+    @State private var photoURLText: String
     @State private var photoURLAlert: TextFieldAlert?
-
+    @State private var isPhotoRemoved: Bool
+    
     // Keyboard / Focus
     private enum Field: Hashable { case name, about, website }
     @FocusState private var focusedField: Field?
     @State private var isKeyboardVisible = false
-
+    
     // Website validation UX
     @State private var showWebsiteError: Bool = false
     @State private var websiteShake: CGFloat = 0
-
+    
     // Exit without saving alert
     @State private var isExitAlertPresented: Bool = false
-
+    
     // Loader
     @State private var isSaving: Bool = false
-
+    
     // MARK: - Layout constants (from Figma)
     private enum Layout {
         static let screenPadding: CGFloat = 16
-
+        
         // Avatar
         static let avatarSize: CGFloat = 70
         static let avatarTopOffsetFromScreen: CGFloat = 80
         static let avatarBottomSpacing: CGFloat = 24
-
+        
         // Camera badge
         static let cameraBadgeSize: CGFloat = 22.57
         static let cameraIconWidth: CGFloat = 11.73
         static let cameraIconHeight: CGFloat = 10.26
-
+        
         // Sections
         static let sectionSpacing: CGFloat = 8
         static let sectionTopSpacing: CGFloat = 24
-
+        
         // Fields
         static let singleLineFieldHeight: CGFloat = 44
         static let aboutFieldHeight: CGFloat = 132
         static let aboutMaxCharacters: Int = 150
         static let websiteMaxLength: Int = 255
-
+        
         // Insets
         static let defaultFieldInsets = EdgeInsets(top: 11, leading: 16, bottom: 11, trailing: 16)
-
+        
         // Extra space for counter inside about field
         static let aboutCounterReservedBottom: CGFloat = 18
-
+        
         // Save button
         static let saveButtonHeight: CGFloat = 60
         static let saveButtonBottomPadding: CGFloat = 50
-
+        
         static var contentBottomPaddingWithButton: CGFloat {
             saveButtonBottomPadding + saveButtonHeight + 16
         }
         static let contentBottomPaddingNoButton: CGFloat = 24
-
+        
         // Loader
         static let loaderSize: CGFloat = 82
         static let loaderCornerRadius: CGFloat = 8
-
+        
         // Nav bar button tweak (чуть ближе к краю)
         static let navBarLeadingAdjustment: CGFloat = -8
     }
-
+    
     // MARK: - Init
     init(profile: Binding<UserProfile>) {
         self._profile = profile
-
+        
         let profileValue = profile.wrappedValue
         self.initialName = profileValue.name
         self.initialAbout = profileValue.about
         self.initialWebsite = profileValue.website
-
+        
+        self.initialPhotoURL = profileValue.photoURL
+        self.initialIsPhotoRemoved = profileValue.isPhotoRemoved
+        
         _name = State(initialValue: profileValue.name)
         _about = State(initialValue: profileValue.about)
         _website = State(initialValue: profileValue.website)
+        
+        _photoURLText = State(initialValue: profileValue.photoURL ?? "")
+        _isPhotoRemoved = State(initialValue: profileValue.isPhotoRemoved)
     }
-
+    
     // MARK: - Derived
     private var hasChanges: Bool {
-        name != initialName || about != initialAbout || website != initialWebsite
+        name != initialName
+        || about != initialAbout
+        || website != initialWebsite
+        || photoURLText != (initialPhotoURL ?? "")
+        || isPhotoRemoved != initialIsPhotoRemoved
     }
-
+    
+    private var photoURL: URL? {
+        guard !isPhotoRemoved else { return nil }
+        
+        let raw = photoURLText.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !raw.isEmpty else { return nil }
+        
+        let candidate = (raw.lowercased().hasPrefix("http://") || raw.lowercased().hasPrefix("https://"))
+        ? raw
+        : "https://\(raw)"
+        
+        guard let components = URLComponents(string: candidate) else { return nil }
+        
+        guard
+            let scheme = components.scheme?.lowercased(),
+            (scheme == "http" || scheme == "https"),
+            let host = components.host, !host.isEmpty
+        else { return nil }
+        
+        return components.url
+    }
+    
     private var showAboutCounter: Bool {
         isKeyboardVisible && focusedField == .about
     }
-
+    
     private enum WebsiteState: Equatable {
         case ok
         case invalid(String)
     }
-
+    
     private var normalizedWebsiteForValidation: String {
         website.trimmingCharacters(in: .whitespacesAndNewlines)
     }
-
+    
     private var websiteState: WebsiteState {
         let raw = normalizedWebsiteForValidation
         guard !raw.isEmpty else { return .ok }
-
+        
         if raw.contains(" ") { return .invalid("Введите корректный адрес сайта") }
-
+        
         let candidate: String
         if raw.lowercased().hasPrefix("http://") || raw.lowercased().hasPrefix("https://") {
             candidate = raw
         } else {
             candidate = "https://\(raw)"
         }
-
+        
         guard
             let components = URLComponents(string: candidate),
             let host = components.host,
@@ -144,15 +178,15 @@ struct ProfileEditView: View {
         else {
             return .invalid("Введите корректный адрес сайта")
         }
-
+        
         return .ok
     }
-
+    
     private var canSave: Bool {
         if case .invalid = websiteState { return false }
         return true
     }
-
+    
     private var websiteErrorText: String? {
         guard showWebsiteError else { return nil }
         switch websiteState {
@@ -160,18 +194,18 @@ struct ProfileEditView: View {
         default: return nil
         }
     }
-
+    
     // MARK: - Body
     var body: some View {
         ZStack(alignment: .bottom) {
-
+            
             ScrollView {
                 VStack(alignment: .leading, spacing: 0) {
-
+                    
                     avatarBlock
                         .padding(.top, Layout.avatarTopOffsetFromScreen)
                         .padding(.bottom, Layout.avatarBottomSpacing)
-
+                    
                     form
                 }
                 .padding(.horizontal, Layout.screenPadding)
@@ -185,22 +219,22 @@ struct ProfileEditView: View {
             .disabled(isSaving)
             .ignoresSafeArea(.container, edges: .top)
             .toolbarBackground(.hidden, for: .navigationBar)
-
+            
             // Save button
             if hasChanges && !isKeyboardVisible {
                 GeometryReader { proxy in
                     let bottomInset = proxy.safeAreaInsets.bottom
-
+                    
                     Button {
                         showWebsiteError = true
-
+                        
                         guard canSave else {
                             UINotificationFeedbackGenerator().notificationOccurred(.error)
                             focusedField = .website
                             withAnimation(.default) { websiteShake += 1 }
                             return
                         }
-
+                        
                         focusedField = nil
                         showWebsiteError = false
                         saveMock()
@@ -224,26 +258,25 @@ struct ProfileEditView: View {
         }
         .overlay {
             if isSaving {
-                Color.black.opacity(0.80)
-                    .ignoresSafeArea()
-
-                ZStack {
-                    RoundedRectangle(cornerRadius: Layout.loaderCornerRadius, style: .continuous)
-                        .fill(Color("AppProgressViewBackground"))
-                        .frame(width: Layout.loaderSize, height: Layout.loaderSize)
-
-                    ProgressView()
-                        .progressViewStyle(.circular)
-                        .scaleEffect(1.2)
-                        .tint(Color.black.opacity(0.75))
+                LoaderTileView()
+                            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
+                            .transition(.opacity)
+                            .zIndex(1000)
+                    }
                 }
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
+
+        .overlay {
+            if isPhotoMenuPresented {
+                Color.black.opacity(0.35)
+                    .ignoresSafeArea()
+                    .transition(.opacity)
             }
         }
+        
         .animation(.easeInOut(duration: 0.2), value: hasChanges)
         .animation(.easeInOut(duration: 0.2), value: isKeyboardVisible)
         .toolbar(.hidden, for: .tabBar)
-
+        
         .navigationBarBackButtonHidden(true)
         .navigationTitle("")
         .navigationBarTitleDisplayMode(.inline)
@@ -265,7 +298,7 @@ struct ProfileEditView: View {
                 .disabled(isSaving)
             }
         }
-
+        
         .overlay {
             if isExitAlertPresented {
                 ExitConfirmOverlay(
@@ -279,7 +312,7 @@ struct ProfileEditView: View {
                 .zIndex(999)
             }
         }
-
+        
         .confirmationDialog(
             "Фото профиля",
             isPresented: $isPhotoMenuPresented,
@@ -294,18 +327,20 @@ struct ProfileEditView: View {
                     onCancel: { },
                     onSave: { newValue in
                         photoURLText = newValue.trimmingCharacters(in: .whitespacesAndNewlines)
+                        isPhotoRemoved = false
                     }
                 )
             }
             Button("Удалить фото", role: .destructive) {
-                // TODO: remove photo
+                photoURLText = ""
+                isPhotoRemoved = true
             }
             Button("Отмена", role: .cancel) {}
         }
-
+        
         .onTapGesture { focusedField = nil }
-        .textFieldAlert($photoURLAlert)
-
+        .photoURLAlert($photoURLAlert)
+        
         .onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardWillShowNotification)) { _ in
             isKeyboardVisible = true
         }
@@ -313,46 +348,91 @@ struct ProfileEditView: View {
             isKeyboardVisible = false
         }
     }
-
+    
     // MARK: - Actions
-
+    
     private func onBackTap() {
         guard !isSaving else { return }
         focusedField = nil
-
+        
         if hasChanges {
             isExitAlertPresented = true
         } else {
             dismiss()
         }
     }
-
+    
     private func saveMock() {
         isSaving = true
-
+        
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
             profile.name = name
             profile.about = about
             profile.website = website.trimmingCharacters(in: .whitespacesAndNewlines)
-
+            
+            let trimmedPhoto = photoURLText.trimmingCharacters(in: .whitespacesAndNewlines)
+            profile.photoURL = trimmedPhoto.isEmpty ? nil : trimmedPhoto
+            profile.isPhotoRemoved = trimmedPhoto.isEmpty
+            
             isSaving = false
+            print("SAVED photoURL:", profile.photoURL ?? "nil", "removed:", profile.isPhotoRemoved)
             dismiss()
         }
     }
-
+    
     // MARK: - Subviews
-
+    
     private var avatarBlock: some View {
         HStack {
             Spacer()
-
+            
             ZStack(alignment: .bottomTrailing) {
-                Image("joaquinPhoenixFoto")
-                    .resizable()
-                    .scaledToFill()
-                    .frame(width: Layout.avatarSize, height: Layout.avatarSize)
-                    .clipShape(Circle())
-
+                
+                Group {
+                    if isPhotoRemoved {
+                        Circle()
+                            .fill(Color(.systemGray5))
+                            .overlay {
+                                Image(systemName: "person.fill")
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(width: 28, height: 28)
+                                    .foregroundStyle(.secondary)
+                            }
+                    } else if let url = photoURL {
+                        
+                        AsyncImage(url: url) { phase in
+                            switch phase {
+                            case .empty:
+                                ProgressView()
+                                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                                
+                            case .success(let image):
+                                image
+                                    .resizable()
+                                    .scaledToFill()
+                                
+                            case .failure:
+                                Image("joaquinPhoenixFoto")
+                                    .resizable()
+                                    .scaledToFill()
+                                
+                            @unknown default:
+                                Image("joaquinPhoenixFoto")
+                                    .resizable()
+                                    .scaledToFill()
+                            }
+                        }
+                        .id(url.absoluteString)
+                    } else {
+                        Image("joaquinPhoenixFoto")
+                            .resizable()
+                            .scaledToFill()
+                    }
+                }
+                .frame(width: Layout.avatarSize, height: Layout.avatarSize)
+                .clipShape(Circle())
+                
                 Button {
                     isPhotoMenuPresented = true
                 } label: {
@@ -360,7 +440,7 @@ struct ProfileEditView: View {
                         Circle()
                             .fill(Color("AppSurfaceBackground"))
                             .frame(width: Layout.cameraBadgeSize, height: Layout.cameraBadgeSize)
-
+                        
                         Image("profile.camera")
                             .renderingMode(.template)
                             .resizable()
@@ -374,14 +454,14 @@ struct ProfileEditView: View {
                 .accessibilityIdentifier("editProfile.changePhotoButton")
                 .disabled(isSaving)
             }
-
+            
             Spacer()
         }
     }
-
+    
     private var form: some View {
         VStack(alignment: .leading, spacing: 0) {
-
+            
             sectionTitle("Имя")
             RoundedField(
                 fieldHeight: Layout.singleLineFieldHeight,
@@ -394,20 +474,18 @@ struct ProfileEditView: View {
                     .onSubmit { focusedField = .about }
                     .accessibilityIdentifier("editProfile.nameField")
             }
-
+            
             Spacer().frame(height: Layout.sectionTopSpacing)
-
+            
             sectionTitle("Описание")
-
-            // динамически резервируем место под счётчик,
-            // только когда он реально показан (клавиатура + фокус на about)
+            
             let aboutInsets = EdgeInsets(
                 top: Layout.defaultFieldInsets.top,
                 leading: Layout.defaultFieldInsets.leading,
                 bottom: Layout.defaultFieldInsets.bottom + (showAboutCounter ? Layout.aboutCounterReservedBottom : 0),
                 trailing: Layout.defaultFieldInsets.trailing
             )
-
+            
             RoundedField(
                 fieldHeight: Layout.aboutFieldHeight,
                 contentInsets: aboutInsets
@@ -423,7 +501,7 @@ struct ProfileEditView: View {
                                 about = String(newValue.prefix(Layout.aboutMaxCharacters))
                             }
                         }
-
+                    
                     if showAboutCounter {
                         Text("\(about.count)/\(Layout.aboutMaxCharacters)")
                             .font(.system(size: 13, weight: .regular))
@@ -436,9 +514,9 @@ struct ProfileEditView: View {
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
             }
-
+            
             Spacer().frame(height: Layout.sectionTopSpacing)
-
+            
             sectionTitle("Сайт")
             RoundedField(
                 isError: websiteErrorText != nil,
@@ -467,7 +545,7 @@ struct ProfileEditView: View {
             }
         }
     }
-
+    
     private func sectionTitle(_ text: String) -> some View {
         Text(text)
             .font(.system(size: 22, weight: .bold))
@@ -499,7 +577,7 @@ private struct RoundedField<Content: View>: View {
     let fieldHeight: CGFloat?
     let contentInsets: EdgeInsets
     let content: Content
-
+    
     init(
         isError: Bool = false,
         helperText: String? = nil,
@@ -515,7 +593,7 @@ private struct RoundedField<Content: View>: View {
         self.contentInsets = contentInsets
         self.content = content()
     }
-
+    
     var body: some View {
         VStack(alignment: .leading, spacing: 6) {
             content
@@ -528,7 +606,7 @@ private struct RoundedField<Content: View>: View {
                 }
                 .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
                 .modifier(ShakeEffect(animatableData: shake))
-
+            
             Text(helperText ?? " ")
                 .font(.system(size: 13, weight: .regular))
                 .foregroundStyle(.red)
@@ -542,7 +620,7 @@ private struct ShakeEffect: GeometryEffect {
     var travelDistance: CGFloat = 8
     var shakesPerUnit: CGFloat = 3
     var animatableData: CGFloat
-
+    
     func effectValue(size: CGSize) -> ProjectionTransform {
         ProjectionTransform(
             CGAffineTransform(
@@ -556,7 +634,7 @@ private struct ShakeEffect: GeometryEffect {
 private struct ExitConfirmOverlay: View {
     let onStay: () -> Void
     let onExit: () -> Void
-
+    
     private enum Layout {
         static let width: CGFloat = 270
         static let height: CGFloat = 119
@@ -564,12 +642,12 @@ private struct ExitConfirmOverlay: View {
         static let dividerHeight: CGFloat = 0.5
         static let buttonHeight: CGFloat = 44
     }
-
+    
     var body: some View {
         ZStack {
             Color.black.opacity(0.8)
                 .ignoresSafeArea()
-
+            
             VStack(spacing: 0) {
                 Text("Уверены,\nчто хотите выйти?")
                     .font(.system(size: 17, weight: .semibold))
@@ -577,11 +655,11 @@ private struct ExitConfirmOverlay: View {
                     .foregroundStyle(Color(uiColor: .appBlack))
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
                     .padding(.horizontal, 16)
-
+                
                 Rectangle()
                     .fill(Color(uiColor: .separator))
                     .frame(height: Layout.dividerHeight)
-
+                
                 HStack(spacing: 0) {
                     Button(action: onStay) {
                         Text("Остаться")
@@ -589,11 +667,11 @@ private struct ExitConfirmOverlay: View {
                             .frame(maxWidth: .infinity, maxHeight: .infinity)
                     }
                     .foregroundStyle(Color("AppBlue"))
-
+                    
                     Rectangle()
                         .fill(Color(uiColor: .separator))
                         .frame(width: Layout.dividerHeight)
-
+                    
                     Button(action: onExit) {
                         Text("Выйти")
                             .font(.system(size: 17, weight: .semibold))
@@ -612,12 +690,33 @@ private struct ExitConfirmOverlay: View {
     }
 }
 
+struct PlaceholderAvatarView: View {
+    let size: CGFloat
+    
+    var body: some View {
+        ZStack {
+            Circle()
+                .fill(Color.gray.opacity(0.25))
+            
+            Image(systemName: "person.fill")
+                .resizable()
+                .scaledToFit()
+                .foregroundStyle(Color.gray.opacity(0.6))
+                .frame(width: size * 0.45)
+        }
+        .frame(width: size, height: size)
+    }
+}
+
+// MARK: - Preview
 #Preview {
     NavigationStack {
         ProfileEditView(profile: .constant(UserProfile(
             name: "Joaquin Phoenix",
             about: "Дизайнер из Казани, люблю цифровое искусство и бейглы. В моей коллекции уже 100+ NFT, и еще больше — на моём сайте. Открыт к коллаборациям.",
-            website: "JoaquinPhoenix.com"
+            website: "JoaquinPhoenix.com",
+            photoURL: nil,
+            isPhotoRemoved: false
         )))
     }
 }
