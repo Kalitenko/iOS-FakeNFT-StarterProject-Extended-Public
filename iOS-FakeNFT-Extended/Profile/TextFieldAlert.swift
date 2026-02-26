@@ -80,7 +80,7 @@ private struct PhotoURLAlertView: View {
         static let buttonsHeight: CGFloat = 44
         static let divider: CGFloat = 0.5
 
-        static let dimOpacity: CGFloat = 0.60
+        static let dimOpacity: CGFloat = 0.50
 
         static let cardTintOpacity: CGFloat = 0.75
     }
@@ -123,7 +123,7 @@ private struct PhotoURLAlertView: View {
                         }
                         .padding(.horizontal, Layout.fieldInnerHorizontalPadding)
                         .frame(height: Layout.fieldHeight)
-                        .background(Color("PhotoAlertTextFieldBackground"))
+                        .background(Color("AlertTextFieldBackground"))
                         .clipShape(RoundedRectangle(cornerRadius: Layout.fieldCornerRadius, style: .continuous))
                         .padding(.top, Layout.fieldTopSpacing)
                         .padding(.horizontal, Layout.fieldHorizontalPadding)

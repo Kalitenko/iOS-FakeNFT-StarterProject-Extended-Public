@@ -267,7 +267,7 @@ struct ProfileEditView: View {
 
         .overlay {
             if isPhotoMenuPresented {
-                Color.black.opacity(0.35)
+                Color.black.opacity(0.2)
                     .ignoresSafeArea()
                     .transition(.opacity)
             }
