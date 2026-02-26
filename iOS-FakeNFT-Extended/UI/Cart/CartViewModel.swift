@@ -6,6 +6,12 @@
 //
 import SwiftUI
 
+enum CartSortOption: String {
+    case name
+    case price
+    case rating
+}
+
 @Observable @MainActor
 final class CartViewModel {
     enum CartState {
@@ -52,6 +58,8 @@ final class CartViewModel {
     var isUpdating: Bool = false
     var errorMessage: String?
 
+    private(set) var selectedSortOption: CartSortOption = .name
+
     // MARK: - Currency state
     var currencies: [CurrencyModel] = []
     var isCurrenciesLoading: Bool = false
@@ -64,8 +72,6 @@ final class CartViewModel {
     var isShowingSuccessView: Bool = false
 
     var isEmpty: Bool { items.isEmpty }
-
-    var isShowingToolbar: Bool { !isEmpty }
 
     var itemsAmount: Int { items.count }
 
@@ -80,17 +86,24 @@ final class CartViewModel {
         self.cartService = cartService
     }
 
-    func load() async {
+    func load(sortedBy sortOption: CartSortOption = .name) async {
         isLoading = true
         errorMessage = nil
         do {
-            items = try await cartService.loadCartItems()
+            let loadedItems = try await cartService.loadCartItems()
+            items = sort(items: loadedItems, by: sortOption)
+            selectedSortOption = sortOption
         } catch {
             errorMessage = "Не удалось получить данные: \(error)"
             print(errorMessage ?? "")
             items = []
         }
         isLoading = false
+    }
+
+    func applySort(_ sortOption: CartSortOption) {
+        selectedSortOption = sortOption
+        items = sort(items: items, by: sortOption)
     }
 
     func deleteFromCart(nft: NFTModel) async {
@@ -160,6 +173,21 @@ final class CartViewModel {
             print(paymentErrorMessage ?? "")
         }
         isPaymentInProgress = false
+    }
+
+    private func sort(items: [NFTModel], by option: CartSortOption) -> [NFTModel] {
+        switch option {
+        case .name:
+            return items.sorted {
+                $0.name.localizedCaseInsensitiveCompare($1.name) == .orderedAscending
+            }
+        case .price:
+            return items.sorted {
+                parseETH($0.price) ?? 0 < parseETH($1.price) ?? 0
+            }
+        case .rating:
+            return items.sorted { $0.rating > $1.rating }
+        }
     }
 
     private func parseETH(_ text: String) -> Double? {

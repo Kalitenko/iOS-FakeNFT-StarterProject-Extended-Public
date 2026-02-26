@@ -12,6 +12,14 @@ struct CartView: View {
     @State private var selectedNFT: NFTModel?
     @State private var isSortingPresented = false
 
+    @AppStorage("cart_sort_option")
+    private var savedSortOption: String = CartSortOption.name.rawValue
+
+    private var selectedSortOption: CartSortOption {
+        get { CartSortOption(rawValue: savedSortOption) ?? .name }
+        nonmutating set { savedSortOption = newValue.rawValue }
+    }
+
     private var isErrorAlertPresented: Binding<Bool> {
         Binding {
             viewModel.errorMessage != nil
@@ -43,7 +51,7 @@ struct CartView: View {
             }
             .background(.appBackground)
             .toolbar {
-                if viewModel.isShowingToolbar {
+                if !viewModel.isEmpty {
                     ToolbarItem(placement: .topBarTrailing) {
                         sortButton
                     }
@@ -51,13 +59,21 @@ struct CartView: View {
             }
         }
         .task {
-            await viewModel.load()
+            await viewModel.load(sortedBy: selectedSortOption)
         }
+        .onChange(of: savedSortOption, { _, newValue in
+            let option = CartSortOption(rawValue: newValue) ?? .name
+            viewModel.applySort(option)
+        })
         .alert(
             L10n.Alerts.dataLoadFailed,
             isPresented: isErrorAlertPresented
         ) {
-            Button(L10n.Common.retry) { Task { await viewModel.load() } }
+            Button(L10n.Common.retry) {
+                Task {
+                    await viewModel.load(sortedBy: selectedSortOption)
+                }
+            }
             Button(L10n.Common.cancel, role: .cancel) { viewModel.errorMessage = nil }
         }
         .confirmationDialog(
@@ -121,11 +137,6 @@ struct CartView: View {
                     .foregroundStyle(.appGreen)
             }
             NavigationLink {
-//                Task {
-//                    await viewModel.loadCurrencies()
-//                     await viewModel.completeOrder()
-//                     viewModel.errorMessage = "Не удалось получить данные: Forbidden(403)"
-//                }
                 CurrencyListView(viewModel: viewModel)
                     .customNavigationBar(title: L10n.Cart.choosePaymentMethod)
                     .toolbar(.hidden, for: .tabBar)
@@ -157,12 +168,15 @@ struct CartView: View {
     private var sortDialogButtons: some View {
         Group {
             Button(L10n.Sort.byPrice) {
+                selectedSortOption = .price
                 isSortingPresented = false
             }
             Button(L10n.Sort.byRating) {
+                selectedSortOption = .rating
                 isSortingPresented = false
             }
             Button(L10n.Sort.byName) {
+                selectedSortOption = .name
                 isSortingPresented = false
             }
             Button(L10n.Common.close, role: .cancel) {
