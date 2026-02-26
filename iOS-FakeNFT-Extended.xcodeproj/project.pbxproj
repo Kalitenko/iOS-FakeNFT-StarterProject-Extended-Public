@@ -61,6 +61,7 @@
 		EA7214DF2F45ED130005CEC2 /* GetCurrenciesRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA7214DE2F45ED060005CEC2 /* GetCurrenciesRequest.swift */; };
 		EA7214E12F45EE370005CEC2 /* CurrencyService.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA7214E02F45EE320005CEC2 /* CurrencyService.swift */; };
 		EA7214E42F45FB720005CEC2 /* CurrencyModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA7214E32F45FB690005CEC2 /* CurrencyModel.swift */; };
+		EA9B300C2F506E0400B2465F /* SuccessView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA9B300B2F506E0400B2465F /* SuccessView.swift */; };
 		EA9E1B652F4629790002F0ED /* PaymentService.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA9E1B642F4629720002F0ED /* PaymentService.swift */; };
 		EA9E1B672F463EAB0002F0ED /* CompleteOrderRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA9E1B662F463E9E0002F0ED /* CompleteOrderRequest.swift */; };
 		EAB5154A2F48CFD600D57976 /* NumberFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = EAB515492F48CFCC00D57976 /* NumberFormatter.swift */; };
@@ -142,6 +143,7 @@
 		EA7214DE2F45ED060005CEC2 /* GetCurrenciesRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetCurrenciesRequest.swift; sourceTree = "<group>"; };
 		EA7214E02F45EE320005CEC2 /* CurrencyService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrencyService.swift; sourceTree = "<group>"; };
 		EA7214E32F45FB690005CEC2 /* CurrencyModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrencyModel.swift; sourceTree = "<group>"; };
+		EA9B300B2F506E0400B2465F /* SuccessView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuccessView.swift; sourceTree = "<group>"; };
 		EA9E1B642F4629720002F0ED /* PaymentService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentService.swift; sourceTree = "<group>"; };
 		EA9E1B662F463E9E0002F0ED /* CompleteOrderRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompleteOrderRequest.swift; sourceTree = "<group>"; };
 		EAB515492F48CFCC00D57976 /* NumberFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumberFormatter.swift; sourceTree = "<group>"; };
@@ -398,6 +400,7 @@
 				EA10219B2F3B224F00487E64 /* DeleteView.swift */,
 				EAE976162F4DC1EA00C6A0BA /* CurrencyCell.swift */,
 				EA1BFBED2F4F202E0073190A /* CurrencyListView.swift */,
+				EA9B300B2F506E0400B2465F /* SuccessView.swift */,
 			);
 			path = Cart;
 			sourceTree = "<group>";
@@ -603,6 +606,7 @@
 				EA238F562F46F09C003F1E73 /* PurchaseRequest.swift in Sources */,
 				EA2BD0132F4465B900400179 /* CartService.swift in Sources */,
 				ABC5E1DF2C3204FB002B4068 /* LoadingView.swift in Sources */,
+				EA9B300C2F506E0400B2465F /* SuccessView.swift in Sources */,
 				ABC5E1A42C31F800002B4068 /* NetworkClient.swift in Sources */,
 				EA5561DA2F3A234300797C6B /* NFTCartCell.swift in Sources */,
 				ABC5E1D32C320438002B4068 /* NftDetailAssembly.swift in Sources */,

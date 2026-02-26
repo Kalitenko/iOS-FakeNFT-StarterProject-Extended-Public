@@ -75,14 +75,14 @@ struct CurrencyListView: View {
         VStack(spacing: 16) {
             VStack(alignment: .leading, spacing: 4) {
                 Text(L10n.Cart.agreementText)
-                    .font(.smallText)
                 Text(L10n.Cart.userAgreement)
-                    .font(.smallText)
             }
+            .font(.smallText)
+            .foregroundStyle(.appTextPrimary)
             ActionButton(title: L10n.Cart.pay) {
 
             }
-            .padding(.bottom, 16)
+            .padding(.bottom, 34)
         }
         .padding(16)
         .background(.appSurfaceBackground)
