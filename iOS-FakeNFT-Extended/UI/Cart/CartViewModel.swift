@@ -58,6 +58,11 @@ final class CartViewModel {
     var currencyErrorMessage: String?
     var selectedCurrencyID: String?
 
+    // MARK: - Payment state
+    var isPaymentInProgress: Bool = false
+    var paymentErrorMessage: String?
+    var isShowingSuccessView: Bool = false
+
     var isEmpty: Bool { items.isEmpty }
 
     var isShowingToolbar: Bool { !isEmpty }
@@ -131,21 +136,30 @@ final class CartViewModel {
         selectedCurrencyID == currency.id
     }
 
-    // Test example
     func completeOrder() async {
-        guard !isUpdating else { return }
+        guard !isPaymentInProgress else { return }
         guard let selectedCurrencyID else { return }
 
-        isUpdating = true
-        errorMessage = nil
+        isPaymentInProgress = true
+        paymentErrorMessage = nil
 
         do {
-            _ = try await cartService.completeOrder(nftIDs: items.map(\.id), currencyID: selectedCurrencyID)
+            let isSuccess = try await cartService.completeOrder(
+                nftIDs: items.map(\.id),
+                currencyID: selectedCurrencyID
+            )
+            if isSuccess {
+                items = []
+                self.selectedCurrencyID = nil
+                isShowingSuccessView = true
+            } else {
+                paymentErrorMessage = "Не удалось выполнить заказ"
+            }
         } catch {
-            errorMessage = "Не удалось выполнить заказ \(error)"
-            print(errorMessage ?? "")
+            paymentErrorMessage = "Не удалось выполнить заказ \(error)"
+            print(paymentErrorMessage ?? "")
         }
-        isUpdating = false
+        isPaymentInProgress = false
     }
 
     private func parseETH(_ text: String) -> Double? {

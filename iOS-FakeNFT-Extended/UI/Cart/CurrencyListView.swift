@@ -9,6 +9,7 @@ import SwiftUI
 
 struct CurrencyListView: View {
     let viewModel: CartViewModel
+    @Environment(\.dismiss) private var dismiss
 
     private let columns = [
         GridItem(.flexible()),
@@ -25,14 +26,34 @@ struct CurrencyListView: View {
         }
     }
 
+    private var isPaymentErrorAlertPresented: Binding<Bool> {
+        Binding {
+            viewModel.paymentErrorMessage != nil
+        } set: { isPresented in
+            if !isPresented {
+                viewModel.paymentErrorMessage = nil
+            }
+        }
+    }
+
+    private var isSuccessPresented: Binding<Bool> {
+        Binding {
+            viewModel.isShowingSuccessView
+        } set: { newValue in
+            viewModel.isShowingSuccessView = newValue
+        }
+    }
+
     var body: some View {
         VStack {
             switch viewModel.currencyListState {
             case .loading:
                 LoadingPlaceholderView()
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
+
             case .empty:
                 emptyState
+
             case .content:
                 currenciesGrid
                 Spacer()
@@ -50,6 +71,19 @@ struct CurrencyListView: View {
         ) {
             Button(L10n.Common.retry) { Task { await viewModel.loadCurrencies() } }
             Button(L10n.Common.cancel, role: .cancel) { viewModel.currencyErrorMessage = nil }
+        }
+        .alert(
+            L10n.Alerts.paymentFailed,
+            isPresented: isPaymentErrorAlertPresented
+        ) {
+            Button(L10n.Common.retry) { Task { await viewModel.completeOrder() } }
+            Button(L10n.Common.cancel, role: .cancel) { viewModel.paymentErrorMessage = nil }
+        }
+        .fullScreenCover(isPresented: isSuccessPresented) {
+            SuccessView {
+                viewModel.isShowingSuccessView = false
+                dismiss()
+            }
         }
     }
 
@@ -79,9 +113,14 @@ struct CurrencyListView: View {
             }
             .font(.smallText)
             .foregroundStyle(.appTextPrimary)
-            ActionButton(title: L10n.Cart.pay) {
 
+            ActionButton(title: L10n.Cart.pay) {
+                Task {
+                    await viewModel.completeOrder()
+                }
             }
+            .disabled(viewModel.selectedCurrencyID == nil || viewModel.isPaymentInProgress)
+            .opacity(viewModel.selectedCurrencyID == nil || viewModel.isPaymentInProgress ? 0.6 : 1)
             .padding(.bottom, 34)
         }
         .padding(16)

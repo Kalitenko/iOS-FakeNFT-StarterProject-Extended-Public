@@ -62,12 +62,12 @@ actor CartService: CartServiceProtocol {
         var models = [CurrencyModel]()
 
         for item in items {
-             if let model = CurrencyModel(
+            if let model = CurrencyModel(
                 id: item.id,
                 title: item.title,
                 name: item.name,
                 imageURLString: item.image
-             ) { models.append(model) }
+            ) { models.append(model) }
         }
 
         return models
