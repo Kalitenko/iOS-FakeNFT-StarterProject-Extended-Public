@@ -44,22 +44,27 @@ final class CollectionViewModel {
             state = .error(error.localizedDescription)
         }
     }
-
+    
     func loadNFTs() async throws {
-        try await withThrowingTaskGroup(of: CollectionItem.self) { group in
+        try await withThrowingTaskGroup(of: (Int, CollectionItem).self) { group in
             
-            for id in collectionInfo.nftIDs {
+            for (index, id) in collectionInfo.nftIDs.enumerated() {
                 group.addTask {
-                    try await self.catalogService.fetchNFTById(id)
+                    let item = try await self.catalogService.fetchNFTById(id)
+                    return (index, item)
                 }
             }
             
-            var result: [CollectionItem] = []
-
-            for try await item in group {
-                result.append(item)
+            var result = [CollectionItem?](
+                repeating: nil,
+                count: collectionInfo.nftIDs.count
+            )
+            
+            for try await (index, item) in group {
+                result[index] = item
             }
-            self.items = result
+            
+            self.items = result.compactMap { $0 }
         }
     }
 }

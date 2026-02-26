@@ -32,7 +32,6 @@ struct CatalogListView: View {
                     .listRowBackground(Color.clear)
             }
             
-            
             if isLoadingMore {
                 HStack {
                     Spacer()
