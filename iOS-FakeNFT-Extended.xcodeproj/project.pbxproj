@@ -62,6 +62,8 @@
 		EA7214E12F45EE370005CEC2 /* CurrencyService.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA7214E02F45EE320005CEC2 /* CurrencyService.swift */; };
 		EA7214E42F45FB720005CEC2 /* CurrencyModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA7214E32F45FB690005CEC2 /* CurrencyModel.swift */; };
 		EA9B300C2F506E0400B2465F /* SuccessView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA9B300B2F506E0400B2465F /* SuccessView.swift */; };
+		EA9B30242F50912000B2465F /* WebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA9B30232F50911A00B2465F /* WebView.swift */; };
+		EA9B30262F50914100B2465F /* WebViewComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA9B30252F50913800B2465F /* WebViewComponent.swift */; };
 		EA9E1B652F4629790002F0ED /* PaymentService.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA9E1B642F4629720002F0ED /* PaymentService.swift */; };
 		EA9E1B672F463EAB0002F0ED /* CompleteOrderRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA9E1B662F463E9E0002F0ED /* CompleteOrderRequest.swift */; };
 		EAB5154A2F48CFD600D57976 /* NumberFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = EAB515492F48CFCC00D57976 /* NumberFormatter.swift */; };
@@ -144,6 +146,8 @@
 		EA7214E02F45EE320005CEC2 /* CurrencyService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrencyService.swift; sourceTree = "<group>"; };
 		EA7214E32F45FB690005CEC2 /* CurrencyModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrencyModel.swift; sourceTree = "<group>"; };
 		EA9B300B2F506E0400B2465F /* SuccessView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuccessView.swift; sourceTree = "<group>"; };
+		EA9B30232F50911A00B2465F /* WebView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebView.swift; sourceTree = "<group>"; };
+		EA9B30252F50913800B2465F /* WebViewComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewComponent.swift; sourceTree = "<group>"; };
 		EA9E1B642F4629720002F0ED /* PaymentService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentService.swift; sourceTree = "<group>"; };
 		EA9E1B662F463E9E0002F0ED /* CompleteOrderRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompleteOrderRequest.swift; sourceTree = "<group>"; };
 		EAB515492F48CFCC00D57976 /* NumberFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumberFormatter.swift; sourceTree = "<group>"; };
@@ -380,6 +384,7 @@
 		EA3CE9BB2F387D69005CFF7D /* UIElements */ = {
 			isa = PBXGroup;
 			children = (
+				EA9B30222F50911200B2465F /* WebView */,
 				EAD3DDF82F439E5700506D24 /* ProgressView.swift */,
 				EAD3DDF62F439D6E00506D24 /* NavigationBarModifier.swift */,
 				EA3474922F3E4B4200A183F6 /* StarRatingView.swift */,
@@ -412,6 +417,15 @@
 				EA2BD0102F44646C00400179 /* NFTModelMapper.swift */,
 			);
 			path = Helpers;
+			sourceTree = "<group>";
+		};
+		EA9B30222F50911200B2465F /* WebView */ = {
+			isa = PBXGroup;
+			children = (
+				EA9B30252F50913800B2465F /* WebViewComponent.swift */,
+				EA9B30232F50911A00B2465F /* WebView.swift */,
+			);
+			path = WebView;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -597,6 +611,7 @@
 				EA2BD0092F44607300400179 /* OrderDTO.swift in Sources */,
 				ABC5E1E42C32055B002B4068 /* ErrorView.swift in Sources */,
 				ABC5E1A62C31F815002B4068 /* NetworkRequest.swift in Sources */,
+				EA9B30242F50912000B2465F /* WebView.swift in Sources */,
 				ABC5E1D52C320446002B4068 /* NftDetailInput.swift in Sources */,
 				ABC5E16E2C31F5AF002B4068 /* ContentView.swift in Sources */,
 				ABC5E1B92C31FD51002B4068 /* TestCatalogView.swift in Sources */,
@@ -615,6 +630,7 @@
 				EA2BD00F2F44630E00400179 /* OrderService.swift in Sources */,
 				EA3CE9BD2F387D7B005CFF7D /* ActionButton.swift in Sources */,
 				ABC5E1AE2C31FB7F002B4068 /* NftByIdRequest.swift in Sources */,
+				EA9B30262F50914100B2465F /* WebViewComponent.swift in Sources */,
 				ABC5E1DB2C3204CE002B4068 /* UIView+Constraints.swift in Sources */,
 				ABC5E16C2C31F5AF002B4068 /* iOS_FakeNFT_ExtendedApp.swift in Sources */,
 				EA7214E42F45FB720005CEC2 /* CurrencyModel.swift in Sources */,

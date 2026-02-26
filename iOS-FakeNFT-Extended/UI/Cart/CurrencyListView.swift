@@ -10,6 +10,7 @@ import SwiftUI
 struct CurrencyListView: View {
     let viewModel: CartViewModel
     @Environment(\.dismiss) private var dismiss
+    @State private var agreementURL: URL?
 
     private let columns = [
         GridItem(.flexible()),
@@ -85,6 +86,27 @@ struct CurrencyListView: View {
                 dismiss()
             }
         }
+        .environment(\.openURL, OpenURLAction { url in
+            agreementURL = url
+            return .handled
+        })
+        .sheet(
+            isPresented: Binding(
+                get: { agreementURL != nil },
+                set: { isPresented in
+                    if !isPresented {
+                        agreementURL = nil
+                    }
+                }
+            )
+        ) {
+            if let url = agreementURL {
+                NavigationStack {
+                    WebViewComponent(url: url)
+                        .customNavigationBar()
+                }
+            }
+        }
     }
 
     private var currenciesGrid: some View {
@@ -106,13 +128,11 @@ struct CurrencyListView: View {
     }
 
     private var bottomPanel: some View {
-        VStack(spacing: 16) {
-            VStack(alignment: .leading, spacing: 4) {
-                Text(L10n.Cart.agreementText)
-                Text(L10n.Cart.userAgreement)
-            }
+        VStack(alignment: .leading, spacing: 16) {
+            Text("\(L10n.Cart.agreementText) [\(L10n.Cart.userAgreement)](https://yandex.ru/legal/practicum_termsofuse)")
             .font(.smallText)
             .foregroundStyle(.appTextPrimary)
+            .lineSpacing(4)
 
             ActionButton(title: L10n.Cart.pay) {
                 Task {
