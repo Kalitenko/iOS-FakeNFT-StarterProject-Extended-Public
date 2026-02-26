@@ -12,6 +12,8 @@ struct CatalogView: View {
     @State private var showSortMenu = false
     @State private var viewModel: CatalogViewModel
     
+    @Environment(ServicesAssembly.self) private var services
+    
     init(viewModel: CatalogViewModel) {
         _viewModel = State(wrappedValue: viewModel)
     }
@@ -57,7 +59,12 @@ struct CatalogView: View {
             }
         )
         .navigationDestination(for: CatalogItem.self) { item in
-            CollectionView(viewModel: CollectionViewModel(catalogService: viewModel.catalogService, collectionInfo: item))
+            CollectionView(viewModel:
+                            CollectionViewModel(
+                                catalogService: viewModel.catalogService,
+                                profileService: services.commonProfileService,
+                                orderService: services.commonOrderService,
+                                collectionInfo: item))
                 .customBackground()
                 .toolbar(.hidden, for: .tabBar)
         }

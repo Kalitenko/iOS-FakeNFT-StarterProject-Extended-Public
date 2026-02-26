@@ -10,7 +10,19 @@ import SwiftUI
 struct CollectionCell: View {
     
     let item: CollectionItem
+    let onLikeTap: () -> Void
+    let onCartTap: () -> Void
     private let imageSize: CGFloat = 108
+    
+    init(
+        item: CollectionItem,
+        onLikeTap: @escaping () -> Void = { print("Like tapped.") },
+        onCartTap: @escaping () -> Void = { print("Cart tapped.") }
+    ) {
+        self.item = item
+        self.onLikeTap = onLikeTap
+        self.onCartTap = onCartTap
+    }
     
     var body: some View {
         VStack {
@@ -35,14 +47,14 @@ struct CollectionCell: View {
             .frame(width: imageSize, height: imageSize)
             .clipped()
             .clipShape(RoundedRectangle(cornerRadius: 12))
-
+            
             heart
         }
     }
     
     private var heart: some View {
         LikeButton(isFavorite: item.isFavorite,
-                   action: { print("Like tapped. Item.name: \(item.name)") }
+                   action: { onLikeTap() }
         )
     }
     
@@ -74,7 +86,7 @@ struct CollectionCell: View {
     
     private var cart: some View {
         CartButton(isInCart: item.isInCart,
-                   action: { print("Add to cart tapped. Item.name: \(item.name)") }
+                   action: { onCartTap() }
         )
     }
 }

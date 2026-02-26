@@ -11,10 +11,18 @@ protocol NetworkRequest {
     var endpoint: URL? { get }
     var httpMethod: HttpMethod { get }
     var dto: Encodable? { get }
+    
+    var body: Data? { get }
+    var headers: [String: String]? { get }
 }
 
 // default values
 extension NetworkRequest {
     var httpMethod: HttpMethod { .get }
     var dto: Encodable? { nil }
+}
+
+extension NetworkRequest {
+    var body: Data? { nil }
+    var headers: [String: String]? { nil }
 }
