@@ -62,8 +62,12 @@ struct CatalogView: View {
                 .toolbar(.hidden, for: .tabBar)
         }
         .confirmationDialog(L10n.Sort.title, isPresented: $showSortMenu, titleVisibility: .visible) {
-            Button(L10n.Sort.byTitle) { print(L10n.Sort.byTitle) }
-            Button(L10n.Sort.byNFTCount) { print(L10n.Sort.byNFTCount) }
+            Button(L10n.Sort.byTitle) {
+                viewModel.changeSort(to: .byTitle)
+            }
+            Button(L10n.Sort.byNFTCount) {
+                viewModel.changeSort(to: .byNFTCount)
+            }
             Button(L10n.Common.close, role: .cancel) { }
         }
     }
