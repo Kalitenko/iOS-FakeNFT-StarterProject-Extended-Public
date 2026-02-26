@@ -396,15 +396,13 @@
 		EA5560A32F3A0C0500797C6B /* Cart */ = {
 			isa = PBXGroup;
 			children = (
-				EA7214E32F45FB690005CEC2 /* CurrencyModel.swift */,
+				EA9B30272F5097FD00B2465F /* Currencies */,
 				EA7214E22F45FA7E0005CEC2 /* Helpers */,
 				EA5561DD2F3A499100797C6B /* CartViewModel.swift */,
 				EA5561DB2F3A242200797C6B /* NFTModel.swift */,
 				EA5560A42F3A0C4900797C6B /* CartView.swift */,
 				EA5561D92F3A234300797C6B /* NFTCartCell.swift */,
 				EA10219B2F3B224F00487E64 /* DeleteView.swift */,
-				EAE976162F4DC1EA00C6A0BA /* CurrencyCell.swift */,
-				EA1BFBED2F4F202E0073190A /* CurrencyListView.swift */,
 				EA9B300B2F506E0400B2465F /* SuccessView.swift */,
 			);
 			path = Cart;
@@ -426,6 +424,16 @@
 				EA9B30232F50911A00B2465F /* WebView.swift */,
 			);
 			path = WebView;
+			sourceTree = "<group>";
+		};
+		EA9B30272F5097FD00B2465F /* Currencies */ = {
+			isa = PBXGroup;
+			children = (
+				EAE976162F4DC1EA00C6A0BA /* CurrencyCell.swift */,
+				EA1BFBED2F4F202E0073190A /* CurrencyListView.swift */,
+				EA7214E32F45FB690005CEC2 /* CurrencyModel.swift */,
+			);
+			path = Currencies;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
