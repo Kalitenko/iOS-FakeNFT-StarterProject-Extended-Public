@@ -6,26 +6,8 @@
 //
 import SwiftUI
 
-enum CartSortOption: String {
-    case name
-    case price
-    case rating
-}
-
 @Observable @MainActor
 final class CartViewModel {
-    enum CartState {
-        case loading
-        case empty
-        case content
-        case updating
-    }
-
-    enum CurrencyListState {
-        case loading
-        case empty
-        case content
-    }
 
     var state: CartState {
         if isLoading {
@@ -197,4 +179,23 @@ final class CartViewModel {
             .replacingOccurrences(of: ",", with: ".")
         return Double(cleaned)
     }
+
+    enum CartState {
+        case loading
+        case empty
+        case content
+        case updating
+    }
+
+    enum CurrencyListState {
+        case loading
+        case empty
+        case content
+    }
+}
+
+enum CartSortOption: String {
+    case name
+    case price
+    case rating
 }
