@@ -51,10 +51,10 @@ struct CartView: View {
             }
             .background(.appBackground)
             .toolbar {
-                if !viewModel.isEmpty {
-                    ToolbarItem(placement: .topBarTrailing) {
-                        sortButton
-                    }
+                ToolbarItem(placement: .topBarTrailing) {
+                    sortButton
+                        .opacity(viewModel.isEmpty ? 0 : 1)
+                        .disabled(viewModel.isEmpty)
                 }
             }
         }
