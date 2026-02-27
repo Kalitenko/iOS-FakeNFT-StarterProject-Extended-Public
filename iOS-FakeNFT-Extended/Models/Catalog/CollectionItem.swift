@@ -26,3 +26,17 @@ struct CollectionItem: Hashable {
         self.isInCart = isInCart
     }
 }
+
+extension CollectionItem {
+    func enriched(isFavorite: Bool, isInCart: Bool) -> Self {
+        Self(
+            id: id,
+            name: name,
+            imageURLs: imagesUrlsStrings,
+            rating: rating,
+            price: price,
+            isFavorite: isFavorite,
+            isInCart: isInCart
+        )
+    }
+}

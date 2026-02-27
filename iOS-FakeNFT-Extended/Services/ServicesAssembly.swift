@@ -27,4 +27,16 @@ final class ServicesAssembly {
             networkClient: networkClient
         )
     }
+    
+    var commonOrderService: CommonOrderServiceProtocol {
+        CommonOrderService(
+            networkClient: networkClient
+        )
+    }
+    
+    var commonProfileService: CommonProfileServiceProtocol {
+        CommonProfileService(
+            networkClient: networkClient
+        )
+    }
 }

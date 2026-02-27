@@ -88,7 +88,11 @@ struct CollectionView: View {
         
         return LazyVGrid(columns: columns, spacing: 8) {
             ForEach(items, id: \.id) { item in
-                CollectionCell(item: item)
+                CollectionCell(
+                    item: item,
+                    onLikeTap: { viewModel.toggleLike(for: item.id) },
+                    onCartTap: { viewModel.toggleCart(for: item.id) }
+                )
             }
         }
     }

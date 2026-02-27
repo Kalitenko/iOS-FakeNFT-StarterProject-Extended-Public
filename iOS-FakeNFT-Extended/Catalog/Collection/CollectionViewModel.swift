@@ -21,28 +21,42 @@ final class CollectionViewModel {
     var state: CollectionViewModelState = .loading
     
     private let catalogService: CatalogServiceProtocol
+    private let profileService: CommonProfileServiceProtocol
+    private let orderService: CommonOrderServiceProtocol
     
     let collectionInfo: CatalogItem
     
     private var items: [CollectionItem] = []
+    private var cartItems: [String] = []
+    private var likes: [String] = []
     
     init(
         catalogService: CatalogServiceProtocol,
+        profileService: CommonProfileServiceProtocol,
+        orderService: CommonOrderServiceProtocol,
         collectionInfo: CatalogItem
     ) {
         self.catalogService = catalogService
+        self.profileService = profileService
+        self.orderService = orderService
         self.collectionInfo = collectionInfo
     }
     
     func loadData() async {
         state = .loading
         do {
+            try await loadCartAndLikes()
             try await loadNFTs()
             state = .loaded(items)
         } catch {
             print(error)
             state = .error(error.localizedDescription)
         }
+    }
+    
+    func loadCartAndLikes() async throws {
+        cartItems = try await orderService.getOrder().nfts
+        likes = try await profileService.fetchProfile().likes
     }
     
     func loadNFTs() async throws {
@@ -64,13 +78,126 @@ final class CollectionViewModel {
                 result[index] = item
             }
             
-            self.items = result.compactMap { $0 }
+            let loadedItems = result.compactMap { $0 }
+            
+            self.items = loadedItems.map {
+                $0.enriched(
+                    isFavorite: likes.contains($0.id),
+                    isInCart: cartItems.contains($0.id)
+                )
+            }
         }
+    }
+    
+    func toggleLike(for itemID: String) {
+        guard case .loaded = state else { return }
+        
+        let wasLiked = likes.contains(itemID)
+        
+        if wasLiked {
+            likes.removeAll { $0 == itemID }
+        } else {
+            likes.append(itemID)
+        }
+        
+        updateItem(itemID) { item in
+            item.enriched(
+                isFavorite: !wasLiked,
+                isInCart: item.isInCart
+            )
+        }
+        
+        Task {
+            do {
+                _ = try await profileService.updateLikes(likes: likes)
+            } catch {
+                if wasLiked {
+                    likes.append(itemID)
+                } else {
+                    likes.removeAll { $0 == itemID }
+                }
+                
+                updateItem(itemID) { item in
+                    item.enriched(
+                        isFavorite: wasLiked,
+                        isInCart: item.isInCart
+                    )
+                }
+                state = .error(error.localizedDescription)
+            }
+        }
+    }
+    
+    func toggleCart(for itemID: String) {
+        guard case .loaded = state else { return }
+        
+        let wasInCart = cartItems.contains(itemID)
+        
+        if wasInCart {
+            cartItems.removeAll { $0 == itemID }
+        } else {
+            cartItems.append(itemID)
+        }
+        
+        updateItem(itemID) { item in
+            item.enriched(
+                isFavorite: item.isFavorite,
+                isInCart: !wasInCart
+            )
+        }
+        
+        Task {
+            do {
+                _ = try await orderService.updateOrder(nftIDs: cartItems)
+            } catch {
+                if wasInCart {
+                    cartItems.append(itemID)
+                } else {
+                    cartItems.removeAll { $0 == itemID }
+                }
+                
+                updateItem(itemID) { item in
+                    item.enriched(
+                        isFavorite: item.isFavorite,
+                        isInCart: wasInCart
+                    )
+                }
+                state = .error(error.localizedDescription)
+            }
+        }
+    }
+    
+    private func updateItem(
+        _ id: String,
+        transform: (CollectionItem) -> CollectionItem
+    ) {
+        guard case .loaded(var currentItems) = state else { return }
+        
+        if let index = currentItems.firstIndex(where: { $0.id == id }) {
+            currentItems[index] = transform(currentItems[index])
+            items = currentItems
+            state = .loaded(currentItems)
+        }
+    }
+    
+    private func enrich(_ item: CollectionItem) -> CollectionItem {
+        CollectionItem(
+            id: item.id,
+            name: item.name,
+            imageURLs: item.imagesUrlsStrings,
+            rating: item.rating,
+            price: item.price,
+            isFavorite: likes.contains(item.id),
+            isInCart: cartItems.contains(item.id)
+        )
     }
 }
 
 extension CollectionViewModel {
     static func mock() -> CollectionViewModel {
-        CollectionViewModel(catalogService: MockCatalogService(), collectionInfo: MockData.Catalog.mock)
+        CollectionViewModel(catalogService: MockCatalogService(),
+                            profileService: MockProfileService(),
+                            orderService: MockOrderService(),
+                            collectionInfo: MockData.Catalog.mock)
     }
 }

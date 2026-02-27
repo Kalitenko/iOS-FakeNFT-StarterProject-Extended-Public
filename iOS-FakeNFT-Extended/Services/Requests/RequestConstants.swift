@@ -6,4 +6,6 @@ enum RequestConstants {
     static let size = "size"
     static let sortBy = "sortBy"
     static let id = "id"
+    static let contentType = "Content-Type"
+    static let urlencoded = "application/x-www-form-urlencoded"
 }
