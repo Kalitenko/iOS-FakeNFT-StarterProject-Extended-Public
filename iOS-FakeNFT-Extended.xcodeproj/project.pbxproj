@@ -63,6 +63,8 @@
 		C285E1A22F5075CA00A89815 /* CommonOrderDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = C285E1A12F5075CA00A89815 /* CommonOrderDTO.swift */; };
 		C285E1A52F5079A800A89815 /* CommonProfileDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = C285E1A42F5079A800A89815 /* CommonProfileDTO.swift */; };
 		C285E1A72F507C0D00A89815 /* CommonRequests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C285E1A62F507C0D00A89815 /* CommonRequests.swift */; };
+		C285DF282F4F1B3800A89815 /* WebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C285DF272F4F1B3800A89815 /* WebView.swift */; };
+		C285DF2B2F4F1B7A00A89815 /* WebViewComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C285DF2A2F4F1B7A00A89815 /* WebViewComponent.swift */; };
 		C2E5A7E32F3B3A6500632512 /* CatalogItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2E5A7E22F3B3A6500632512 /* CatalogItem.swift */; };
 		C2E5A7E62F3B40E400632512 /* CatalogView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2E5A7E52F3B40E400632512 /* CatalogView.swift */; };
 		C2E5A7E82F3B41A500632512 /* CatalogItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2E5A7E72F3B41A500632512 /* CatalogItemView.swift */; };
@@ -126,6 +128,7 @@
 		ABC5E1E32C32055B002B4068 /* ErrorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorView.swift; sourceTree = "<group>"; };
 		ABC5E1E52C320585002B4068 /* LinePageControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinePageControl.swift; sourceTree = "<group>"; };
 		ABC5E1E72C320610002B4068 /* NftDetailBridgeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NftDetailBridgeView.swift; sourceTree = "<group>"; };
+		C20076A72F3F2F3500C217BF /* MockCatalogView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockCatalogView.swift; sourceTree = "<group>"; };
 		C20076A92F3F2F7700C217BF /* MockProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockProfileView.swift; sourceTree = "<group>"; };
 		C20076AB2F3F2F9700C217BF /* MockCartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockCartView.swift; sourceTree = "<group>"; };
 		C20076AD2F3F2FAD00C217BF /* MockStatisticsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockStatisticsView.swift; sourceTree = "<group>"; };
@@ -150,6 +153,8 @@
 		C285E1A12F5075CA00A89815 /* CommonOrderDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommonOrderDTO.swift; sourceTree = "<group>"; };
 		C285E1A42F5079A800A89815 /* CommonProfileDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommonProfileDTO.swift; sourceTree = "<group>"; };
 		C285E1A62F507C0D00A89815 /* CommonRequests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommonRequests.swift; sourceTree = "<group>"; };
+		C285DF272F4F1B3800A89815 /* WebView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebView.swift; sourceTree = "<group>"; };
+		C285DF2A2F4F1B7A00A89815 /* WebViewComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewComponent.swift; sourceTree = "<group>"; };
 		C2E5A7E22F3B3A6500632512 /* CatalogItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatalogItem.swift; sourceTree = "<group>"; };
 		C2E5A7E52F3B40E400632512 /* CatalogView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatalogView.swift; sourceTree = "<group>"; };
 		C2E5A7E72F3B41A500632512 /* CatalogItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatalogItemView.swift; sourceTree = "<group>"; };
@@ -202,6 +207,7 @@
 				ABC5E17B2C31F5B0002B4068 /* iOS-FakeNFT-ExtendedTests */,
 				ABC5E1852C31F5B0002B4068 /* iOS-FakeNFT-ExtendedUITests */,
 				ABC5E1692C31F5AF002B4068 /* Products */,
+				C274683F2F52021D0030CF78 /* Recovered References */,
 			);
 			sourceTree = "<group>";
 		};
@@ -460,6 +466,23 @@
 			path = Collection;
 			sourceTree = "<group>";
 		};
+		C274683F2F52021D0030CF78 /* Recovered References */ = {
+			isa = PBXGroup;
+			children = (
+				C20076A72F3F2F3500C217BF /* MockCatalogView.swift */,
+			);
+			name = "Recovered References";
+			sourceTree = "<group>";
+		};
+		C285DF292F4F1B6100A89815 /* WebView */ = {
+			isa = PBXGroup;
+			children = (
+				C285DF272F4F1B3800A89815 /* WebView.swift */,
+				C285DF2A2F4F1B7A00A89815 /* WebViewComponent.swift */,
+			);
+			path = WebView;
+			sourceTree = "<group>";
+		};
 		C2E5A7E12F3B3A3100632512 /* Catalog */ = {
 			isa = PBXGroup;
 			children = (
@@ -473,6 +496,7 @@
 		EA3CE9BB2F387D69005CFF7D /* UIElements */ = {
 			isa = PBXGroup;
 			children = (
+				C285DF292F4F1B6100A89815 /* WebView */,
 				EA3CE9BC2F387D7B005CFF7D /* ActionButton.swift */,
 				C266D5E32F3F166A00B47E7C /* NavigationBarModifier.swift */,
 				C2E5A96D2F3C521E00632512 /* StarRatingView.swift */,
@@ -653,6 +677,7 @@
 				C2711A292F438DAE00B1A647 /* NFTRequests.swift in Sources */,
 				ABC5E1992C31F666002B4068 /* Fonts.swift in Sources */,
 				C2637AB72F49D06600B571FC /* Array+Extensions.swift in Sources */,
+				C285DF282F4F1B3800A89815 /* WebView.swift in Sources */,
 				ABC5E1CF2C32041D002B4068 /* NftDetailViewController.swift in Sources */,
 				ABC5E1B72C31FC70002B4068 /* ServicesAssembly.swift in Sources */,
 				ABC5E19D2C31F6A6002B4068 /* NftStorage.swift in Sources */,
@@ -679,6 +704,7 @@
 				ABC5E16E2C31F5AF002B4068 /* ContentView.swift in Sources */,
 				C2F4FCE12F46409300372066 /* CollectionViewModel.swift in Sources */,
 				C266D5572F3DF23900B47E7C /* CollectionView.swift in Sources */,
+				C285DF2B2F4F1B7A00A89815 /* WebViewComponent.swift in Sources */,
 				ABC5E1B92C31FD51002B4068 /* TestCatalogView.swift in Sources */,
 				ABC5E1DF2C3204FB002B4068 /* LoadingView.swift in Sources */,
 				C234CDF72F388EC600E6C9EE /* ProgressView.swift in Sources */,
