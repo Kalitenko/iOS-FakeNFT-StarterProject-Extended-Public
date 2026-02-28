@@ -16,7 +16,7 @@ struct CurrencyModel: Identifiable, Hashable, Sendable {
     init?(id: String, title: String, name: String, imageURLString: String) {
         guard let url = URL(string: imageURLString) else { return nil }
         self.id = id
-        self.title = title
+        self.title = title.replacingOccurrences(of: "_", with: " ")
         self.name = name
         self.imageURL = url
     }

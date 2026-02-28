@@ -8,12 +8,6 @@ import SwiftUI
 
 @Observable @MainActor
 final class CartViewModel {
-    enum CartState {
-        case loading
-        case empty
-        case content
-        case updating
-    }
 
     var state: CartState {
         if isLoading {
@@ -28,16 +22,38 @@ final class CartViewModel {
         return .content
     }
 
+    var currencyListState: CurrencyListState {
+        if isCurrenciesLoading {
+            return .loading
+        }
+        if currencies.isEmpty {
+            return .empty
+        }
+        return .content
+    }
+
     private let cartService: CartServiceProtocol
 
+    // MARK: - Cart state
     var items: [NFTModel] = []
     var isLoading: Bool = false
     var isUpdating: Bool = false
     var errorMessage: String?
 
-    var isEmpty: Bool { items.isEmpty }
+    private(set) var selectedSortOption: CartSortOption = .name
 
-    var isShowingToolbar: Bool { !isEmpty }
+    // MARK: - Currency state
+    var currencies: [CurrencyModel] = []
+    var isCurrenciesLoading: Bool = false
+    var currencyErrorMessage: String?
+    var selectedCurrencyID: String?
+
+    // MARK: - Payment state
+    var isPaymentInProgress: Bool = false
+    var paymentErrorMessage: String?
+    var isShowingSuccessView: Bool = false
+
+    var isEmpty: Bool { items.isEmpty }
 
     var itemsAmount: Int { items.count }
 
@@ -52,17 +68,24 @@ final class CartViewModel {
         self.cartService = cartService
     }
 
-    func load() async {
+    func load(sortedBy sortOption: CartSortOption = .name) async {
         isLoading = true
         errorMessage = nil
         do {
-            items = try await cartService.loadCartItems()
+            let loadedItems = try await cartService.loadCartItems()
+            items = sort(items: loadedItems, by: sortOption)
+            selectedSortOption = sortOption
         } catch {
             errorMessage = "Не удалось получить данные: \(error)"
             print(errorMessage ?? "")
             items = []
         }
         isLoading = false
+    }
+
+    func applySort(_ sortOption: CartSortOption) {
+        selectedSortOption = sortOption
+        items = sort(items: items, by: sortOption)
     }
 
     func deleteFromCart(nft: NFTModel) async {
@@ -84,31 +107,69 @@ final class CartViewModel {
         isUpdating = false
     }
 
-    // Test example
     func loadCurrencies() async {
-        var currencies = [CurrencyModel]()
+        guard !isCurrenciesLoading else { return }
+        isCurrenciesLoading = true
+        currencyErrorMessage = nil
+
         do {
-            currencies = try await cartService.getCurrencies()
+            let loadedCurrencies = try await cartService.getCurrencies()
+            currencies = loadedCurrencies
         } catch {
-            errorMessage = "Не удалось получить список валют \(error)"
-            print(errorMessage ?? "")
+            currencies = []
+            currencyErrorMessage = "Не удалось получить список валют \(error)"
+            print(currencyErrorMessage ?? "")
         }
-        print(currencies.first ?? "")
+        isCurrenciesLoading = false
     }
 
-    // Test example
+    func selectCurrency(_ currency: CurrencyModel) {
+        selectedCurrencyID = currency.id
+    }
+
+    func isCurrencySelected(_ currency: CurrencyModel) -> Bool {
+        selectedCurrencyID == currency.id
+    }
+
     func completeOrder() async {
-        guard !isUpdating else { return }
-        isUpdating = true
-        errorMessage = nil
+        guard !isPaymentInProgress else { return }
+        guard let selectedCurrencyID else { return }
+
+        isPaymentInProgress = true
+        paymentErrorMessage = nil
 
         do {
-            _ = try await cartService.completeOrder(nftIDs: items.map(\.id), currencyID: "2")
+            let isSuccess = try await cartService.completeOrder(
+                nftIDs: items.map(\.id),
+                currencyID: selectedCurrencyID
+            )
+            if isSuccess {
+                items = []
+                self.selectedCurrencyID = nil
+                isShowingSuccessView = true
+            } else {
+                paymentErrorMessage = "Не удалось выполнить заказ"
+            }
         } catch {
-            errorMessage = "Не удалось выполнить заказ \(error)"
-            print(errorMessage ?? "")
+            paymentErrorMessage = "Не удалось выполнить заказ \(error)"
+            print(paymentErrorMessage ?? "")
         }
-        isUpdating = false
+        isPaymentInProgress = false
+    }
+
+    private func sort(items: [NFTModel], by option: CartSortOption) -> [NFTModel] {
+        switch option {
+        case .name:
+            return items.sorted {
+                $0.name.localizedCaseInsensitiveCompare($1.name) == .orderedAscending
+            }
+        case .price:
+            return items.sorted {
+                parseETH($0.price) ?? 0 < parseETH($1.price) ?? 0
+            }
+        case .rating:
+            return items.sorted { $0.rating > $1.rating }
+        }
     }
 
     private func parseETH(_ text: String) -> Double? {
@@ -118,4 +179,23 @@ final class CartViewModel {
             .replacingOccurrences(of: ",", with: ".")
         return Double(cleaned)
     }
+
+    enum CartState {
+        case loading
+        case empty
+        case content
+        case updating
+    }
+
+    enum CurrencyListState {
+        case loading
+        case empty
+        case content
+    }
+}
+
+enum CartSortOption: String {
+    case name
+    case price
+    case rating
 }
