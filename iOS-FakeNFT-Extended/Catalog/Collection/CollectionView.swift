@@ -38,12 +38,17 @@ struct CollectionView: View {
                     
                 case .loaded(let items):
                     grid(items)
-                    
-                case .error:
-                    // TODO: обработать ошибку
-                    grid([])
                 }
             }
+        }
+        .alert(
+            alertTitle,
+            isPresented: Binding(
+                get: { viewModel.screenError != nil },
+                set: { if !$0 { viewModel.screenError = nil } }
+            )
+        ) {
+            alertButtons
         }
     }
     
@@ -98,6 +103,43 @@ struct CollectionView: View {
                     onCartTap: { viewModel.toggleCart(for: item.id) }
                 )
             }
+        }
+    }
+    
+    private var alertTitle: String {
+        switch viewModel.screenError {
+        case .loadFailed:
+            return L10n.Alerts.dataLoadFailed
+        case .likeFailed, .cartFailed:
+            return L10n.Alerts.somethingWentWrong
+        case .none:
+            return ""
+        }
+    }
+    
+    @ViewBuilder
+    private var alertButtons: some View {
+        switch viewModel.screenError {
+            
+        case .loadFailed:
+            Button(L10n.Common.cancel, role: .cancel) {
+                viewModel.screenError = nil
+            }
+            
+            Button(L10n.Common.retry) {
+                viewModel.screenError = nil
+                Task {
+                    await viewModel.loadData()
+                }
+            }
+            
+        case .likeFailed, .cartFailed:
+            Button(L10n.Alerts.okay, role: .cancel) {
+                viewModel.screenError = nil
+            }
+            
+        case .none:
+            EmptyView()
         }
     }
 }

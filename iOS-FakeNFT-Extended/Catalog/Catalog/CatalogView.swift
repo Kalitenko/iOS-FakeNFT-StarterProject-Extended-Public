@@ -30,9 +30,6 @@ struct CatalogView: View {
                 
             case .loadingMore(let items):
                 catalogContent(items, isLoadingMore: true)
-                
-            case .error:
-                catalogContent([], isLoadingMore: false)
             }
         }
         .task {
@@ -65,8 +62,8 @@ struct CatalogView: View {
                                 profileService: services.commonProfileService,
                                 orderService: services.commonOrderService,
                                 collectionInfo: item))
-                .customBackground()
-                .toolbar(.hidden, for: .tabBar)
+            .customBackground()
+            .toolbar(.hidden, for: .tabBar)
         }
         .confirmationDialog(L10n.Sort.title, isPresented: $showSortMenu, titleVisibility: .visible) {
             Button(L10n.Sort.byTitle) {
@@ -76,6 +73,56 @@ struct CatalogView: View {
                 viewModel.changeSort(to: .byNFTCount)
             }
             Button(L10n.Common.close, role: .cancel) { }
+        }
+        .alert(
+            alertTitle,
+            isPresented: Binding(
+                get: { viewModel.screenError != nil },
+                set: { newValue in
+                    if !newValue {
+                        viewModel.screenError = nil
+                    }
+                }
+            )
+        ) {
+            alertButtons
+        }
+    }
+    
+    private var alertTitle: String {
+        switch viewModel.screenError {
+        case .loading:
+            return L10n.Alerts.dataLoadFailed
+        case .generic:
+            return L10n.Alerts.somethingWentWrong
+        case .none:
+            return ""
+        }
+    }
+    
+    @ViewBuilder
+    private var alertButtons: some View {
+        switch viewModel.screenError {
+            
+        case .loading:
+            Button(L10n.Common.cancel, role: .cancel) {
+                viewModel.screenError = nil
+            }
+            
+            Button(L10n.Common.retry) {
+                viewModel.screenError = nil
+                Task {
+                    await viewModel.loadInitial()
+                }
+            }
+            
+        case .generic:
+            Button(L10n.Alerts.okay, role: .cancel) {
+                viewModel.screenError = nil
+            }
+            
+        case .none:
+            EmptyView()
         }
     }
 }
