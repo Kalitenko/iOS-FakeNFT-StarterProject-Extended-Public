@@ -70,11 +70,15 @@ struct CollectionView: View {
     private var author: some View {
         HStack(spacing: 4) {
             Text("\(L10n.Catalog.collectionAuthor): ")
-            NavigationLink("\(viewModel.collectionInfo.author)") {
-                AuthorWebsiteView(author: viewModel.collectionInfo.author, website: viewModel.collectionInfo.website)
-                    .customBackground()
+            if let url = viewModel.authorURL {
+                NavigationLink(viewModel.collectionInfo.author) {
+                    WebViewComponent(url: url)
+                        .customNavigationBarApplyingIOS26()
+                }
+                .foregroundStyle(.appBlue)
+            } else {
+                Text("\(viewModel.collectionInfo.author)")
             }
-            .foregroundStyle(.appBlue)
         }
     }
     

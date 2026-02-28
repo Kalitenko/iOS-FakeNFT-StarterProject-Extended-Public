@@ -25,6 +25,9 @@ final class CollectionViewModel {
     private let orderService: CommonOrderServiceProtocol
     
     let collectionInfo: CatalogItem
+    var authorURL: URL? {
+        makeURL(from: collectionInfo.website)
+    }
     
     private var items: [CollectionItem] = []
     private var cartItems: [String] = []
@@ -190,6 +193,14 @@ final class CollectionViewModel {
             isFavorite: likes.contains(item.id),
             isInCart: cartItems.contains(item.id)
         )
+    }
+    
+    private func makeURL(from string: String) -> URL? {
+        if string.hasPrefix("http://") || string.hasPrefix("https://") {
+            return URL(string: string)
+        } else {
+            return URL(string: "https://\(string)")
+        }
     }
 }
 
