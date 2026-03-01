@@ -11,4 +11,6 @@ struct UserProfile {
     var name: String
     var about: String
     var website: String
+    var photoURL: String?
+    var isPhotoRemoved: Bool
 }
