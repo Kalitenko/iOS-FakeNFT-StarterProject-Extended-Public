@@ -9,9 +9,9 @@ import SwiftUI
 import SafariServices
 
 struct ProfileView: View {
-
+    
     @State private var isWebViewPresented = false
-
+    
     @State private var profile = UserProfile(
         name: "Joaquin Phoenix",
         about: "Дизайнер из Казани, люблю цифровое искусство и бейглы. В моей коллекции уже 100+ NFT, и еще больше — на моём сайте. Открыт к коллаборациям.",
@@ -19,44 +19,44 @@ struct ProfileView: View {
         photoURL: nil,
         isPhotoRemoved: false
     )
-
+    
     private let myNFTCount = 112
     private let favoriteNFTCount = 11
-
+    
     private enum Layout {
         static let screenPadding: CGFloat = 16
-
+        
         static let avatarSize: CGFloat = 70
-
+        
         static let nameFontSize: CGFloat = 22
         static let nameLineHeight: CGFloat = 28
         static let nameTracking: CGFloat = 0.35
-
+        
         static let headerSpacing: CGFloat = 20
         static let headerBottomPadding: CGFloat = 40
         static let headerRowSpacing: CGFloat = 12
     }
-
+    
     private var websiteURL: URL? {
         Self.makeWebURL(from: profile.website)
     }
-
+    
     private var avatarURL: URL? {
         guard !profile.isPhotoRemoved else { return nil }
         guard let raw = profile.photoURL else { return nil }
         return Self.makeWebURL(from: raw)
     }
-
+    
     var body: some View {
         NavigationStack {
             ScrollView {
                 VStack(alignment: .leading, spacing: 16) {
-
+                    
                     header
                         .padding(.bottom, Layout.headerBottomPadding)
-
+                    
                     navigationRows
-
+                    
                     Spacer(minLength: 0)
                 }
                 .padding(.horizontal, Layout.screenPadding)
@@ -92,10 +92,10 @@ struct ProfileView: View {
             }
         }
     }
-
+    
     private var header: some View {
         VStack(alignment: .leading, spacing: Layout.headerSpacing) {
-
+            
             HStack(spacing: Layout.headerRowSpacing) {
                 RemoteAvatarView(
                     url: avatarURL,
@@ -104,23 +104,23 @@ struct ProfileView: View {
                     placeholderAssetName: "joaquinPhoenixFoto"
                 )
                 .accessibilityIdentifier("profile.avatar")
-
+                
                 Text(profile.name)
                     .font(.system(size: Layout.nameFontSize, weight: .bold))
                     .tracking(Layout.nameTracking)
                     .frame(height: Layout.nameLineHeight, alignment: .leading)
                     .foregroundStyle(Color(uiColor: .appTextPrimary))
-
+                
                 Spacer()
             }
-
+            
             VStack(alignment: .leading, spacing: 8) {
                 Text(profile.about)
                     .font(.system(size: 13, weight: .regular))
                     .lineSpacing(5)
                     .foregroundStyle(Color(uiColor: .appTextPrimary))
                     .fixedSize(horizontal: false, vertical: true)
-
+                
                 Button {
                     guard websiteURL != nil else { return }
                     isWebViewPresented = true
@@ -136,17 +136,18 @@ struct ProfileView: View {
             }
         }
     }
-
+    
     private var navigationRows: some View {
         VStack(spacing: 8) {
             NavigationLink {
-                Text(L10n.Profile.myNFT)
+                //                MyNFTsView(nfts: []) проверить пустой экран My NFT
+                MyNFTsView(nfts: NFTMock.sampleMyNFTs)
             } label: {
                 row(title: L10n.Profile.myNFT, value: myNFTCount)
             }
             .buttonStyle(.plain)
             .accessibilityIdentifier("profile.myNFTRow")
-
+            
             NavigationLink {
                 Text(L10n.Profile.favoriteNFT)
             } label: {
@@ -156,19 +157,19 @@ struct ProfileView: View {
             .accessibilityIdentifier("profile.favoriteNFTRow")
         }
     }
-
+    
     private func row(title: String, value: Int) -> some View {
         HStack(spacing: 4) {
             Text(title)
                 .font(.system(size: 17, weight: .bold))
                 .foregroundStyle(Color(uiColor: .appTextPrimary))
-
+            
             Text("(\(value))")
                 .font(.system(size: 17, weight: .bold))
                 .foregroundStyle(Color(uiColor: .appTextPrimary))
-
+            
             Spacer()
-
+            
             Image("chevron")
                 .renderingMode(.template)
                 .resizable()
@@ -179,25 +180,25 @@ struct ProfileView: View {
         .padding(.vertical, 14)
         .contentShape(Rectangle())
     }
-
+    
     // MARK: - URL helper
-
+    
     private static func makeWebURL(from rawString: String) -> URL? {
         let trimmed = rawString.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !trimmed.isEmpty else { return nil }
-
+        
         let candidate: String
         if trimmed.lowercased().hasPrefix("http://") || trimmed.lowercased().hasPrefix("https://") {
             candidate = trimmed
         } else {
             candidate = "https://\(trimmed)"
         }
-
+        
         guard let url = URL(string: candidate),
               let scheme = url.scheme, (scheme == "http" || scheme == "https"),
               url.host != nil
         else { return nil }
-
+        
         return url
     }
 }
@@ -209,9 +210,9 @@ private struct RemoteAvatarView: View {
     let isRemoved: Bool
     let size: CGFloat
     let placeholderAssetName: String
-
+    
     @StateObject private var loader = AvatarLoader()
-
+    
     var body: some View {
         Group {
             if isRemoved {
@@ -234,12 +235,12 @@ private struct RemoteAvatarView: View {
             await loader.load(url: url, isRemoved: isRemoved)
         }
     }
-
+    
     private var identityKey: String {
         if isRemoved { return "removed" }
         return url?.absoluteString ?? "default"
     }
-
+    
     private var removedPlaceholder: some View {
         ZStack {
             Circle().fill(Color(UIColor.systemGray5))
@@ -256,9 +257,9 @@ private struct RemoteAvatarView: View {
 private final class AvatarLoader: ObservableObject {
     @Published var image: UIImage?
     @Published var isLoading = false
-
+    
     private static let cache = NSCache<NSString, UIImage>()
-
+    
     func load(url: URL?, isRemoved: Bool) async {
         // removed -> always clear
         guard !isRemoved else {
@@ -266,37 +267,37 @@ private final class AvatarLoader: ObservableObject {
             isLoading = false
             return
         }
-
+        
         guard let url else {
             image = nil
             isLoading = false
             return
         }
-
+        
         let key = url.absoluteString as NSString
-
+        
         if let cached = Self.cache.object(forKey: key) {
             image = cached
             isLoading = false
             return
         }
-
+        
         isLoading = true
         defer { isLoading = false }
-
+        
         do {
             let (data, response) = try await URLSession.shared.data(from: url)
-
+            
             if let http = response as? HTTPURLResponse, !(200...299).contains(http.statusCode) {
                 image = nil
                 return
             }
-
+            
             guard let uiImage = UIImage(data: data) else {
                 image = nil
                 return
             }
-
+            
             Self.cache.setObject(uiImage, forKey: key)
             image = uiImage
         } catch {
@@ -309,11 +310,11 @@ private final class AvatarLoader: ObservableObject {
 
 private struct SafariView: UIViewControllerRepresentable {
     let url: URL
-
+    
     func makeUIViewController(context: Context) -> SFSafariViewController {
         SFSafariViewController(url: url)
     }
-
+    
     func updateUIViewController(_ uiViewController: SFSafariViewController, context: Context) {}
 }
 
