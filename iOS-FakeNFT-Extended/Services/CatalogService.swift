@@ -14,7 +14,7 @@ protocol CatalogServiceProtocol: Sendable {
     func fetchNFTById(_ id: String) async throws -> CollectionItem
 }
 
-final class CatalogService: CatalogServiceProtocol {
+actor CatalogService: CatalogServiceProtocol {
     
     private let networkClient: NetworkClient
 

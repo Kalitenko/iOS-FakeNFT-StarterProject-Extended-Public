@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct CollectionItem: Hashable {
+struct CollectionItem: Hashable, Sendable {
     let id: String
     let name: String
     let imagesUrlsStrings: [ImageSource]

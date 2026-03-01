@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct CatalogRequest: NetworkRequest {
+struct CatalogRequest: NetworkRequest, Sendable {
     
     let pageNumber: Int
     let pageSize: Int
@@ -27,7 +27,7 @@ struct CatalogRequest: NetworkRequest {
     }
 }
 
-struct CollectionByIdRequest: NetworkRequest {
+struct CollectionByIdRequest: NetworkRequest, Sendable {
     
     let id: String
     

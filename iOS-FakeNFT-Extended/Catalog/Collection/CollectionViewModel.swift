@@ -72,8 +72,11 @@ final class CollectionViewModel {
         try await withThrowingTaskGroup(of: (Int, CollectionItem).self) { group in
             
             for (index, id) in collectionInfo.nftIDs.enumerated() {
+                
+                let catalogService = self.catalogService
+                
                 group.addTask {
-                    let item = try await self.catalogService.fetchNFTById(id)
+                    let item = try await catalogService.fetchNFTById(id)
                     return (index, item)
                 }
             }

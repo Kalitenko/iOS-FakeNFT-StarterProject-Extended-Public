@@ -7,7 +7,7 @@
 
 import Foundation
 
-protocol CommonProfileServiceProtocol {
+protocol CommonProfileServiceProtocol: Sendable {
     func fetchProfile() async throws -> CommonProfileDTO
     func updateLikes(likes: [String]) async throws -> CommonProfileDTO
 }

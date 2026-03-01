@@ -7,7 +7,7 @@
 
 import Foundation
 
-protocol CommonOrderServiceProtocol {
+protocol CommonOrderServiceProtocol: Sendable {
     func getOrder() async throws -> CommonOrderDTO
     func updateOrder(nftIDs: [String]) async throws -> CommonOrderDTO
 }
