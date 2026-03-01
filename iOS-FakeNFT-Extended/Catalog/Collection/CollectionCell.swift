@@ -12,16 +12,19 @@ struct CollectionCell: View {
     let item: CollectionItem
     let onLikeTap: () -> Void
     let onCartTap: () -> Void
+    let onImageTap: () -> Void
     private let imageSize: CGFloat = 108
     
     init(
         item: CollectionItem,
-        onLikeTap: @escaping () -> Void = { print("Like tapped.") },
-        onCartTap: @escaping () -> Void = { print("Cart tapped.") }
+        onLikeTap: @escaping () -> Void,
+        onCartTap: @escaping () -> Void,
+        onImageTap: @escaping () -> Void
     ) {
         self.item = item
         self.onLikeTap = onLikeTap
         self.onCartTap = onCartTap
+        self.onImageTap = onImageTap
     }
     
     var body: some View {
@@ -47,6 +50,9 @@ struct CollectionCell: View {
             .frame(width: imageSize, height: imageSize)
             .clipped()
             .clipShape(RoundedRectangle(cornerRadius: 12))
+            .onTapGesture {
+                onImageTap()
+            }
             
             heart
         }
