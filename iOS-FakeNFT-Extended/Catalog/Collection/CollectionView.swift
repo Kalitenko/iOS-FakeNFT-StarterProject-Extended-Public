@@ -7,9 +7,14 @@
 
 import SwiftUI
 
+struct SelectedNFT: Identifiable {
+    let id: String
+}
+
 struct CollectionView: View {
     
     @State private var viewModel: CollectionViewModel
+    @State private var selectedNFT: SelectedNFT?
     
     init(viewModel: CollectionViewModel) {
         _viewModel = State(wrappedValue: viewModel)
@@ -40,6 +45,9 @@ struct CollectionView: View {
                     grid(items)
                 }
             }
+        }
+        .sheet(item: $selectedNFT) { item in
+            NftDetailBridgeView(nftId: item.id)
         }
         .alert(
             alertTitle,
@@ -100,7 +108,8 @@ struct CollectionView: View {
                 CollectionCell(
                     item: item,
                     onLikeTap: { viewModel.toggleLike(for: item.id) },
-                    onCartTap: { viewModel.toggleCart(for: item.id) }
+                    onCartTap: { viewModel.toggleCart(for: item.id) },
+                    onImageTap: { selectedNFT = SelectedNFT(id: item.id) }
                 )
             }
         }
