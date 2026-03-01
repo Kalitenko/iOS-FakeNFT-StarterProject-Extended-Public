@@ -143,16 +143,3 @@ struct CollectionView: View {
         }
     }
 }
-
-#Preview("Экран коллекции") {
-    CollectionView(viewModel: .mock())
-}
-
-#Preview("Экран коллекции в навигации") {
-    NavigationStack {
-        NavigationLink("Open") {
-            CollectionView(viewModel: .mock())
-                .customBackground()
-        }
-    }
-}

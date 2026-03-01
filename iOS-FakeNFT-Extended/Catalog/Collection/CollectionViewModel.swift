@@ -212,12 +212,3 @@ final class CollectionViewModel {
         }
     }
 }
-
-extension CollectionViewModel {
-    static func mock() -> CollectionViewModel {
-        CollectionViewModel(catalogService: MockCatalogService(),
-                            profileService: MockProfileService(),
-                            orderService: MockOrderService(),
-                            collectionInfo: MockData.Catalog.mock)
-    }
-}

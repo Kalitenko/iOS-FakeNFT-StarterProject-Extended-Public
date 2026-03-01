@@ -20,37 +20,26 @@ struct CatalogView: View {
     
     var body: some View {
         Group {
-            switch viewModel.state {
-                
-            case .loading:
+            if viewModel.isLoading {
                 CircularProgressView()
-                
-            case .loaded(let items):
-                catalogContent(items, isLoadingMore: false)
-                
-            case .loadingMore(let items):
-                catalogContent(items, isLoadingMore: true)
+            } else {
+                catalogContent()
             }
         }
-        .task {
-            await viewModel.prepare()
-        }
+        .task { await viewModel.prepare() }
     }
     
-    private func catalogContent(_ items: [CatalogItem],
-                                isLoadingMore: Bool) -> some View {
-        CatalogListView(    items: items,
-                            isLoadingMore: isLoadingMore,
-                            loadMore: {
-            Task { await viewModel.loadMore() }
-        })
+    private func catalogContent() -> some View {
+        CatalogListView(
+            items: viewModel.items,
+            isLoadingMore: viewModel.isLoadingMore,
+            loadMore: { Task { await viewModel.loadMore() } }
+        )
         .padding(.horizontal, 16)
         .padding(.bottom, 20)
         .customNavigationBarApplyingIOS26(
             hidesLeading: true,
-            trailingAction: {
-                showSortMenu = true
-            }
+            trailingAction: { showSortMenu = true }
         )
         .navigationDestination(for: CatalogItem.self) { item in
             CollectionView(viewModel:
@@ -58,27 +47,23 @@ struct CatalogView: View {
                                 catalogService: viewModel.catalogService,
                                 profileService: services.commonProfileService,
                                 orderService: services.commonOrderService,
-                                collectionInfo: item))
+                                collectionInfo: item
+                            )
+            )
             .customBackground()
             .toolbar(.hidden, for: .tabBar)
         }
         .confirmationDialog(L10n.Sort.title, isPresented: $showSortMenu, titleVisibility: .visible) {
-            Button(L10n.Sort.byTitle) {
-                Task { await viewModel.changeSort(to: .byTitle)}
-            }
-            Button(L10n.Sort.byNFTCount) {
-                Task { await viewModel.changeSort(to: .byNFTCount)}
-            }
-            Button(L10n.Common.close, role: .cancel) { }
+            Button(L10n.Sort.byTitle) { Task { await viewModel.changeSort(to: .byTitle) } }
+            Button(L10n.Sort.byNFTCount) { Task { await viewModel.changeSort(to: .byNFTCount) } }
+            Button(L10n.Common.close, role: .cancel) {}
         }
         .alert(
             alertTitle,
             isPresented: Binding(
                 get: { viewModel.screenError != nil },
                 set: { newValue in
-                    if !newValue {
-                        viewModel.screenError = nil
-                    }
+                    if !newValue { viewModel.screenError = nil }
                 }
             )
         ) {
@@ -100,33 +85,16 @@ struct CatalogView: View {
     @ViewBuilder
     private var alertButtons: some View {
         switch viewModel.screenError {
-            
         case .loading:
-            Button(L10n.Common.cancel, role: .cancel) {
-                viewModel.screenError = nil
-            }
-            
+            Button(L10n.Common.cancel, role: .cancel) { viewModel.screenError = nil }
             Button(L10n.Common.retry) {
                 viewModel.screenError = nil
-                Task {
-                    await viewModel.loadInitial()
-                }
+                Task { await viewModel.loadInitial() }
             }
-            
         case .generic:
-            Button(L10n.Alerts.okay, role: .cancel) {
-                viewModel.screenError = nil
-            }
-            
+            Button(L10n.Alerts.okay, role: .cancel) { viewModel.screenError = nil }
         case .none:
             EmptyView()
         }
-    }
-}
-
-#Preview {
-    NavigationStack {
-        CatalogView(viewModel: .mock())
-            .customBackground(color: .purple)
     }
 }

@@ -12,12 +12,6 @@ import SwiftUI
 @Observable
 final class CatalogViewModel {
     
-    enum State {
-        case loading
-        case loaded([CatalogItem])
-        case loadingMore([CatalogItem])
-    }
-    
     enum CatalogError {
         case loading
         case generic
@@ -34,7 +28,9 @@ final class CatalogViewModel {
     private let limit = 20
     private var canLoadMore = true
     
-    var state: State = .loading
+    var items: [CatalogItem] = []
+    var isLoading = true
+    var isLoadingMore = false
     var screenError: CatalogError?
     
     private var allItems: [CatalogItem] = []
@@ -53,58 +49,53 @@ final class CatalogViewModel {
     }
     
     func loadInitial() async {
-        state = .loading
+        isLoading = true
         currentPage = 0
         canLoadMore = true
         
         do {
-            let items = try await catalogService.fetchCatalog(page: 0, limit: limit)
-            allItems = items
+            let fetchedItems = try await catalogService.fetchCatalog(page: 0, limit: limit)
+            allItems = fetchedItems
+            items = sort(allItems)
             currentPage += 1
-            state = .loaded(sort(allItems))
+            isLoading = false
         } catch let error as NetworkClientError {
-            state = .loaded([])
+            items = []
+            isLoading = false
             screenError = map(error)
         } catch {
-            state = .loaded([])
+            items = []
+            isLoading = false
             screenError = .generic
         }
     }
     
     func loadMore() async {
-        guard canLoadMore else { return }
-        
-        guard case .loaded(let currentItems) = state else { return }
-        
-        state = .loadingMore(currentItems)
+        guard canLoadMore, !isLoadingMore else { return }
+        isLoadingMore = true
         
         do {
-            let newItems = try await catalogService.fetchCatalog(
-                page: currentPage,
-                limit: limit
-            )
-            
+            let newItems = try await catalogService.fetchCatalog(page: currentPage, limit: limit)
             if newItems.isEmpty {
                 canLoadMore = false
-                state = .loaded(sort(allItems))
             } else {
                 currentPage += 1
                 allItems.append(contentsOf: newItems)
-                state = .loaded(sort(allItems))
+                let sortedNewItems = sort(newItems)
+                items.append(contentsOf: sortedNewItems)
             }
-            
         } catch let error as NetworkClientError {
-            state = .loaded(sort(allItems))
             screenError = map(error)
         } catch {
-            state = .loaded(sort(allItems))
             screenError = .generic
         }
+        
+        isLoadingMore = false
     }
     
     func changeSort(to newSort: SortType) async {
         sortType = newSort
-        state = .loaded(sort(allItems))
+        items = sort(allItems)
         await storage.set(sortType.rawValue, forKey: .catalogSort)
     }
     
@@ -119,7 +110,6 @@ final class CatalogViewModel {
         switch sortType {
         case .byTitle:
             return items.sorted { $0.name < $1.name }
-            
         case .byNFTCount:
             return items.sorted { $0.count > $1.count }
         }
@@ -127,21 +117,10 @@ final class CatalogViewModel {
     
     private func map(_ error: NetworkClientError) -> CatalogError {
         switch error {
-            
-        case .urlSessionError,
-                .urlRequestError,
-                .httpStatusCode:
+        case .urlSessionError, .urlRequestError, .httpStatusCode:
             return .loading
-            
-        case .parsingError,
-                .incorrectRequest:
+        case .parsingError, .incorrectRequest:
             return .generic
         }
-    }
-}
-
-extension CatalogViewModel {
-    static func mock() -> CatalogViewModel {
-        CatalogViewModel(catalogService: MockCatalogService())
     }
 }
