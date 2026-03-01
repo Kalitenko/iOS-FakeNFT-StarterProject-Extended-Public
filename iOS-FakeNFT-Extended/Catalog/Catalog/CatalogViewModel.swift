@@ -16,7 +16,11 @@ final class CatalogViewModel {
         case loading
         case loaded([CatalogItem])
         case loadingMore([CatalogItem])
-        case error(String)
+    }
+    
+    enum CatalogError {
+        case loading
+        case generic
     }
     
     enum SortType: String {
@@ -31,6 +35,7 @@ final class CatalogViewModel {
     private var canLoadMore = true
     
     var state: State = .loading
+    var screenError: CatalogError?
     
     private var allItems: [CatalogItem] = []
     private let storage: SettingsStorageProtocol
@@ -60,8 +65,12 @@ final class CatalogViewModel {
             allItems = items
             currentPage += 1
             state = .loaded(sort(allItems))
+        } catch let error as NetworkClientError {
+            state = .loaded([])
+            screenError = map(error)
         } catch {
-            state = .error(error.localizedDescription)
+            state = .loaded([])
+            screenError = .generic
         }
     }
     
@@ -87,8 +96,12 @@ final class CatalogViewModel {
                 state = .loaded(sort(allItems))
             }
             
+        } catch let error as NetworkClientError {
+            state = .loaded(sort(allItems))
+            screenError = map(error)
         } catch {
-            state = .error(error.localizedDescription)
+            state = .loaded(sort(allItems))
+            screenError = .generic
         }
     }
     
@@ -104,6 +117,20 @@ final class CatalogViewModel {
             
         case .byNFTCount:
             return items.sorted { $0.count > $1.count }
+        }
+    }
+    
+    private func map(_ error: NetworkClientError) -> CatalogError {
+        switch error {
+            
+        case .urlSessionError,
+                .urlRequestError,
+                .httpStatusCode:
+            return .loading
+            
+        case .parsingError,
+                .incorrectRequest:
+            return .generic
         }
     }
 }

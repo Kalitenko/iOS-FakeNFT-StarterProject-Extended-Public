@@ -15,10 +15,16 @@ final class CollectionViewModel {
     enum CollectionViewModelState {
         case loading
         case loaded([CollectionItem])
-        case error(String)
+    }
+    
+    enum CollectionError {
+        case loadFailed
+        case likeFailed
+        case cartFailed
     }
     
     var state: CollectionViewModelState = .loading
+    var screenError: CollectionError?
     
     private let catalogService: CatalogServiceProtocol
     private let profileService: CommonProfileServiceProtocol
@@ -52,17 +58,17 @@ final class CollectionViewModel {
             try await loadNFTs()
             state = .loaded(items)
         } catch {
-            print(error)
-            state = .error(error.localizedDescription)
+            state = .loaded([])
+            screenError = .loadFailed
         }
     }
     
-    func loadCartAndLikes() async throws {
+    private func loadCartAndLikes() async throws {
         cartItems = try await orderService.getOrder().nfts
         likes = try await profileService.fetchProfile().likes
     }
     
-    func loadNFTs() async throws {
+    private func loadNFTs() async throws {
         try await withThrowingTaskGroup(of: (Int, CollectionItem).self) { group in
             
             for (index, id) in collectionInfo.nftIDs.enumerated() {
@@ -126,7 +132,7 @@ final class CollectionViewModel {
                         isInCart: item.isInCart
                     )
                 }
-                state = .error(error.localizedDescription)
+                screenError = .likeFailed
             }
         }
     }
@@ -165,7 +171,7 @@ final class CollectionViewModel {
                         isInCart: wasInCart
                     )
                 }
-                state = .error(error.localizedDescription)
+                screenError = .cartFailed
             }
         }
     }
