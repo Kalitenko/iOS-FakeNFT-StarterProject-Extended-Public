@@ -17,7 +17,7 @@ struct CatalogListView: View {
             ForEach(items, id: \.id) { item in
                 CatalogItemView(item: item)
                     .onAppear {
-                        if item.id == items.last?.id {
+                        if item.id == items.last?.id && !isLoadingMore {
                             loadMore()
                         }
                     }
@@ -47,15 +47,4 @@ struct CatalogListView: View {
         .scrollContentBackground(.hidden)
     }
     
-}
-
-#Preview {
-    NavigationStack {
-        CatalogListView(items: MockData.Catalog.mockItems,
-                        isLoadingMore: true,
-                        loadMore: { print("Load more") })
-        .background(.green)
-        .padding(16)
-        .background(.yellow)
-    }
 }

@@ -29,13 +29,3 @@ actor CommonProfileService: CommonProfileServiceProtocol {
         return try await networkClient.send(request: request)
     }
 }
-
-final class MockProfileService: CommonProfileServiceProtocol {
-    func fetchProfile() async throws -> CommonProfileDTO {
-        CommonProfileDTO(likes: [])
-    }
-    
-    func updateLikes(likes: [String]) async throws -> CommonProfileDTO {
-        CommonProfileDTO(likes: [])
-    }
-}

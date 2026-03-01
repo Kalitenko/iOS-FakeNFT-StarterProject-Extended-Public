@@ -29,13 +29,3 @@ actor CommonOrderService: CommonOrderServiceProtocol {
         return try await networkClient.send(request: request)
     }
 }
-
-final class MockOrderService: CommonOrderServiceProtocol {
-    func getOrder() async throws -> CommonOrderDTO {
-        CommonOrderDTO(nfts: [])
-    }
-    
-    func updateOrder(nftIDs: [String]) async throws -> CommonOrderDTO {
-        CommonOrderDTO(nfts: [])
-    }
-}

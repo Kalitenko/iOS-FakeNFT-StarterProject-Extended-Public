@@ -46,22 +46,3 @@ actor CatalogService: CatalogServiceProtocol {
         return dto.toDomain()
     }
 }
-
-final class MockCatalogService: CatalogServiceProtocol {
-    
-    func fetchCatalog(page: Int, limit: Int) async throws -> [CatalogItem] {
-        MockData.Catalog.mockItems
-    }
-    
-    func fetchCollectionById(_ id: String) async throws -> CatalogItem {
-        MockData.Catalog.mock
-    }
-    
-    func fetchNFTs(page: Int, limit: Int) async throws -> [CollectionItem] {
-        MockData.Collections.mockItems
-    }
-    
-    func fetchNFTById(_ id: String) async throws -> CollectionItem {
-        MockData.Collections.mockIsNotLikedAndInCart
-    }
-}
