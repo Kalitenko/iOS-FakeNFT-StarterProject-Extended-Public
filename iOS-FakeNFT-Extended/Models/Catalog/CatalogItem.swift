@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct CatalogItem: Hashable {
+struct CatalogItem: Hashable, Sendable {
     let id: String
     let name: String
     let description: String

@@ -39,20 +39,17 @@ final class CatalogViewModel {
     
     private var allItems: [CatalogItem] = []
     private let storage: SettingsStorageProtocol
-    private var sortType: SortType {
-        didSet { storage.set(sortType.rawValue, forKey: .catalogSort) }
-    }
+    private var sortType: SortType
     
     init(catalogService: CatalogServiceProtocol) {
         self.catalogService = catalogService
         self.storage = UserDefaultsStorage.shared
-        
-        if let saved = storage.get(forKey: .catalogSort),
-           let type = SortType(rawValue: saved) {
-            self.sortType = type
-        } else {
-            self.sortType = .byNFTCount
-        }
+        self.sortType = .byNFTCount
+    }
+    
+    func prepare() async {
+        await loadSortType()
+        await loadInitial()
     }
     
     func loadInitial() async {
@@ -105,9 +102,17 @@ final class CatalogViewModel {
         }
     }
     
-    func changeSort(to newSort: SortType) {
+    func changeSort(to newSort: SortType) async {
         sortType = newSort
         state = .loaded(sort(allItems))
+        await storage.set(sortType.rawValue, forKey: .catalogSort)
+    }
+    
+    private func loadSortType() async {
+        if let saved = await storage.get(forKey: .catalogSort),
+           let type = SortType(rawValue: saved) {
+            sortType = type
+        }
     }
     
     private func sort(_ items: [CatalogItem]) -> [CatalogItem] {

@@ -11,12 +11,12 @@ enum StorageKeys: String {
     case catalogSort
 }
 
-protocol SettingsStorageProtocol {
+protocol SettingsStorageProtocol: Actor {
     func set(_ value: String, forKey key: StorageKeys)
     func get(forKey key: StorageKeys) -> String?
 }
 
-final class UserDefaultsStorage: SettingsStorageProtocol {
+actor UserDefaultsStorage: SettingsStorageProtocol {
     
     static let shared = UserDefaultsStorage()
     

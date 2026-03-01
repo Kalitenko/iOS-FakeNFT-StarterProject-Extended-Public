@@ -33,7 +33,7 @@ struct CatalogView: View {
             }
         }
         .task {
-            await viewModel.loadInitial()
+            await viewModel.prepare()
         }
     }
     
@@ -42,11 +42,8 @@ struct CatalogView: View {
         CatalogListView(    items: items,
                             isLoadingMore: isLoadingMore,
                             loadMore: {
-            Task {
-                await viewModel.loadMore()
-            }
-        }
-        )
+            Task { await viewModel.loadMore() }
+        })
         .padding(.horizontal, 16)
         .padding(.bottom, 20)
         .customNavigationBarApplyingIOS26(
@@ -67,10 +64,10 @@ struct CatalogView: View {
         }
         .confirmationDialog(L10n.Sort.title, isPresented: $showSortMenu, titleVisibility: .visible) {
             Button(L10n.Sort.byTitle) {
-                viewModel.changeSort(to: .byTitle)
+                Task { await viewModel.changeSort(to: .byTitle)}
             }
             Button(L10n.Sort.byNFTCount) {
-                viewModel.changeSort(to: .byNFTCount)
+                Task { await viewModel.changeSort(to: .byNFTCount)}
             }
             Button(L10n.Common.close, role: .cancel) { }
         }

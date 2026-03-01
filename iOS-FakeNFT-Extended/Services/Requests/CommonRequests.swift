@@ -7,13 +7,13 @@
 
 import Foundation
 
-struct CommonGetOrderRequest: NetworkRequest {
+struct CommonGetOrderRequest: NetworkRequest, Sendable {
     var endpoint: URL? {
         URL(string: "\(RequestConstants.apiURL)/orders/1")
     }
 }
 
-struct CommonPutOrderRequest: NetworkRequest {
+struct CommonPutOrderRequest: NetworkRequest, Sendable {
     
     let nftIDs: [String]
     
@@ -39,13 +39,13 @@ struct CommonPutOrderRequest: NetworkRequest {
     }
 }
 
-struct CommonGetProfileRequest: NetworkRequest {
+struct CommonGetProfileRequest: NetworkRequest, Sendable {
     var endpoint: URL? {
         URL(string: "\(RequestConstants.apiURL)/profile/1")
     }
 }
 
-struct CommonPutProfileRequest: NetworkRequest {
+struct CommonPutProfileRequest: NetworkRequest, Sendable {
     
     let likes: [String]
     
