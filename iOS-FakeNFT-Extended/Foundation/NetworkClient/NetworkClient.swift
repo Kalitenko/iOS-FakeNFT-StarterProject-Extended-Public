@@ -79,7 +79,6 @@ actor DefaultNetworkClient: NetworkClient {
             urlRequest.setValue(contentType, forHTTPHeaderField: "Content-Type")
         }
 
-        
         if let body = request.body {
             urlRequest.httpBody = body
         } else if let dto = request.dto,
@@ -91,7 +90,6 @@ actor DefaultNetworkClient: NetworkClient {
         request.headers?.forEach {
             urlRequest.setValue($1, forHTTPHeaderField: $0)
         }
-        
 
         urlRequest.addValue(RequestConstants.token, forHTTPHeaderField: "X-Practicum-Mobile-Token")
         

@@ -14,6 +14,7 @@ struct SuccessView: View {
         VStack(spacing: 20) {
             congratsView
             .frame(maxHeight: .infinity)
+            .padding(.horizontal, 16)
 
             ActionButton(
                 title: L10n.Cart.backToCart,

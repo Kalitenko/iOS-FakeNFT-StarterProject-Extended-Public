@@ -93,11 +93,9 @@
 		EA7214E12F45EE370005CEC2 /* CurrencyService.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA7214E02F45EE320005CEC2 /* CurrencyService.swift */; };
 		EA7214E42F45FB720005CEC2 /* CurrencyModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA7214E32F45FB690005CEC2 /* CurrencyModel.swift */; };
 		EA9B300C2F506E0400B2465F /* SuccessView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA9B300B2F506E0400B2465F /* SuccessView.swift */; };
-		EA9B30242F50912000B2465F /* WebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA9B30232F50911A00B2465F /* WebView.swift */; };
 		EA9E1B652F4629790002F0ED /* PaymentService.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA9E1B642F4629720002F0ED /* PaymentService.swift */; };
 		EA9E1B672F463EAB0002F0ED /* CompleteOrderRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA9E1B662F463E9E0002F0ED /* CompleteOrderRequest.swift */; };
 		EAB5154A2F48CFD600D57976 /* NumberFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = EAB515492F48CFCC00D57976 /* NumberFormatter.swift */; };
-		EAD3DDF92F439E5F00506D24 /* ProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EAD3DDF82F439E5700506D24 /* ProgressView.swift */; };
 		EAE976172F4DC1EA00C6A0BA /* CurrencyCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EAE976162F4DC1EA00C6A0BA /* CurrencyCell.swift */; };
 /* End PBXBuildFile section */
 
@@ -802,12 +800,10 @@
 				ABC5E1E42C32055B002B4068 /* ErrorView.swift in Sources */,
 				C2F4FCE32F46F63B00372066 /* AppImageView.swift in Sources */,
 				ABC5E1A62C31F815002B4068 /* NetworkRequest.swift in Sources */,
-				EA9B30242F50912000B2465F /* WebView.swift in Sources */,
 				ABC5E1D52C320446002B4068 /* NftDetailInput.swift in Sources */,
 				ABC5E16E2C31F5AF002B4068 /* ContentView.swift in Sources */,
 				EA9E1B672F463EAB0002F0ED /* CompleteOrderRequest.swift in Sources */,
 				EA238F582F46F1D6003F1E73 /* PaymentDTO.swift in Sources */,
-				EAD3DDF92F439E5F00506D24 /* ProgressView.swift in Sources */,
 				EA238F562F46F09C003F1E73 /* PurchaseRequest.swift in Sources */,
 				EA2BD0132F4465B900400179 /* CartService.swift in Sources */,
 				C2F4FCE12F46409300372066 /* CollectionViewModel.swift in Sources */,
