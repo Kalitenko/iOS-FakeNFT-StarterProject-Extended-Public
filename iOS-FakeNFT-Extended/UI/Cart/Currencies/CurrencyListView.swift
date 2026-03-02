@@ -111,10 +111,11 @@ struct CurrencyListView: View {
                 Text(L10n.Cart.agreementText + " ")
                 
                 NavigationLink {
-                    WebViewComponent(
-                        url: URL(string: "https://yandex.ru/legal/practicum_termsofuse")!
-                    )
-                    .customNavigationBarApplyingIOS26()
+                    if let url = URL(string: "https://yandex.ru/legal/practicum_termsofuse") {
+                        WebViewComponent(url: url)
+                            .customNavigationBarApplyingIOS26()
+                            .customBackground()
+                    }
                 } label: {
                     Text(L10n.Cart.userAgreement)
                         .foregroundStyle(.appBlue)
