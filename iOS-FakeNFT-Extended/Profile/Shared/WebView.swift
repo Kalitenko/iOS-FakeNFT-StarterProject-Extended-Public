@@ -95,16 +95,13 @@ struct WebView: UIViewRepresentable {
         webView.allowsBackForwardNavigationGestures = true
         webView.scrollView.contentInsetAdjustmentBehavior = .never
 
-        // initial load
         context.coordinator.loadIfNeeded(webView, url: url)
         return webView
     }
 
     func updateUIView(_ webView: WKWebView, context: Context) {
-        // 1) грузим только если URL реально изменился
         context.coordinator.loadIfNeeded(webView, url: url)
 
-        // 2) ручной перезапуск по токену (Retry)
         if context.coordinator.lastReloadToken != reloadToken {
             context.coordinator.lastReloadToken = reloadToken
             errorMessage = nil
@@ -126,7 +123,7 @@ struct WebView: UIViewRepresentable {
         }
 
         func loadIfNeeded(_ webView: WKWebView, url: URL) {
-            // чтобы не делать load снова и снова
+
             guard lastLoadedURL != url else { return }
             lastLoadedURL = url
 
@@ -154,7 +151,6 @@ struct WebView: UIViewRepresentable {
         private func handle(_ error: Error) {
             let nsError = error as NSError
 
-            // ✅ -999 = отмена загрузки (часто из-за reload/перезапуска) — НЕ показываем алерт
             if nsError.domain == NSURLErrorDomain && nsError.code == NSURLErrorCancelled {
                 return
             }
