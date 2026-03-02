@@ -73,12 +73,9 @@ struct CatalogView: View {
     
     private var alertTitle: String {
         switch viewModel.screenError {
-        case .loading:
-            return L10n.Alerts.dataLoadFailed
-        case .generic:
-            return L10n.Alerts.somethingWentWrong
-        case .none:
-            return ""
+        case .loading: L10n.Alerts.dataLoadFailed
+        case .generic: L10n.Alerts.somethingWentWrong
+        case .none: ""
         }
     }
     

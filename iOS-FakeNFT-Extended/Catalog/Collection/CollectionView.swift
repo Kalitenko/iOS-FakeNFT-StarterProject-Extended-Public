@@ -117,12 +117,9 @@ struct CollectionView: View {
     
     private var alertTitle: String {
         switch viewModel.screenError {
-        case .loadFailed:
-            return L10n.Alerts.dataLoadFailed
-        case .likeFailed, .cartFailed:
-            return L10n.Alerts.somethingWentWrong
-        case .none:
-            return ""
+        case .loadFailed: L10n.Alerts.dataLoadFailed
+        case .likeFailed, .cartFailed: L10n.Alerts.somethingWentWrong
+        case .none: ""
         }
     }
     

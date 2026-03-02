@@ -108,19 +108,15 @@ final class CatalogViewModel {
     
     private func sort(_ items: [CatalogItem]) -> [CatalogItem] {
         switch sortType {
-        case .byTitle:
-            return items.sorted { $0.name < $1.name }
-        case .byNFTCount:
-            return items.sorted { $0.count > $1.count }
+        case .byTitle: items.sorted { $0.name < $1.name }
+        case .byNFTCount: items.sorted { $0.count > $1.count }
         }
     }
     
     private func map(_ error: NetworkClientError) -> CatalogError {
         switch error {
-        case .urlSessionError, .urlRequestError, .httpStatusCode:
-            return .loading
-        case .parsingError, .incorrectRequest:
-            return .generic
+        case .urlSessionError, .urlRequestError, .httpStatusCode: .loading
+        case .parsingError, .incorrectRequest: .generic
         }
     }
 }
