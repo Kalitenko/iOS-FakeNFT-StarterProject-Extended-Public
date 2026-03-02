@@ -10,13 +10,12 @@ import SwiftUI
 struct CurrencyListView: View {
     let viewModel: CartViewModel
     @Environment(\.dismiss) private var dismiss
-    @State private var agreementURL: URL?
-
+    
     private let columns = [
         GridItem(.flexible()),
         GridItem(.flexible())
     ]
-
+    
     private var isErrorAlertPresented: Binding<Bool> {
         Binding {
             viewModel.currencyErrorMessage != nil
@@ -26,7 +25,7 @@ struct CurrencyListView: View {
             }
         }
     }
-
+    
     private var isPaymentErrorAlertPresented: Binding<Bool> {
         Binding {
             viewModel.paymentErrorMessage != nil
@@ -36,7 +35,7 @@ struct CurrencyListView: View {
             }
         }
     }
-
+    
     private var isSuccessPresented: Binding<Bool> {
         Binding {
             viewModel.isShowingSuccessView
@@ -44,17 +43,17 @@ struct CurrencyListView: View {
             viewModel.isShowingSuccessView = newValue
         }
     }
-
+    
     var body: some View {
         VStack {
             switch viewModel.currencyListState {
             case .loading:
                 LoadingPlaceholderView()
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
-
+                
             case .empty:
                 emptyState
-
+                
             case .content:
                 currenciesGrid
                 Spacer()
@@ -86,29 +85,8 @@ struct CurrencyListView: View {
                 dismiss()
             }
         }
-        .environment(\.openURL, OpenURLAction { url in
-            agreementURL = url
-            return .handled
-        })
-        .sheet(
-            isPresented: Binding(
-                get: { agreementURL != nil },
-                set: { isPresented in
-                    if !isPresented {
-                        agreementURL = nil
-                    }
-                }
-            )
-        ) {
-            if let url = agreementURL {
-                NavigationStack {
-                    WebViewComponent(url: url)
-                        .customNavigationBar()
-                }
-            }
-        }
     }
-
+    
     private var currenciesGrid: some View {
         LazyVGrid(columns: columns, spacing: 7) {
             ForEach(viewModel.currencies) { currency in
@@ -126,14 +104,24 @@ struct CurrencyListView: View {
         .padding(.top, 20)
         .padding(.horizontal, 16)
     }
-
+    
     private var bottomPanel: some View {
         VStack(alignment: .leading, spacing: 16) {
-            Text("\(L10n.Cart.agreementText) [\(L10n.Cart.userAgreement)](https://yandex.ru/legal/practicum_termsofuse)")
+            VStack(alignment: .leading, spacing: 4) {
+                Text(L10n.Cart.agreementText + " ")
+                
+                NavigationLink {
+                    WebViewComponent(
+                        url: URL(string: "https://yandex.ru/legal/practicum_termsofuse")!
+                    )
+                    .customNavigationBarApplyingIOS26()
+                } label: {
+                    Text(L10n.Cart.userAgreement)
+                        .foregroundStyle(.appBlue)
+                }
+            }
             .font(.smallText)
-            .foregroundStyle(.appTextPrimary)
-            .lineSpacing(4)
-
+            
             ActionButton(title: L10n.Cart.pay) {
                 Task {
                     await viewModel.completeOrder()
@@ -147,7 +135,7 @@ struct CurrencyListView: View {
         .background(.appSurfaceBackground)
         .clipShape(.rect(topLeadingRadius: 12, topTrailingRadius: 12))
     }
-
+    
     private var emptyState: some View {
         Text(L10n.Cart.noCurrencies)
             .font(.title)
