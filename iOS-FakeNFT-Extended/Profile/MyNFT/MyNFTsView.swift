@@ -115,6 +115,6 @@ struct MyNFTsView: View {
 
 #Preview("With data") {
     NavigationStack {
-        MyNFTsView(nfts: NFTMock.sampleMyNFTs)
+        MyNFTsView(nfts: NFTMock.sampleFavoritesNFTs)
     }
 }

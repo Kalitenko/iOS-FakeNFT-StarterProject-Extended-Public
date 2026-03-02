@@ -16,27 +16,49 @@ struct NFTMock: Identifiable {
 }
 
 extension NFTMock {
-    static let sampleMyNFTs: [NFTMock] = [
+
+    static let sampleFavoritesNFTs: [NFTMock] = [
         NFTMock(
-            name: "Lilo",
+            name: "Archie",
             author: "John Doe",
             price: 1.78,
-            imageName: "LiloNFT",
+            imageName: "ArchieNFT",
+            rating: 1
+        ),
+        NFTMock(
+            name: "Pixi",
+            author: "John Doe",
+            price: 1.78,
+            imageName: "PixiNFT",
             rating: 3
         ),
         NFTMock(
-            name: "Spring",
+            name: "Melissa",
             author: "John Doe",
             price: 1.78,
-            imageName: "SpringNFT",
-            rating: 3
+            imageName: "MelissaNFT",
+            rating: 5
         ),
         NFTMock(
             name: "April",
             author: "John Doe",
             price: 1.78,
             imageName: "AprilNFT",
-            rating: 3
+            rating: 2
+        ),
+        NFTMock(
+            name: "Daisy",
+            author: "John Doe",
+            price: 1.78,
+            imageName: "DaisyNFT",
+            rating: 1
+        ),
+        NFTMock(
+            name: "Lilo",
+            author: "John Doe",
+            price: 1.78,
+            imageName: "LiloNFT",
+            rating: 4
         )
     ]
 }

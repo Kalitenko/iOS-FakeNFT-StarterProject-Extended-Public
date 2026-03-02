@@ -141,7 +141,7 @@ struct ProfileView: View {
         VStack(spacing: 8) {
             NavigationLink {
                 //                MyNFTsView(nfts: []) проверить пустой экран My NFT
-                MyNFTsView(nfts: NFTMock.sampleMyNFTs)
+                MyNFTsView(nfts: NFTMock.sampleFavoritesNFTs)
             } label: {
                 row(title: L10n.Profile.myNFT, value: myNFTCount)
             }
@@ -149,7 +149,8 @@ struct ProfileView: View {
             .accessibilityIdentifier("profile.myNFTRow")
             
             NavigationLink {
-                Text(L10n.Profile.favoriteNFT)
+                FavoritesNFTView()
+                    .toolbar(.hidden, for: .tabBar)
             } label: {
                 row(title: L10n.Profile.favoriteNFT, value: favoriteNFTCount)
             }
