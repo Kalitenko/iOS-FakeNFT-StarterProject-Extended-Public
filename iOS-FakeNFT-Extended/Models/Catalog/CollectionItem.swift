@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct CollectionItem: Hashable {
+struct CollectionItem: Hashable, Sendable {
     let id: String
     let name: String
     let imagesUrlsStrings: [ImageSource]
@@ -24,5 +24,19 @@ struct CollectionItem: Hashable {
         self.price = price
         self.isFavorite = isFavorite
         self.isInCart = isInCart
+    }
+}
+
+extension CollectionItem {
+    func enriched(isFavorite: Bool, isInCart: Bool) -> Self {
+        Self(
+            id: id,
+            name: name,
+            imageURLs: imagesUrlsStrings,
+            rating: rating,
+            price: price,
+            isFavorite: isFavorite,
+            isInCart: isInCart
+        )
     }
 }

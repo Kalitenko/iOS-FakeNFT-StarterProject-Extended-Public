@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct NFTSRequest: NetworkRequest {
+struct NFTSRequest: NetworkRequest, Sendable {
     
     let pageNumber: Int
     let pageSize: Int
@@ -27,7 +27,7 @@ struct NFTSRequest: NetworkRequest {
     }
 }
 
-struct NFTByIdRequest: NetworkRequest {
+struct NFTByIdRequest: NetworkRequest, Sendable {
     
     let id: String
     

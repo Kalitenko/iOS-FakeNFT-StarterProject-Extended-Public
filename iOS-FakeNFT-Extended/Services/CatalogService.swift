@@ -14,7 +14,7 @@ protocol CatalogServiceProtocol: Sendable {
     func fetchNFTById(_ id: String) async throws -> CollectionItem
 }
 
-final class CatalogService: CatalogServiceProtocol {
+actor CatalogService: CatalogServiceProtocol {
     
     private let networkClient: NetworkClient
 
@@ -44,24 +44,5 @@ final class CatalogService: CatalogServiceProtocol {
         let request = NFTByIdRequest(id: id)
         let dto: NFTDTO = try await networkClient.send(request: request)
         return dto.toDomain()
-    }
-}
-
-final class MockCatalogService: CatalogServiceProtocol {
-    
-    func fetchCatalog(page: Int, limit: Int) async throws -> [CatalogItem] {
-        MockData.Catalog.mockItems
-    }
-    
-    func fetchCollectionById(_ id: String) async throws -> CatalogItem {
-        MockData.Catalog.mock
-    }
-    
-    func fetchNFTs(page: Int, limit: Int) async throws -> [CollectionItem] {
-        MockData.Collections.mockItems
-    }
-    
-    func fetchNFTById(_ id: String) async throws -> CollectionItem {
-        MockData.Collections.mockIsNotLikedAndInCart
     }
 }
