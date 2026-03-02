@@ -40,7 +40,6 @@
 		ABC5E1E62C320585002B4068 /* LinePageControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABC5E1E52C320585002B4068 /* LinePageControl.swift */; };
 		ABC5E1E82C320610002B4068 /* NftDetailBridgeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABC5E1E72C320610002B4068 /* NftDetailBridgeView.swift */; };
 		C20076A82F3F2F3500C217BF /* MockCatalogView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C20076A72F3F2F3500C217BF /* MockCatalogView.swift */; };
-		C20076AA2F3F2F7700C217BF /* MockProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C20076A92F3F2F7700C217BF /* MockProfileView.swift */; };
 		C20076AC2F3F2F9700C217BF /* MockCartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C20076AB2F3F2F9700C217BF /* MockCartView.swift */; };
 		C20076AE2F3F2FAD00C217BF /* MockStatisticsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C20076AD2F3F2FAD00C217BF /* MockStatisticsView.swift */; };
 		C20076C12F3F38AE00C217BF /* CustomBackgroundModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = C20076C02F3F38AE00C217BF /* CustomBackgroundModifier.swift */; };
@@ -108,7 +107,6 @@
 		ABC5E1E52C320585002B4068 /* LinePageControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinePageControl.swift; sourceTree = "<group>"; };
 		ABC5E1E72C320610002B4068 /* NftDetailBridgeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NftDetailBridgeView.swift; sourceTree = "<group>"; };
 		C20076A72F3F2F3500C217BF /* MockCatalogView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockCatalogView.swift; sourceTree = "<group>"; };
-		C20076A92F3F2F7700C217BF /* MockProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockProfileView.swift; sourceTree = "<group>"; };
 		C20076AB2F3F2F9700C217BF /* MockCartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockCartView.swift; sourceTree = "<group>"; };
 		C20076AD2F3F2FAD00C217BF /* MockStatisticsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockStatisticsView.swift; sourceTree = "<group>"; };
 		C20076C02F3F38AE00C217BF /* CustomBackgroundModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomBackgroundModifier.swift; sourceTree = "<group>"; };
@@ -375,7 +373,6 @@
 				FC37FC042F4902DB009B54F6 /* UserProfile.swift */,
 				FC9C5F022F413CED00A32E1D /* ProfileView.swift */,
 				FCCDBE432F43C38600C96B09 /* ProfileEditView.swift */,
-				C20076A92F3F2F7700C217BF /* MockProfileView.swift */,
 				FC37FC932F54F182009B54F6 /* RatingView.swift */,
 				FC37FC862F54E1BB009B54F6 /* FavoritesNFT */,
 			);
@@ -577,7 +574,6 @@
 				ABC5E19D2C31F6A6002B4068 /* NftStorage.swift in Sources */,
 				ABC5E1E82C320610002B4068 /* NftDetailBridgeView.swift in Sources */,
 				ABC5E1E62C320585002B4068 /* LinePageControl.swift in Sources */,
-				C20076AA2F3F2F7700C217BF /* MockProfileView.swift in Sources */,
 				C20076AE2F3F2FAD00C217BF /* MockStatisticsView.swift in Sources */,
 				ABC5E1DD2C3204DC002B4068 /* CellsReusingUtils.swift in Sources */,
 				ABC5E1B52C31FC57002B4068 /* TabBarView.swift in Sources */,

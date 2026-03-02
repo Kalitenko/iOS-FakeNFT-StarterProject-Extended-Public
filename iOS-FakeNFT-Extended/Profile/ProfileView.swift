@@ -121,18 +121,25 @@ struct ProfileView: View {
                     .foregroundStyle(Color(uiColor: .appTextPrimary))
                     .fixedSize(horizontal: false, vertical: true)
                 
-                Button {
-                    guard websiteURL != nil else { return }
-                    isWebViewPresented = true
-                } label: {
+                if let url = websiteURL {
+                    NavigationLink {
+                        WebViewScreen(url: url)
+                    } label: {
+                        Text(profile.website)
+                            .font(.system(size: 15, weight: .regular))
+                            .foregroundStyle(Color("AppBlue"))
+                    }
+                    .buttonStyle(.plain)
+                    .padding(.top, 8)
+                    .accessibilityIdentifier("profile.websiteButton")
+                } else {
                     Text(profile.website)
                         .font(.system(size: 15, weight: .regular))
                         .foregroundStyle(Color("AppBlue"))
+                        .opacity(0.5)
+                        .padding(.top, 8)
+                        .accessibilityIdentifier("profile.websiteButton")
                 }
-                .buttonStyle(.plain)
-                .padding(.top, 8)
-                .accessibilityIdentifier("profile.websiteButton")
-                .disabled(websiteURL == nil)
             }
         }
     }
