@@ -1,6 +1,6 @@
 import SwiftUI
 
-struct TabBarView: View {
+struct TabBarViewCart: View {
     @Environment(ServicesAssembly.self) var servicesAssembly
 
     var body: some View {

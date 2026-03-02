@@ -7,7 +7,7 @@
 import Foundation
 
 enum NFTModelMapper {
-    static func map(_ nft: NftDTO) -> NFTModel? {
+    static func map(_ nft: NftDTOCart) -> NFTModel? {
         guard let firstImage = nft.images.first else { return nil }
 
         return NFTModel(
