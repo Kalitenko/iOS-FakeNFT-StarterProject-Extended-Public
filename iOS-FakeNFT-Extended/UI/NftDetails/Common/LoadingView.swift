@@ -1,6 +1,7 @@
 import ProgressHUD
 import UIKit
 
+@MainActor
 protocol LoadingView {
     var activityIndicator: UIActivityIndicatorView { get }
     func showLoading()
