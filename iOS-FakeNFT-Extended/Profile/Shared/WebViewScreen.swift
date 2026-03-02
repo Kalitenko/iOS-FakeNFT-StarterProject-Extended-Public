@@ -5,7 +5,6 @@
 //  Created by Andrei  Boyarko on 02/03/2026.
 //
 
-
 import SwiftUI
 
 struct WebViewScreen: View {

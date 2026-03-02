@@ -53,16 +53,7 @@ struct MyNFTCell: View {
                         .foregroundStyle(Color(uiColor: .appTextPrimary))
                         .frame(height: 22, alignment: .top)
                     
-                    RatingView(rating: nft.rating)
-                    
-//                    HStack(spacing: Layout.starsSpacing) {
-//                        ForEach(0..<5, id: \.self) { ratingStarIndex in
-//                            Image(ratingStarIndex < nft.rating ? "starFilled" : "starEmpty")
-//                                .resizable()
-//                                .scaledToFit()
-//                                .frame(width: Layout.starsSize, height: Layout.starsSize)
-//                        }
-//                    }
+                    StarRatingView(rating: nft.rating)
                     
                     Text("от \(nft.author)")
                         .font(.system(size: 13))

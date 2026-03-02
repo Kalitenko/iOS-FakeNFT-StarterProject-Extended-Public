@@ -65,7 +65,7 @@ struct FavoriteNFTCell: View {
                     .foregroundStyle(Color(uiColor: .appTextPrimary))
                     .frame(height: Layout.titleLineHeight, alignment: .top)
                 
-                RatingView(rating: nft.rating)
+                StarRatingView(rating: nft.rating)
                 
                 Text("\(nft.priceFormattedRu) ETH")
                     .font(.system(size: Layout.priceFontSize, weight: .regular))
