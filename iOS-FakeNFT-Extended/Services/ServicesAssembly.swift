@@ -42,4 +42,22 @@ final class ServicesAssembly {
             paymentService: paymentService
         )
     }
+
+    var catalogService: CatalogServiceProtocol {
+        CatalogService(
+            networkClient: networkClient
+        )
+    }
+    
+    var commonOrderService: CommonOrderServiceProtocol {
+        CommonOrderService(
+            networkClient: networkClient
+        )
+    }
+    
+    var commonProfileService: CommonProfileServiceProtocol {
+        CommonProfileService(
+            networkClient: networkClient
+        )
+    }
 }

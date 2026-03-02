@@ -7,12 +7,15 @@ enum HttpMethod: String {
     case delete = "DELETE"
 }
 
-protocol NetworkRequest {
+protocol NetworkRequest: Sendable {
     var endpoint: URL? { get }
     var httpMethod: HttpMethod { get }
     var dto: Encodable? { get }
     var bodyData: Data? { get }
     var contentType: String? { get }
+    
+    var body: Data? { get }
+    var headers: [String: String]? { get }
 }
 
 // default values
@@ -21,4 +24,9 @@ extension NetworkRequest {
     var dto: Encodable? { nil }
     var bodyData: Data? { nil }
     var contentType: String? { nil }
+}
+
+extension NetworkRequest {
+    var body: Data? { nil }
+    var headers: [String: String]? { nil }
 }

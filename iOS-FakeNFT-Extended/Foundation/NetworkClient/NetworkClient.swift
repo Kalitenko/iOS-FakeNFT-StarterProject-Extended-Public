@@ -20,7 +20,7 @@ struct AnyEncodable: Encodable {
     }
 }
 
-protocol NetworkClient {
+protocol NetworkClient: Sendable {
     func send(request: NetworkRequest) async throws -> Data
     func send<T: Decodable>(request: NetworkRequest) async throws -> T
 }
@@ -29,7 +29,7 @@ actor DefaultNetworkClient: NetworkClient {
     private let session: URLSession
     private let decoder: JSONDecoder
     private let encoder: JSONEncoder
-
+    
     init(
         session: URLSession = URLSession.shared,
         decoder: JSONDecoder = JSONDecoder(),
@@ -39,7 +39,7 @@ actor DefaultNetworkClient: NetworkClient {
         self.decoder = decoder
         self.encoder = encoder
     }
-
+    
     func send(request: NetworkRequest) async throws -> Data {
         let urlRequest = try create(request: request)
         let (data, response) = try await session.data(for: urlRequest)
@@ -51,19 +51,19 @@ actor DefaultNetworkClient: NetworkClient {
         }
         return data
     }
-
-    func send<T: Decodable>(request: NetworkRequest) async throws -> T {
+    
+    func send<T: Decodable & Sendable>(request: NetworkRequest) async throws -> T {
         let data = try await send(request: request)
         return try await parse(data: data)
     }
-
+    
     // MARK: - Private
-
+    
     private func create(request: NetworkRequest) throws -> URLRequest {
         guard let endpoint = request.endpoint else {
             throw NetworkClientError.incorrectRequest("Empty endpoint")
         }
-
+        
         var urlRequest = URLRequest(url: endpoint)
         urlRequest.httpMethod = request.httpMethod.rawValue
 
@@ -79,11 +79,25 @@ actor DefaultNetworkClient: NetworkClient {
             urlRequest.setValue(contentType, forHTTPHeaderField: "Content-Type")
         }
 
-        urlRequest.addValue(RequestConstants.token, forHTTPHeaderField: "X-Practicum-Mobile-Token")
+        
+        if let body = request.body {
+            urlRequest.httpBody = body
+        } else if let dto = request.dto,
+                let dtoEncoded = try? encoder.encode(dto) {
+            urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
+            urlRequest.httpBody = dtoEncoded
+        }
+        
+        request.headers?.forEach {
+            urlRequest.setValue($1, forHTTPHeaderField: $0)
+        }
+        
 
+        urlRequest.addValue(RequestConstants.token, forHTTPHeaderField: "X-Practicum-Mobile-Token")
+        
         return urlRequest
     }
-
+    
     private func parse<T: Decodable>(data: Data) async throws -> T {
         do {
             return try decoder.decode(T.self, from: data)
