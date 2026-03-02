@@ -60,6 +60,7 @@ enum L10n {
         static let save             = String(localized: "profile.save")
         static let noNFT            = String(localized: "profile.no_nft")
         static let noFavoriteNFT    = String(localized: "profile.no_favorite_nft")
+        static let invalidWebsite   = String(localized: "profile.invalid_website")
     }
     
     enum Statistics {

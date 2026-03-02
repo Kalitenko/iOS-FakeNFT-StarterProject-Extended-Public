@@ -160,7 +160,7 @@ struct ProfileEditView: View {
         let raw = normalizedWebsiteForValidation
         guard !raw.isEmpty else { return .ok }
         
-        if raw.contains(" ") { return .invalid("Введите корректный адрес сайта") }
+        if raw.contains(" ") { return .invalid(L10n.Profile.invalidWebsite) }
         
         let candidate: String
         if raw.lowercased().hasPrefix("http://") || raw.lowercased().hasPrefix("https://") {
@@ -176,7 +176,7 @@ struct ProfileEditView: View {
             host.first != ".",
             host.last != "."
         else {
-            return .invalid("Введите корректный адрес сайта")
+            return .invalid(L10n.Profile.invalidWebsite)
         }
         
         return .ok
@@ -239,7 +239,7 @@ struct ProfileEditView: View {
                         showWebsiteError = false
                         saveMock()
                     } label: {
-                        Text("Сохранить")
+                        Text(L10n.Profile.save)
                             .font(.system(size: 17, weight: .bold))
                             .frame(maxWidth: .infinity)
                             .frame(height: Layout.saveButtonHeight)
@@ -295,13 +295,13 @@ struct ProfileEditView: View {
         }
     
         .confirmationDialog(
-            "Фото профиля",
+            L10n.Profile.profilePhoto,
             isPresented: $isPhotoMenuPresented,
             titleVisibility: .visible
         ) {
-            Button("Изменить фото") {
+            Button(L10n.Profile.changePhoto) {
                 photoURLAlert = TextFieldAlert(
-                    title: "Ссылка на фото",
+                    title: L10n.Profile.photoLink,
                     placeholder: "http://www.example.com",
                     text: photoURLText,
                     keyboardType: .URL,
@@ -312,11 +312,11 @@ struct ProfileEditView: View {
                     }
                 )
             }
-            Button("Удалить фото", role: .destructive) {
+            Button(L10n.Profile.deletePhoto, role: .destructive) {
                 photoURLText = ""
                 isPhotoRemoved = true
             }
-            Button("Отмена", role: .cancel) {}
+            Button(L10n.Common.cancel, role: .cancel) {}
         }
     
         .onTapGesture { focusedField = nil }
@@ -443,7 +443,7 @@ private var avatarBlock: some View {
 private var form: some View {
     VStack(alignment: .leading, spacing: 0) {
         
-        sectionTitle("Имя")
+        sectionTitle(L10n.Profile.name)
         RoundedField(
             fieldHeight: Layout.singleLineFieldHeight,
             contentInsets: Layout.defaultFieldInsets
@@ -458,7 +458,7 @@ private var form: some View {
         
         Spacer().frame(height: Layout.sectionTopSpacing)
         
-        sectionTitle("Описание")
+        sectionTitle(L10n.Profile.description)
         
         let aboutInsets = EdgeInsets(
             top: Layout.defaultFieldInsets.top,
@@ -498,7 +498,7 @@ private var form: some View {
         
         Spacer().frame(height: Layout.sectionTopSpacing)
         
-        sectionTitle("Сайт")
+        sectionTitle(L10n.Profile.website)
         RoundedField(
             isError: websiteErrorText != nil,
             helperText: websiteErrorText,
@@ -630,7 +630,7 @@ private struct ExitConfirmOverlay: View {
                 .ignoresSafeArea()
             
             VStack(spacing: 0) {
-                Text("Уверены,\nчто хотите выйти?")
+                Text(L10n.Alerts.confirmLogout)
                     .font(.system(size: 17, weight: .semibold))
                     .multilineTextAlignment(.center)
                     .foregroundStyle(Color(uiColor: .appBlack))
@@ -643,7 +643,7 @@ private struct ExitConfirmOverlay: View {
                 
                 HStack(spacing: 0) {
                     Button(action: onStay) {
-                        Text("Остаться")
+                        Text(L10n.Alerts.stay)
                             .font(.system(size: 17, weight: .regular))
                             .frame(maxWidth: .infinity, maxHeight: .infinity)
                     }
@@ -654,7 +654,7 @@ private struct ExitConfirmOverlay: View {
                         .frame(width: Layout.dividerHeight)
                     
                     Button(action: onExit) {
-                        Text("Выйти")
+                        Text(L10n.Alerts.logout)
                             .font(.system(size: 17, weight: .semibold))
                             .frame(maxWidth: .infinity, maxHeight: .infinity)
                     }

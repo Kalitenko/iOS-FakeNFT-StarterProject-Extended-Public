@@ -55,7 +55,7 @@ struct MyNFTCell: View {
                     
                     StarRatingView(rating: nft.rating)
                     
-                    Text("от \(nft.author)")
+                    Text(String(format: L10n.Catalog.collectionAuthor, nft.author))
                         .font(.system(size: 13))
                         .kerning(-0.08)
                         .frame(height: 20, alignment: .top)
@@ -65,7 +65,7 @@ struct MyNFTCell: View {
                 Spacer(minLength: 0)
                 
                 VStack(alignment: .leading, spacing: 4) {
-                    Text("Цена")
+                    Text(L10n.Common.price)
                         .font(.system(size: 13))
                         .kerning(-0.08)
                         .foregroundStyle(Color(uiColor: .appTextPrimary))

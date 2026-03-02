@@ -11,7 +11,7 @@ struct MyNFTEmptyView: View {
     var body: some View {
         VStack {
             Spacer()
-            Text("У Вас ещё нет NFT")
+            Text(L10n.Profile.noNFT)
                 .font(.system(size: 17, weight: .bold))
                 .frame(height: 22)
                 .foregroundStyle(Color(uiColor: .appTextPrimary))

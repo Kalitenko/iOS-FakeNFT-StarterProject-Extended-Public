@@ -57,8 +57,7 @@ struct FavoritesNFTView: View {
         }
         .background(Color(uiColor: .systemBackground))
         .toolbar(.hidden, for: .tabBar)
-        .customNavigationBar(title: "Избранные NFT")
-    }
+        .customNavigationBar(title: L10n.Profile.favoriteNFT)    }
     
 }
 

@@ -76,7 +76,7 @@ struct MyNFTsView: View {
             // Title + Sort — только если НЕ пусто
             if !isEmpty {
                 ToolbarItem(placement: .principal) {
-                    Text("Мои NFT")
+                    Text(L10n.Profile.myNFT)
                         .font(.system(size: 17, weight: .bold))
                         .frame(height: 22)
                         .foregroundStyle(Color(uiColor: .appTextPrimary))
@@ -98,11 +98,11 @@ struct MyNFTsView: View {
                 }
             }
         }
-        .confirmationDialog("Сортировка", isPresented: $isSortPresented, titleVisibility: .visible) {
-            Button("По цене") { sort = .price }
-            Button("По рейтингу") { sort = .rating }
-            Button("По названию") { sort = .name }
-            Button("Закрыть", role: .cancel) { }
+        .confirmationDialog(L10n.Sort.title, isPresented: $isSortPresented, titleVisibility: .visible) {
+            Button(L10n.Sort.byPrice) { sort = .price }
+            Button(L10n.Sort.byRating) { sort = .rating }
+            Button(L10n.Sort.byName) { sort = .name }
+            Button(L10n.Common.close, role: .cancel) { }
         }
     }
 }

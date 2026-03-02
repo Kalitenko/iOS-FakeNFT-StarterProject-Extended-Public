@@ -20,7 +20,7 @@ struct FavoritesEmptyView: View {
         VStack {
             Spacer()
 
-            Text("У Вас ещё нет избранных NFT")
+            Text(L10n.Profile.noFavoriteNFT)
                 .font(.system(size: 17, weight: .bold))
                 .foregroundStyle(Color(uiColor: .appTextPrimary))
                 .multilineTextAlignment(.center)
