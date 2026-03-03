@@ -61,7 +61,7 @@ final class LinePageControl: UIView {
     func selectedSegmentChanged() {
         for (index, subview) in stackView.arrangedSubviews.enumerated() {
             let isSelected = index == selectedItem
-            subview.backgroundColor = isSelected ? .appTextPrimary : .appBackgroundUniversal
+            subview.backgroundColor = isSelected ? .appTextPrimary : .appSurfaceBackground
         }
     }
 }
