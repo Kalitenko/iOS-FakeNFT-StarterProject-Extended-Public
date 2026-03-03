@@ -35,29 +35,3 @@ struct WebViewComponent: View {
         }
     }
 }
-
-private struct WebViewComponentExample: View {
-    var body: some View {
-        NavigationStack {
-            VStack(spacing: 20) {
-
-                NavigationLink("Google") {
-                    WebViewComponent(
-                        url: URL(string: "https://google.com")!
-                    )
-                }
-
-                NavigationLink("Broken link") {
-                    WebViewComponent(
-                        url: URL(string: "https://wrong-url-12345.com")!,
-                        fallbackURL: URL(string: "https://apple.com")
-                    )
-                }
-            }
-        }
-    }
-}
-
-#Preview {
-    WebViewComponentExample()
-}
