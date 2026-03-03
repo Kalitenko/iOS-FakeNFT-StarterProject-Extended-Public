@@ -56,11 +56,13 @@ struct CommonPutProfileRequest: NetworkRequest, Sendable {
     var httpMethod: HttpMethod { .put }
     
     var body: Data? {
-        guard !likes.isEmpty else { return nil }
-        
+        let likesValue = likes.isEmpty
+            ? RequestConstants.null
+            : likes.joined(separator: ",")
+
         var components = URLComponents()
         components.queryItems = [
-            URLQueryItem(name: "likes", value: likes.joined(separator: ","))
+            URLQueryItem(name: "likes", value: likesValue)
         ]
         
         return components.percentEncodedQuery?.data(using: .utf8)

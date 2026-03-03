@@ -8,15 +8,15 @@
 import SwiftUI
 
 struct NavigationBarModifier: ViewModifier {
-    
+
     @Environment(\.dismiss) private var dismiss
-    
+
     let title: String?
     let hidesBackground: Bool
     let hidesLeading: Bool
     let leadingAction: (() -> Void)?
     let trailingAction: (() -> Void)?
-    
+
     func body(content: Content) -> some View {
         content
             .navigationBarBackButtonHidden(true)
@@ -27,7 +27,7 @@ struct NavigationBarModifier: ViewModifier {
             .foregroundStyle(.appTextPrimary)
             .font(.title)
     }
-    
+
     @ToolbarContentBuilder
     private var toolbarContent: some ToolbarContent {
         if !hidesLeading {
@@ -39,13 +39,13 @@ struct NavigationBarModifier: ViewModifier {
                 }
             }
         }
-        
+
         if let title {
             ToolbarItem(placement: .principal) {
                 Text(title)
             }
         }
-        
+
         if let trailingAction {
             ToolbarItem(placement: .topBarTrailing) {
                 Button(action: trailingAction) {
@@ -53,7 +53,7 @@ struct NavigationBarModifier: ViewModifier {
                 }
             }
         }
-        
+
     }
 }
 
@@ -88,7 +88,7 @@ extension View {
                 return false
             }
         }()
-        
+
         return self.customNavigationBar(
             title: title,
             hidesBackground: backgroundHidden,

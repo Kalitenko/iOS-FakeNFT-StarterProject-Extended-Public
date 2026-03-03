@@ -8,12 +8,12 @@
 import SwiftUI
 
 struct WebViewComponent: View {
-    
+
     let url: URL
     let fallbackURL: URL?
-    
+
     @State private var isLoading = true
-    
+
     init(
         url: URL,
         fallbackURL: URL? = URL(string: "https://practicum.yandex.ru/ios-developer/")
@@ -21,7 +21,7 @@ struct WebViewComponent: View {
         self.url = url
         self.fallbackURL = fallbackURL
     }
-    
+
     var body: some View {
         WebView(
             url: url,
@@ -40,13 +40,13 @@ private struct WebViewComponentExample: View {
     var body: some View {
         NavigationStack {
             VStack(spacing: 20) {
-                
+
                 NavigationLink("Google") {
                     WebViewComponent(
                         url: URL(string: "https://google.com")!
                     )
                 }
-                
+
                 NavigationLink("Broken link") {
                     WebViewComponent(
                         url: URL(string: "https://wrong-url-12345.com")!,

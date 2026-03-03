@@ -87,6 +87,7 @@ struct CollectionView: View {
                 NavigationLink(viewModel.collectionInfo.author) {
                     WebViewComponent(url: url)
                         .customNavigationBarApplyingIOS26()
+                        .customBackground()
                 }
                 .foregroundStyle(.appBlue)
             } else {

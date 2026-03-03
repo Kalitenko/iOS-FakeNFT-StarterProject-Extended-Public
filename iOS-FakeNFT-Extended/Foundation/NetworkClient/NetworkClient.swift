@@ -8,6 +8,18 @@ enum NetworkClientError: Error {
     case incorrectRequest(String)
 }
 
+struct AnyEncodable: Encodable {
+    private let _encode: (Encoder) throws -> Void
+
+    init(_ wrapped: Encodable) {
+        self._encode = wrapped.encode
+    }
+
+    func encode(to encoder: any Encoder) throws {
+        try _encode(encoder)
+    }
+}
+
 protocol NetworkClient: Sendable {
     func send(request: NetworkRequest) async throws -> Data
     func send<T: Decodable>(request: NetworkRequest) async throws -> T
@@ -54,7 +66,19 @@ actor DefaultNetworkClient: NetworkClient {
         
         var urlRequest = URLRequest(url: endpoint)
         urlRequest.httpMethod = request.httpMethod.rawValue
-        
+
+        if let bodyData = request.bodyData {
+            urlRequest.httpBody = bodyData
+        } else if let dto = request.dto {
+            let dtoEncoded = try encoder.encode(AnyEncodable(dto))
+            urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
+            urlRequest.httpBody = dtoEncoded
+        }
+
+        if let contentType = request.contentType {
+            urlRequest.setValue(contentType, forHTTPHeaderField: "Content-Type")
+        }
+
         if let body = request.body {
             urlRequest.httpBody = body
         } else if let dto = request.dto,
@@ -66,7 +90,7 @@ actor DefaultNetworkClient: NetworkClient {
         request.headers?.forEach {
             urlRequest.setValue($1, forHTTPHeaderField: $0)
         }
-        
+
         urlRequest.addValue(RequestConstants.token, forHTTPHeaderField: "X-Practicum-Mobile-Token")
         
         return urlRequest

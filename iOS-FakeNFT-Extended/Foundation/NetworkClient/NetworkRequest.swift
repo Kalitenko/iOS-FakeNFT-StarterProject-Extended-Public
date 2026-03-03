@@ -11,6 +11,8 @@ protocol NetworkRequest: Sendable {
     var endpoint: URL? { get }
     var httpMethod: HttpMethod { get }
     var dto: Encodable? { get }
+    var bodyData: Data? { get }
+    var contentType: String? { get }
     
     var body: Data? { get }
     var headers: [String: String]? { get }
@@ -20,6 +22,8 @@ protocol NetworkRequest: Sendable {
 extension NetworkRequest {
     var httpMethod: HttpMethod { .get }
     var dto: Encodable? { nil }
+    var bodyData: Data? { nil }
+    var contentType: String? { nil }
 }
 
 extension NetworkRequest {

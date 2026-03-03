@@ -45,8 +45,7 @@ struct TabBarView: View {
                     Image(systemName: "rectangle.stack.fill")
                 }
             }
-            MockCartView()
-                .customBackground(color: .indigo)
+            CartView(viewModel: CartViewModel(cartService: services.cartService))
                 .tabItem {
                     Label {
                         Text(L10n.TabBar.cart)

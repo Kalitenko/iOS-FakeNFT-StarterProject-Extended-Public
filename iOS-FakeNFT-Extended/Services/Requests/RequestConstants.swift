@@ -8,4 +8,5 @@ enum RequestConstants {
     static let id = "id"
     static let contentType = "Content-Type"
     static let urlencoded = "application/x-www-form-urlencoded"
+    static let null = "null"
 }
