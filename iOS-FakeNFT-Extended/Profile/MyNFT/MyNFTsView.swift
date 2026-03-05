@@ -24,16 +24,16 @@ struct MyNFTsView: View {
     private var sortedNfts: [NFTMock] {
         switch sort {
         case .price:
-            return nfts.sorted { $0.price < $1.price }
+            nfts.sorted { $0.price < $1.price }
         case .rating:
-            return nfts.sorted { $0.rating > $1.rating }
+            nfts.sorted { $0.rating > $1.rating }
         case .name:
-            return nfts.sorted {
+            nfts.sorted {
                 $0.name.localizedCaseInsensitiveCompare($1.name) == .orderedAscending
             }
         }
     }
-
+    
     private var isEmpty: Bool { sortedNfts.isEmpty }
 
     var body: some View {
@@ -56,48 +56,12 @@ struct MyNFTsView: View {
         .navigationBarBackButtonHidden(true)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar(.hidden, for: .tabBar)
-        .toolbar {
-                        ToolbarItem(placement: .topBarLeading) {
-                Button { dismiss() } label: {
-                    Image("back.chevron")
-                        .renderingMode(.template)
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 18, height: 18)
-                        .foregroundStyle(Color(uiColor: .appTextPrimary))
-                        .frame(width: 44, height: 44, alignment: .leading)
-                        .contentShape(Rectangle())
-                        .padding(.leading, -8)
-                }
-                .buttonStyle(.plain)
-                .accessibilityIdentifier("myNFT.backButton")
-            }
+        .customNavigationBar(
+            title: isEmpty ? nil : L10n.Profile.myNFT,
+            hidesBackground: false,
+            trailingAction: isEmpty ? nil : { isSortPresented = true }
+        )
 
-            // Title + Sort — только если НЕ пусто
-            if !isEmpty {
-                ToolbarItem(placement: .principal) {
-                    Text(L10n.Profile.myNFT)
-                        .font(.system(size: 17, weight: .bold))
-                        .frame(height: 22)
-                        .foregroundStyle(Color(uiColor: .appTextPrimary))
-                }
-
-                ToolbarItem(placement: .topBarTrailing) {
-                    Button { isSortPresented = true } label: {
-                        Image("sort")
-                            .renderingMode(.template)
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 42, height: 42)
-                            .foregroundStyle(Color(uiColor: .appTextPrimary))
-                            .frame(width: 44, height: 44)
-                            .contentShape(Rectangle())
-                    }
-                    .buttonStyle(.plain)
-                    .accessibilityIdentifier("myNFT.sortButton")
-                }
-            }
-        }
         .confirmationDialog(L10n.Sort.title, isPresented: $isSortPresented, titleVisibility: .visible) {
             Button(L10n.Sort.byPrice) { sort = .price }
             Button(L10n.Sort.byRating) { sort = .rating }

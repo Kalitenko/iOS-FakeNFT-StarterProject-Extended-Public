@@ -67,7 +67,7 @@ struct ProfileEditView: View {
         // Fields
         static let singleLineFieldHeight: CGFloat = 44
         static let aboutFieldHeight: CGFloat = 132
-        static let aboutMaxCharacters: Int = 150
+        static let aboutMaxCharacters: Int = 300
         static let websiteMaxLength: Int = 255
         
         // Insets

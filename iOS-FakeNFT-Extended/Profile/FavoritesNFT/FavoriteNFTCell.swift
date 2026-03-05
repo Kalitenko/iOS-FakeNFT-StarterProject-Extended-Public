@@ -46,7 +46,7 @@ struct FavoriteNFTCell: View {
                 )
                 .overlay(alignment: .topTrailing) {
                     Button(action: onRemove) {
-                        Image("favorites.active")
+                        Image(.favoritesActive)
                             .renderingMode(.original)
                             .resizable()
                             .scaledToFit()
