@@ -21,4 +21,43 @@ final class ServicesAssembly {
             storage: nftStorage
         )
     }
+
+    var orderService: OrderServiceProtocol {
+        OrderService(networkClient: networkClient)
+    }
+
+    var currencyService: CurrencyServiceProtocol {
+        CurrencyService(networkClient: networkClient)
+    }
+
+    var paymentService: PaymentServiceProtocol {
+        PaymentService(networkClient: networkClient)
+    }
+
+    var cartService: CartServiceProtocol {
+        CartService(
+            orderService: orderService,
+            nftService: nftService,
+            currencyService: currencyService,
+            paymentService: paymentService
+        )
+    }
+
+    var catalogService: CatalogServiceProtocol {
+        CatalogService(
+            networkClient: networkClient
+        )
+    }
+    
+    var commonOrderService: CommonOrderServiceProtocol {
+        CommonOrderService(
+            networkClient: networkClient
+        )
+    }
+    
+    var commonProfileService: CommonProfileServiceProtocol {
+        CommonProfileService(
+            networkClient: networkClient
+        )
+    }
 }

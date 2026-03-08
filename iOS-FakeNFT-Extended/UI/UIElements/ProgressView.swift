@@ -19,9 +19,9 @@ struct LoadingPlaceholderView: View {
 }
 
 struct CircularProgressView: View {
-    
+
     var tintColor: Color = .appTextPrimary
-    
+
     var body: some View {
         ProgressView()
             .scaleEffect(1.5)
