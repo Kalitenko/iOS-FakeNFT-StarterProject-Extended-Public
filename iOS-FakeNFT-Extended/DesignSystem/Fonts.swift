@@ -1,19 +1,15 @@
-import UIKit
+import SwiftUI
 
-extension UIFont {
-    // Ниже приведены примеры шрифтов, настоящие шрифты надо взять из фигмы
+extension Font {
+    static let bigHeader = Font.system(size: 34, weight: .bold)
+    static let header = Font.system(size: 32, weight: .bold)
 
-    // Headline Fonts
-    static var headline1 = UIFont.systemFont(ofSize: 34, weight: .bold)
-    static var headline2 = UIFont.systemFont(ofSize: 28, weight: .bold)
-    static var headline3 = UIFont.systemFont(ofSize: 22, weight: .bold)
-    static var headline4 = UIFont.systemFont(ofSize: 20, weight: .bold)
+    static let bigTitle = Font.system(size: 22, weight: .bold)
+    static let title = Font.system(size: 17, weight: .bold)
 
-    // Body Fonts
-    static var bodyRegular = UIFont.systemFont(ofSize: 17, weight: .regular)
-    static var bodyBold = UIFont.systemFont(ofSize: 17, weight: .bold)
+    static let bigText = Font.system(size: 17, weight: .regular)
+    static let text = Font.system(size: 15, weight: .regular)
+    static let smallText = Font.system(size: 13, weight: .regular)
 
-    // Caption Fonts
-    static var caption1 = UIFont.systemFont(ofSize: 15, weight: .regular)
-    static var caption2 = UIFont.systemFont(ofSize: 13, weight: .regular)
+    static let description = Font.system(size: 10, weight: .medium)
 }
