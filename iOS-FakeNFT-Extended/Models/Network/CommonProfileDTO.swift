@@ -8,5 +8,9 @@
 import Foundation
 
 struct CommonProfileDTO: Decodable, Sendable {
+    let name: String
+    let avatar: String
+    let description: String
+    let website: String
     let likes: [String]
 }

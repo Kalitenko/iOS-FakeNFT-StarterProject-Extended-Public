@@ -47,6 +47,10 @@ struct CommonGetProfileRequest: NetworkRequest, Sendable {
 
 struct CommonPutProfileRequest: NetworkRequest, Sendable {
     
+    let name: String
+    let avatar: String
+    let description: String
+    let website: String
     let likes: [String]
     
     var endpoint: URL? {
