@@ -25,7 +25,13 @@ actor CommonProfileService: CommonProfileServiceProtocol {
     }
     
     func updateLikes(likes: [String]) async throws -> CommonProfileDTO {
-        let request = CommonPutProfileRequest(likes: likes)
+        let request = CommonPutProfileRequest(
+            name: "",
+            avatar: "",
+            description: "",
+            website: "",
+            likes: likes
+        )
         return try await networkClient.send(request: request)
     }
 }
