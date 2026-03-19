@@ -13,6 +13,8 @@ struct ProfileEditView: View {
     @Environment(\.dismiss) private var dismiss
     @Binding var profile: UserProfile
     
+    let onSave: (UserProfile) -> Void
+    
     // MARK: - Initial values (to detect changes)
     private let initialName: String
     private let initialAbout: String
@@ -94,8 +96,12 @@ struct ProfileEditView: View {
     }
     
     // MARK: - Init
-    init(profile: Binding<UserProfile>) {
+    init(
+        profile: Binding<UserProfile>,
+        onSave: @escaping (UserProfile) -> Void
+    ) {
         self._profile = profile
+        self.onSave = onSave
         
         let profileValue = profile.wrappedValue
         self.initialName = profileValue.name
@@ -354,6 +360,8 @@ private func saveMock() {
         let trimmedPhoto = photoURLText.trimmingCharacters(in: .whitespacesAndNewlines)
         profile.photoURL = trimmedPhoto.isEmpty ? nil : trimmedPhoto
         profile.isPhotoRemoved = trimmedPhoto.isEmpty
+        
+        onSave(profile)
         
         isSaving = false
         print("SAVED photoURL:", profile.photoURL ?? "nil", "removed:", profile.isPhotoRemoved)
@@ -692,12 +700,17 @@ struct PlaceholderAvatarView: View {
 // MARK: - Preview
 #Preview {
     NavigationStack {
-        ProfileEditView(profile: .constant(UserProfile(
-            name: "Joaquin Phoenix",
-            about: "Дизайнер из Казани, люблю цифровое искусство и бейглы. В моей коллекции уже 100+ NFT, и еще больше — на моём сайте. Открыт к коллаборациям.",
-            website: "JoaquinPhoenix.com",
-            photoURL: nil,
-            isPhotoRemoved: false
-        )))
+        ProfileEditView(
+            profile: .constant(
+                UserProfile(
+                    name: "Joaquin Phoenix",
+                    about: "Дизайнер из Казани, люблю цифровое искусство и бейглы. В моей коллекции уже 100+ NFT, и еще больше — на моём сайте. Открыт к коллаборациям.",
+                    website: "JoaquinPhoenix.com",
+                    photoURL: nil,
+                    isPhotoRemoved: false
+                )
+            ),
+            onSave: { _ in }
+        )
     }
 }

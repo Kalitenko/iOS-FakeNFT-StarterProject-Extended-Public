@@ -10,6 +10,8 @@ import SafariServices
 
 struct ProfileView: View {
     
+    @Environment(ServicesAssembly.self) private var services
+    
     @State private var isWebViewPresented = false
     
     @State private var profile = UserProfile(
@@ -20,8 +22,13 @@ struct ProfileView: View {
         isPhotoRemoved: false
     )
     
-    private let myNFTCount = 112
-    private let favoriteNFTCount = 11
+    @State private var currentLikes: [String] = []
+    
+//    private let myNFTCount = 112
+//    private let favoriteNFTCount = 11
+    
+    @State private var myNFTCount = 0
+    @State private var favoriteNFTCount = 0
     
     private enum Layout {
         static let screenPadding: CGFloat = 16
@@ -67,7 +74,30 @@ struct ProfileView: View {
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
                     NavigationLink {
-                        ProfileEditView(profile: $profile)
+                        ProfileEditView(profile: $profile) { editedProfile in
+                            Task {
+                                let dto = UpdateProfileDTO(
+                                    name: editedProfile.name,
+                                    avatar: editedProfile.photoURL ?? "",
+                                    description: editedProfile.about,
+                                    website: editedProfile.website,
+                                    likes: currentLikes
+                                )
+                                
+                                print("🚀 SENDING UPDATE PROFILE DTO:", dto)
+
+                                do {
+                                    let updated = try await services.commonProfileService.updateProfile(profile: dto)
+                                    currentLikes = updated.likes
+                                    favoriteNFTCount = updated.likes.count
+                                               print("✅ UPDATE SUCCESS, likes:", updated.likes)
+
+                                    currentLikes = updated.likes
+                                } catch {
+                                    print("❌ Failed to update profile:", error)
+                                }
+                            }
+                        }
                     } label: {
                         Image("edit")
                             .renderingMode(.template)
@@ -88,8 +118,23 @@ struct ProfileView: View {
                     Text("Некорректная ссылка")
                         .font(.system(size: 17, weight: .regular))
                         .padding()
+                } 
+            }
+            .task {
+                do {
+                    let profileDTO = try await services.commonProfileService.fetchProfile()
+                            currentLikes = profileDTO.likes
+                            favoriteNFTCount = profileDTO.likes.count
+                            myNFTCount = profileDTO.nfts.count
+                            print("SERVER COUNTS -> myNFT:", profileDTO.nfts.count, "favorites:", profileDTO.likes.count)
+                        } catch let error as URLError where error.code == .cancelled {
+                            return
+                        } catch {
+                            print("Failed to fetch profile:", error)
+                            
                 }
             }
+        
         }
     }
     

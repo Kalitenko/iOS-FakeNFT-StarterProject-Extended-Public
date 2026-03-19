@@ -10,6 +10,7 @@ import Foundation
 protocol CommonProfileServiceProtocol: Sendable {
     func fetchProfile() async throws -> CommonProfileDTO
     func updateLikes(likes: [String]) async throws -> CommonProfileDTO
+    func updateProfile(profile: UpdateProfileDTO) async throws -> CommonProfileDTO
 }
 
 actor CommonProfileService: CommonProfileServiceProtocol {
@@ -25,13 +26,22 @@ actor CommonProfileService: CommonProfileServiceProtocol {
     }
     
     func updateLikes(likes: [String]) async throws -> CommonProfileDTO {
-        let request = CommonPutProfileRequest(
+
+        let profile = UpdateProfileDTO(
             name: "",
             avatar: "",
             description: "",
             website: "",
             likes: likes
         )
+
+        let request = CommonPutProfileRequest(profile: profile)
+
+        return try await networkClient.send(request: request)
+    }
+    
+    func updateProfile(profile: UpdateProfileDTO) async throws -> CommonProfileDTO {
+        let request = CommonPutProfileRequest(profile: profile)
         return try await networkClient.send(request: request)
     }
 }

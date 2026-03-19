@@ -10,8 +10,11 @@ import SwiftUI
 struct FavoritesNFTView: View {
     
     @Environment(\.dismiss) private var dismiss
+    @Environment(ServicesAssembly.self) private var services
+    
     @State private var favorites: [NFTMock] = NFTMock.sampleFavoritesNFTs
-    /*    @State private var favorites: [NFTMock] = []*/   //  для проверки empty
+    @State private var currentLikes: [String] = []
+    @State private var isLoading = false
     
     private enum Layout {
         static let horizontalPadding: CGFloat = 16
@@ -40,12 +43,13 @@ struct FavoritesNFTView: View {
                 ScrollView {
                     LazyVGrid(
                         columns: columns,
-                        alignment: .center,
                         spacing: Layout.rowsSpacing
                     ) {
                         ForEach(favorites) { nft in
                             FavoriteNFTCell(nft: nft) {
-                                favorites.removeAll { $0.id == nft.id }
+                                Task {
+                                    await removeLike(for: nft)
+                                }
                             }
                         }
                     }
@@ -57,35 +61,36 @@ struct FavoritesNFTView: View {
         }
         .background(Color(uiColor: .systemBackground))
         .toolbar(.hidden, for: .tabBar)
-        .customNavigationBar(title: L10n.Profile.favoriteNFT)    }
-    
-}
-
-// MARK: - временная заглушка ячейки (чтобы проверить сетку)
-private struct FavoriteNFTCellStub: View {
-    let nft: NFTMock
-    
-    var body: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            Image(nft.imageName)
-                .resizable()
-                .scaledToFill()
-                .frame(height: 80)
-                .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
-            
-            Text(nft.name)
-                .font(.system(size: 17, weight: .bold))
-                .foregroundStyle(Color(uiColor: .appTextPrimary))
-            
-            Text("\(nft.priceFormattedRu) ETH")
-                .font(.system(size: 13, weight: .regular))
-                .foregroundStyle(Color(uiColor: .appTextPrimary))
+        .customNavigationBar(title: L10n.Profile.favoriteNFT)
+        .task {
+            await loadLikes()
         }
     }
-}
-
-#Preview("Favorites Grid") {
-    NavigationStack {
-        FavoritesNFTView()
+    
+    @MainActor
+    private func loadLikes() async {
+        do {
+            let profileDTO = try await services.commonProfileService.fetchProfile()
+            currentLikes = profileDTO.likes
+        } catch {
+            print("Failed to fetch likes:", error)
+        }
+    }
+    
+    @MainActor
+    private func removeLike(for nft: NFTMock) async {
+        guard !isLoading else { return }
+        isLoading = true
+        defer { isLoading = false }
+        
+        let updatedLikes = currentLikes.filter { $0 != nft.id.uuidString }
+        
+        do {
+            let updatedProfile = try await services.commonProfileService.updateLikes(likes: updatedLikes)
+            currentLikes = updatedProfile.likes
+            favorites.removeAll { $0.id == nft.id }
+        } catch {
+            print("Failed to update likes:", error)
+        }
     }
 }
