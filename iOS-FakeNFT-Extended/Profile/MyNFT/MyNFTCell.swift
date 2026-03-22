@@ -1,13 +1,7 @@
-//
-//  MyNFTCell.swift
-//  iOS-FakeNFT-Extended
-//
-//  Created by Andrei  Boyarko on 27/02/2026.
-//
 import SwiftUI
 
 struct MyNFTCell: View {
-    let nft: NFTMock
+    let nft: NftDTOCart
     
     private enum Layout {
         static let rowHeight: CGFloat = 140
@@ -17,15 +11,8 @@ struct MyNFTCell: View {
         static let imageSize: CGFloat = 108
         static let imageCornerRadius: CGFloat = 12
         
-        static let likeSize: CGFloat = 24
-        static let likePadding: CGFloat = 8
-        
-        static let starsSize: CGFloat = 12
-        static let starsSpacing: CGFloat = 2
-        
         static let contentWidth: CGFloat = 320
         static let priceBlockWidth: CGFloat = 75
-        static let heartContainerSize: CGFloat = 42
     }
     
     var body: some View {
@@ -33,11 +20,7 @@ struct MyNFTCell: View {
             HStack(spacing: Layout.spacing) {
                 
                 ZStack {
-                    Image(nft.imageName)
-                        .resizable()
-                        .scaledToFill()
-                        .frame(width: Layout.imageSize, height: Layout.imageSize)
-                        .clipShape(RoundedRectangle(cornerRadius: Layout.imageCornerRadius, style: .continuous))
+                    nftImage
                 }
                 .overlay(alignment: .topTrailing) {
                     Image("favorites.inactive")
@@ -55,7 +38,7 @@ struct MyNFTCell: View {
                     
                     StarRatingView(rating: nft.rating)
                     
-                    Text(String(format: L10n.Catalog.collectionAuthor, nft.author))
+                    Text(String(format: L10n.Catalog.collectionAuthor, nft.author ?? "Unknown"))
                         .font(.system(size: 13))
                         .kerning(-0.08)
                         .frame(height: 20, alignment: .top)
@@ -70,7 +53,7 @@ struct MyNFTCell: View {
                         .kerning(-0.08)
                         .foregroundStyle(Color(uiColor: .appTextPrimary))
                     
-                    Text("\(nft.priceFormattedRu) ETH")
+                    Text("\(nft.price.formattedPrice) ETH")
                         .font(.system(size: 17, weight: .bold))
                         .foregroundStyle(Color(uiColor: .appTextPrimary))
                 }
@@ -84,11 +67,40 @@ struct MyNFTCell: View {
         .padding(.vertical, 16)
         .frame(height: Layout.rowHeight)
     }
+    
+    @ViewBuilder
+    private var nftImage: some View {
+        if let imageURL = nft.images.first {
+            AsyncImage(url: imageURL) { phase in
+                switch phase {
+                case .empty:
+                    ProgressView()
+                        .frame(width: Layout.imageSize, height: Layout.imageSize)
+                case .success(let image):
+                    image
+                        .resizable()
+                        .scaledToFill()
+                        .frame(width: Layout.imageSize, height: Layout.imageSize)
+                case .failure:
+                    Color.gray.opacity(0.2)
+                        .frame(width: Layout.imageSize, height: Layout.imageSize)
+                @unknown default:
+                    Color.gray.opacity(0.2)
+                        .frame(width: Layout.imageSize, height: Layout.imageSize)
+                }
+            }
+            .clipShape(RoundedRectangle(cornerRadius: Layout.imageCornerRadius, style: .continuous))
+        } else {
+            Color.gray.opacity(0.2)
+                .frame(width: Layout.imageSize, height: Layout.imageSize)
+                .clipShape(RoundedRectangle(cornerRadius: Layout.imageCornerRadius, style: .continuous))
+        }
+    }
 }
 
-extension NFTMock {
-    var priceFormattedRu: String {
-        price.formatted(
+private extension Double {
+    var formattedPrice: String {
+        formatted(
             .number
                 .precision(.fractionLength(2))
                 .locale(Locale(identifier: "ru_RU"))

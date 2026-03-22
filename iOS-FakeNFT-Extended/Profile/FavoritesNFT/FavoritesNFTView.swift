@@ -9,12 +9,12 @@ import SwiftUI
 
 struct FavoritesNFTView: View {
     
-    @Environment(\.dismiss) private var dismiss
     @Environment(ServicesAssembly.self) private var services
     
-    @State private var favorites: [NFTMock] = NFTMock.sampleFavoritesNFTs
+    @State private var favorites: [NftDTOCart] = []
     @State private var currentLikes: [String] = []
     @State private var isLoading = false
+    @State private var errorMessage: String?
     
     private enum Layout {
         static let horizontalPadding: CGFloat = 16
@@ -23,10 +23,9 @@ struct FavoritesNFTView: View {
         
         static let columnsSpacing: CGFloat = 8
         static let rowsSpacing: CGFloat = 20
-        static let navBarLeadingInset: CGFloat = -7
     }
     
-    private var isEmpty: Bool { favorites.isEmpty }
+    private var isEmpty: Bool { favorites.isEmpty && !isLoading }
     
     private var columns: [GridItem] {
         [
@@ -37,7 +36,10 @@ struct FavoritesNFTView: View {
     
     var body: some View {
         Group {
-            if isEmpty {
+            if isLoading {
+                ProgressView()
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+            } else if isEmpty {
                 FavoritesEmptyView()
             } else {
                 ScrollView {
@@ -45,7 +47,7 @@ struct FavoritesNFTView: View {
                         columns: columns,
                         spacing: Layout.rowsSpacing
                     ) {
-                        ForEach(favorites) { nft in
+                        ForEach(favorites, id: \.id) { nft in
                             FavoriteNFTCell(nft: nft) {
                                 Task {
                                     await removeLike(for: nft)
@@ -63,34 +65,76 @@ struct FavoritesNFTView: View {
         .toolbar(.hidden, for: .tabBar)
         .customNavigationBar(title: L10n.Profile.favoriteNFT)
         .task {
-            await loadLikes()
+            await loadFavorites()
+        }
+        .alert(
+            L10n.Alerts.somethingWentWrong,
+            isPresented: Binding(
+                get: { errorMessage != nil },
+                set: { if !$0 { errorMessage = nil } }
+            )
+        ) {
+            Button(L10n.Alerts.okay, role: .cancel) {
+                errorMessage = nil
+            }
+        } message: {
+            Text(errorMessage ?? "")
         }
     }
     
     @MainActor
-    private func loadLikes() async {
+    private func loadFavorites() async {
+        isLoading = true
+        defer { isLoading = false }
+        
         do {
-            let profileDTO = try await services.commonProfileService.fetchProfile()
-            currentLikes = profileDTO.likes
+            let profile = try await services.commonProfileService.fetchProfile()
+            currentLikes = profile.likes
+            
+            let items = try await withThrowingTaskGroup(of: NftDTOCart.self) { group in
+                for id in profile.likes {
+                    group.addTask {
+                        try await services.nftService.loadNft(id: id)
+                    }
+                }
+                
+                var loaded: [NftDTOCart] = []
+                for try await item in group {
+                    loaded.append(item)
+                }
+                return loaded
+            }
+            
+            favorites = items
+        } catch let error as URLError where error.code == .cancelled {
+            return
         } catch {
-            print("Failed to fetch likes:", error)
+            errorMessage = L10n.Alerts.dataLoadFailed
         }
     }
     
     @MainActor
-    private func removeLike(for nft: NFTMock) async {
+    private func removeLike(for nft: NftDTOCart) async {
         guard !isLoading else { return }
         isLoading = true
         defer { isLoading = false }
         
-        let updatedLikes = currentLikes.filter { $0 != nft.id.uuidString }
+        let updatedLikes = currentLikes.filter { $0 != nft.id }
         
         do {
             let updatedProfile = try await services.commonProfileService.updateLikes(likes: updatedLikes)
             currentLikes = updatedProfile.likes
             favorites.removeAll { $0.id == nft.id }
+        } catch let error as URLError where error.code == .cancelled {
+            return
         } catch {
-            print("Failed to update likes:", error)
+            errorMessage = L10n.Alerts.somethingWentWrong
         }
+    }
+}
+
+#Preview("Favorites Grid") {
+    NavigationStack {
+        FavoritesNFTView()
     }
 }
