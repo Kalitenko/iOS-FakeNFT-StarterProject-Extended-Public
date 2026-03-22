@@ -24,9 +24,8 @@ struct ProfileView: View {
     
     @State private var currentLikes: [String] = []
     
-//    private let myNFTCount = 112
-//    private let favoriteNFTCount = 11
-    
+    @State private var errorMessage: String?
+        
     @State private var myNFTCount = 0
     @State private var favoriteNFTCount = 0
     
@@ -42,6 +41,25 @@ struct ProfileView: View {
         static let headerSpacing: CGFloat = 20
         static let headerBottomPadding: CGFloat = 40
         static let headerRowSpacing: CGFloat = 12
+    }
+    
+    private func profileErrorMessage(from error: Error) -> String? {
+        if let urlError = error as? URLError {
+            switch urlError.code {
+            case .cancelled:
+                return nil
+            case .notConnectedToInternet, .timedOut:
+                return L10n.Alerts.dataLoadFailed
+            default:
+                return L10n.Alerts.somethingWentWrong
+            }
+        }
+
+        if error is DecodingError {
+            return L10n.Alerts.dataLoadFailed
+        }
+
+        return L10n.Alerts.somethingWentWrong
     }
     
     private var websiteURL: URL? {
@@ -76,12 +94,14 @@ struct ProfileView: View {
                     NavigationLink {
                         ProfileEditView(profile: $profile) { editedProfile in
                             Task {
+                                let currentProfile = try await services.commonProfileService.fetchProfile()
+                                
                                 let dto = UpdateProfileDTO(
                                     name: editedProfile.name,
                                     avatar: editedProfile.photoURL ?? "",
                                     description: editedProfile.about,
                                     website: editedProfile.website,
-                                    likes: currentLikes
+                                    likes: currentProfile.likes
                                 )
                                 
                                 print("🚀 SENDING UPDATE PROFILE DTO:", dto)
@@ -91,10 +111,8 @@ struct ProfileView: View {
                                     currentLikes = updated.likes
                                     favoriteNFTCount = updated.likes.count
                                                print("✅ UPDATE SUCCESS, likes:", updated.likes)
-
-                                    currentLikes = updated.likes
                                 } catch {
-                                    print("❌ Failed to update profile:", error)
+                                    errorMessage = profileErrorMessage(from: error)
                                 }
                             }
                         }
@@ -123,16 +141,25 @@ struct ProfileView: View {
             .task {
                 do {
                     let profileDTO = try await services.commonProfileService.fetchProfile()
-                            currentLikes = profileDTO.likes
-                            favoriteNFTCount = profileDTO.likes.count
-                            myNFTCount = profileDTO.nfts.count
-                            print("SERVER COUNTS -> myNFT:", profileDTO.nfts.count, "favorites:", profileDTO.likes.count)
-                        } catch let error as URLError where error.code == .cancelled {
-                            return
-                        } catch {
-                            print("Failed to fetch profile:", error)
-                            
+                    currentLikes = profileDTO.likes
+                    favoriteNFTCount = profileDTO.likes.count
+                    myNFTCount = profileDTO.nfts.count
+                } catch {
+                    errorMessage = profileErrorMessage(from: error)
                 }
+            }
+            .alert(
+                L10n.Alerts.somethingWentWrong,
+                isPresented: Binding(
+                    get: { errorMessage != nil },
+                    set: { if !$0 { errorMessage = nil } }
+                )
+            ) {
+                Button(L10n.Alerts.okay, role: .cancel) {
+                    errorMessage = nil
+                }
+            } message: {
+                Text(errorMessage ?? "")
             }
         
         }
