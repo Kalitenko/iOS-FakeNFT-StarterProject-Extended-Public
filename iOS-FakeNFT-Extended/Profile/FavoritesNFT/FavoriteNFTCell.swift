@@ -54,7 +54,7 @@ struct FavoriteNFTCell: View {
                 
                 StarRatingView(rating: nft.rating)
                 
-                Text("\(nft.price) ETH")
+                Text("\(nft.price.formattedETH) ETH")
                     .font(.system(size: Layout.priceFontSize, weight: .regular))
                     .kerning(Layout.priceKerning)
                     .foregroundStyle(Color(uiColor: .appTextPrimary))
@@ -100,8 +100,13 @@ struct FavoriteNFTCell: View {
         }
     }
 }
-//
-//#Preview("Favorite cell") {
-//    FavoriteNFTCell(nft: NFTMock.sampleFavoritesNFTs.first!) { }
-//        .padding()
-//}
+
+extension Double {
+    var formattedETH: String {
+        self.formatted(
+            .number
+                .precision(.fractionLength(2))
+                .locale(Locale(identifier: "ru_RU"))
+        )
+    }
+}
