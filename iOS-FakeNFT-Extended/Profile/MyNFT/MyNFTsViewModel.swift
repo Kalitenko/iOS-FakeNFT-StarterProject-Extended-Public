@@ -12,16 +12,25 @@ import Observation
 @MainActor
 final class MyNFTsViewModel {
     
-    enum Sort {
+    enum Sort: String {
         case price
         case rating
         case name
     }
     
+    private enum Constants {
+        static let sortKey = "myNFTs.sort"
+    }
+    
     var isLoading = false
     var errorMessage: String?
     var nfts: [NftDTOCart] = []
-    var sort: Sort = .name
+    
+    var sort: Sort {
+        didSet {
+            UserDefaults.standard.set(sort.rawValue, forKey: Constants.sortKey)
+        }
+    }
     
     private let commonProfileService: CommonProfileServiceProtocol
     private let nftService: NftService
@@ -32,6 +41,9 @@ final class MyNFTsViewModel {
     ) {
         self.commonProfileService = commonProfileService
         self.nftService = nftService
+        
+        let savedSort = UserDefaults.standard.string(forKey: Constants.sortKey)
+        self.sort = Sort(rawValue: savedSort ?? "") ?? .name
     }
     
     var sortedNfts: [NftDTOCart] {
