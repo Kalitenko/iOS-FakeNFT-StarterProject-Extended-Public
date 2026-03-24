@@ -10,24 +10,12 @@ import SafariServices
 
 struct ProfileView: View {
     
-    @Environment(ServicesAssembly.self) private var services
-    
+    @State private var viewModel: ProfileViewModel
     @State private var isWebViewPresented = false
     
-    @State private var profile = UserProfile(
-        name: "Joaquin Phoenix",
-        about: "Дизайнер из Казани, люблю цифровое искусство и бейглы. В моей коллекции уже 100+ NFT, и еще больше — на моём сайте. Открыт к коллаборациям.",
-        website: "JoaquinPhoenix.com",
-        photoURL: nil,
-        isPhotoRemoved: false
-    )
-    
-    @State private var currentLikes: [String] = []
-    
-    @State private var errorMessage: String?
-        
-    @State private var myNFTCount = 0
-    @State private var favoriteNFTCount = 0
+    init(viewModel: ProfileViewModel) {
+        _viewModel = State(initialValue: viewModel)
+    }
     
     private enum Layout {
         static let screenPadding: CGFloat = 16
@@ -43,32 +31,13 @@ struct ProfileView: View {
         static let headerRowSpacing: CGFloat = 12
     }
     
-    private func profileErrorMessage(from error: Error) -> String? {
-        if let urlError = error as? URLError {
-            switch urlError.code {
-            case .cancelled:
-                return nil
-            case .notConnectedToInternet, .timedOut:
-                return L10n.Alerts.dataLoadFailed
-            default:
-                return L10n.Alerts.somethingWentWrong
-            }
-        }
-
-        if error is DecodingError {
-            return L10n.Alerts.dataLoadFailed
-        }
-
-        return L10n.Alerts.somethingWentWrong
-    }
-    
     private var websiteURL: URL? {
-        Self.makeWebURL(from: profile.website)
+        Self.makeWebURL(from: viewModel.profile.website)
     }
     
     private var avatarURL: URL? {
-        guard !profile.isPhotoRemoved else { return nil }
-        guard let raw = profile.photoURL else { return nil }
+        guard !viewModel.profile.isPhotoRemoved else { return nil }
+        guard let raw = viewModel.profile.photoURL else { return nil }
         return Self.makeWebURL(from: raw)
     }
     
@@ -76,7 +45,6 @@ struct ProfileView: View {
         NavigationStack {
             ScrollView {
                 VStack(alignment: .leading, spacing: 16) {
-                    
                     header
                         .padding(.bottom, Layout.headerBottomPadding)
                     
@@ -92,28 +60,9 @@ struct ProfileView: View {
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
                     NavigationLink {
-                        ProfileEditView(profile: $profile) { editedProfile in
+                        ProfileEditView(profile: $viewModel.profile) { editedProfile in
                             Task {
-                                let currentProfile = try await services.commonProfileService.fetchProfile()
-                                
-                                let dto = UpdateProfileDTO(
-                                    name: editedProfile.name,
-                                    avatar: editedProfile.photoURL ?? "",
-                                    description: editedProfile.about,
-                                    website: editedProfile.website,
-                                    likes: currentProfile.likes
-                                )
-                                
-                                print("🚀 SENDING UPDATE PROFILE DTO:", dto)
-
-                                do {
-                                    let updated = try await services.commonProfileService.updateProfile(profile: dto)
-                                    currentLikes = updated.likes
-                                    favoriteNFTCount = updated.likes.count
-                                               print("✅ UPDATE SUCCESS, likes:", updated.likes)
-                                } catch {
-                                    errorMessage = profileErrorMessage(from: error)
-                                }
+                                await viewModel.updateProfile(with: editedProfile)
                             }
                         }
                     } label: {
@@ -131,53 +80,45 @@ struct ProfileView: View {
             }
             .sheet(isPresented: $isWebViewPresented) {
                 if let url = websiteURL {
-                    SafariView(url: url).ignoresSafeArea()
+                    SafariView(url: url)
+                        .ignoresSafeArea()
                 } else {
                     Text("Некорректная ссылка")
                         .font(.system(size: 17, weight: .regular))
                         .padding()
-                } 
+                }
             }
             .task {
-                do {
-                    let profileDTO = try await services.commonProfileService.fetchProfile()
-                    currentLikes = profileDTO.likes
-                    favoriteNFTCount = profileDTO.likes.count
-                    myNFTCount = profileDTO.nfts.count
-                } catch {
-                    errorMessage = profileErrorMessage(from: error)
-                }
+                await viewModel.loadProfile()
             }
             .alert(
                 L10n.Alerts.somethingWentWrong,
                 isPresented: Binding(
-                    get: { errorMessage != nil },
-                    set: { if !$0 { errorMessage = nil } }
+                    get: { viewModel.errorMessage != nil },
+                    set: { if !$0 { viewModel.errorMessage = nil } }
                 )
             ) {
                 Button(L10n.Alerts.okay, role: .cancel) {
-                    errorMessage = nil
+                    viewModel.errorMessage = nil
                 }
             } message: {
-                Text(errorMessage ?? "")
+                Text(viewModel.errorMessage ?? "")
             }
-        
         }
     }
     
     private var header: some View {
         VStack(alignment: .leading, spacing: Layout.headerSpacing) {
-            
             HStack(spacing: Layout.headerRowSpacing) {
                 RemoteAvatarView(
                     url: avatarURL,
-                    isRemoved: profile.isPhotoRemoved,
+                    isRemoved: viewModel.profile.isPhotoRemoved,
                     size: Layout.avatarSize,
                     placeholderAssetName: "joaquinPhoenixFoto"
                 )
                 .accessibilityIdentifier("profile.avatar")
                 
-                Text(profile.name)
+                Text(viewModel.profile.name)
                     .font(.system(size: Layout.nameFontSize, weight: .bold))
                     .tracking(Layout.nameTracking)
                     .frame(height: Layout.nameLineHeight, alignment: .leading)
@@ -187,7 +128,7 @@ struct ProfileView: View {
             }
             
             VStack(alignment: .leading, spacing: 8) {
-                Text(profile.about)
+                Text(viewModel.profile.about)
                     .font(.system(size: 13, weight: .regular))
                     .lineSpacing(5)
                     .foregroundStyle(Color(uiColor: .appTextPrimary))
@@ -197,7 +138,7 @@ struct ProfileView: View {
                     NavigationLink {
                         WebViewScreen(url: url)
                     } label: {
-                        Text(profile.website)
+                        Text(viewModel.profile.website)
                             .font(.system(size: 15, weight: .regular))
                             .foregroundStyle(.appBlue)
                     }
@@ -205,7 +146,7 @@ struct ProfileView: View {
                     .padding(.top, 8)
                     .accessibilityIdentifier("profile.websiteButton")
                 } else {
-                    Text(profile.website)
+                    Text(viewModel.profile.website)
                         .font(.system(size: 15, weight: .regular))
                         .foregroundStyle(.appBlue)
                         .opacity(0.5)
@@ -219,10 +160,9 @@ struct ProfileView: View {
     private var navigationRows: some View {
         VStack(spacing: 8) {
             NavigationLink {
-                //                MyNFTsView(nfts: []) проверить пустой экран My NFT
                 MyNFTsView()
             } label: {
-                row(title: L10n.Profile.myNFT, value: myNFTCount)
+                row(title: L10n.Profile.myNFT, value: viewModel.myNFTCount)
             }
             .buttonStyle(.plain)
             .accessibilityIdentifier("profile.myNFTRow")
@@ -231,7 +171,7 @@ struct ProfileView: View {
                 FavoritesNFTView()
                     .toolbar(.hidden, for: .tabBar)
             } label: {
-                row(title: L10n.Profile.favoriteNFT, value: favoriteNFTCount)
+                row(title: L10n.Profile.favoriteNFT, value: viewModel.favoriteNFTCount)
             }
             .buttonStyle(.plain)
             .accessibilityIdentifier("profile.favoriteNFTRow")
@@ -261,8 +201,6 @@ struct ProfileView: View {
         .contentShape(Rectangle())
     }
     
-    // MARK: - URL helper
-    
     private static func makeWebURL(from rawString: String) -> URL? {
         let trimmed = rawString.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !trimmed.isEmpty else { return nil }
@@ -275,15 +213,18 @@ struct ProfileView: View {
         }
         
         guard let url = URL(string: candidate),
-              let scheme = url.scheme, (scheme == "http" || scheme == "https"),
+              let scheme = url.scheme,
+              scheme == "http" || scheme == "https",
               url.host != nil
-        else { return nil }
+        else {
+            return nil
+        }
         
         return url
     }
 }
 
-// MARK: - Avatar (clean + stable)
+// MARK: - Avatar
 
 private struct RemoteAvatarView: View {
     let url: URL?
@@ -302,7 +243,7 @@ private struct RemoteAvatarView: View {
                     .resizable()
                     .scaledToFill()
             } else if loader.isLoading {
-                ProgressView()
+                avatarLoadingPlaceholder
             } else {
                 Image(placeholderAssetName)
                     .resizable()
@@ -331,6 +272,16 @@ private struct RemoteAvatarView: View {
                 .foregroundStyle(.secondary)
         }
     }
+    
+    private var avatarLoadingPlaceholder: some View {
+        ZStack {
+            Circle()
+                .fill(Color(UIColor.systemGray5))
+            
+            LoaderTileView()
+                .scaleEffect(0.55)
+        }
+    }
 }
 
 @MainActor
@@ -341,7 +292,6 @@ private final class AvatarLoader: ObservableObject {
     private static let cache = NSCache<NSString, UIImage>()
     
     func load(url: URL?, isRemoved: Bool) async {
-        // removed -> always clear
         guard !isRemoved else {
             image = nil
             isLoading = false
@@ -368,7 +318,8 @@ private final class AvatarLoader: ObservableObject {
         do {
             let (data, response) = try await URLSession.shared.data(from: url)
             
-            if let http = response as? HTTPURLResponse, !(200...299).contains(http.statusCode) {
+            if let http = response as? HTTPURLResponse,
+               !(200...299).contains(http.statusCode) {
                 image = nil
                 return
             }
@@ -395,9 +346,6 @@ private struct SafariView: UIViewControllerRepresentable {
         SFSafariViewController(url: url)
     }
     
-    func updateUIViewController(_ uiViewController: SFSafariViewController, context: Context) {}
-}
-
-#Preview {
-    ProfileView()
+    func updateUIViewController(_ uiViewController: SFSafariViewController, context: Context) {
+    }
 }

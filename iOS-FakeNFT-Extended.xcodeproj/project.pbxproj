@@ -99,6 +99,7 @@
 		FC37FC052F4902DD009B54F6 /* UserProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC37FC042F4902DB009B54F6 /* UserProfile.swift */; };
 		FC79D1BD2F67630500D06BBA /* UpdateProfileDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC79D1BC2F67630300D06BBA /* UpdateProfileDTO.swift */; };
 		FC79D1BF2F67631E00D06BBA /* CommonPutProfileRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC79D1BE2F67631D00D06BBA /* CommonPutProfileRequest.swift */; };
+		FC8A34342F72A69E0018C29B /* ProfileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC8A34332F72A69C0018C29B /* ProfileViewModel.swift */; };
 		FC9C5F032F413CFE00A32E1D /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC9C5F022F413CED00A32E1D /* ProfileView.swift */; };
 		FCCDBE442F43C38700C96B09 /* ProfileEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCCDBE432F43C38600C96B09 /* ProfileEditView.swift */; };
 /* End PBXBuildFile section */
@@ -214,6 +215,7 @@
 		FC37FC042F4902DB009B54F6 /* UserProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfile.swift; sourceTree = "<group>"; };
 		FC79D1BC2F67630300D06BBA /* UpdateProfileDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateProfileDTO.swift; sourceTree = "<group>"; };
 		FC79D1BE2F67631D00D06BBA /* CommonPutProfileRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommonPutProfileRequest.swift; sourceTree = "<group>"; };
+		FC8A34332F72A69C0018C29B /* ProfileViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewModel.swift; sourceTree = "<group>"; };
 		FC9C5F022F413CED00A32E1D /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
 		FCCDBE432F43C38600C96B09 /* ProfileEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileEditView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -498,6 +500,7 @@
 				FC37FC042F4902DB009B54F6 /* UserProfile.swift */,
 				FC9C5F022F413CED00A32E1D /* ProfileView.swift */,
 				FCCDBE432F43C38600C96B09 /* ProfileEditView.swift */,
+				FC8A34332F72A69C0018C29B /* ProfileViewModel.swift */,
 				FC37FC862F54E1BB009B54F6 /* FavoritesNFT */,
 			);
 			path = Profile;
@@ -826,6 +829,7 @@
 				C2F4FCE32F46F63B00372066 /* AppImageView.swift in Sources */,
 				ABC5E1A62C31F815002B4068 /* NetworkRequest.swift in Sources */,
 				FCCDBE442F43C38700C96B09 /* ProfileEditView.swift in Sources */,
+				FC8A34342F72A69E0018C29B /* ProfileViewModel.swift in Sources */,
 				ABC5E1D52C320446002B4068 /* NftDetailInput.swift in Sources */,
 				ABC5E16E2C31F5AF002B4068 /* ContentView.swift in Sources */,
 				FC37FC052F4902DD009B54F6 /* UserProfile.swift in Sources */,

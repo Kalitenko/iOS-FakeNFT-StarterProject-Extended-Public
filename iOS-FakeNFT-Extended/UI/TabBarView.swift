@@ -25,7 +25,11 @@ struct TabBarView: View {
     
     var body: some View {
         TabView {
-            ProfileView()
+            ProfileView(
+                viewModel: ProfileViewModel(
+                    commonProfileService: services.commonProfileService
+                )
+            )
                 .customBackground(color: .purple)
                 .tabItem {
                     Label {
