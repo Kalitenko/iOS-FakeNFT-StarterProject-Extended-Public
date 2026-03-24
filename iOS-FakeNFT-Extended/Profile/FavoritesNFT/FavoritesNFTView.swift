@@ -132,9 +132,3 @@ struct FavoritesNFTView: View {
         }
     }
 }
-
-#Preview("Favorites Grid") {
-    NavigationStack {
-        FavoritesNFTView()
-    }
-}

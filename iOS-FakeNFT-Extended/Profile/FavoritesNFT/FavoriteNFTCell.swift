@@ -73,37 +73,49 @@ struct FavoriteNFTCell: View {
             AsyncImage(url: imageURL) { phase in
                 switch phase {
                 case .empty:
-                    ProgressView()
-                        .frame(width: Layout.imageSize, height: Layout.imageSize)
+                    loadingPlaceholder
                 case .success(let image):
                     image
                         .resizable()
                         .scaledToFill()
                         .frame(width: Layout.imageSize, height: Layout.imageSize)
                 case .failure:
-                    Color.gray.opacity(0.2)
-                        .frame(width: Layout.imageSize, height: Layout.imageSize)
+                    imagePlaceholder
                 @unknown default:
-                    Color.gray.opacity(0.2)
-                        .frame(width: Layout.imageSize, height: Layout.imageSize)
+                    imagePlaceholder
                 }
             }
             .clipShape(
-                RoundedRectangle(cornerRadius: Layout.imageCornerRadius, style: .continuous)
+                RoundedRectangle(
+                    cornerRadius: Layout.imageCornerRadius,
+                    style: .continuous
+                )
             )
         } else {
-            Color.gray.opacity(0.2)
-                .frame(width: Layout.imageSize, height: Layout.imageSize)
+            imagePlaceholder
                 .clipShape(
-                    RoundedRectangle(cornerRadius: Layout.imageCornerRadius, style: .continuous)
+                    RoundedRectangle(
+                        cornerRadius: Layout.imageCornerRadius,
+                        style: .continuous
+                    )
                 )
         }
     }
+    
+    private var loadingPlaceholder: some View {
+        ProgressView()
+            .frame(width: Layout.imageSize, height: Layout.imageSize)
+    }
+    
+    private var imagePlaceholder: some View {
+        Color.gray.opacity(0.2)
+            .frame(width: Layout.imageSize, height: Layout.imageSize)
+    }
 }
 
-extension Double {
+private extension Double {
     var formattedETH: String {
-        self.formatted(
+        formatted(
             .number
                 .precision(.fractionLength(2))
                 .locale(Locale(identifier: "ru_RU"))

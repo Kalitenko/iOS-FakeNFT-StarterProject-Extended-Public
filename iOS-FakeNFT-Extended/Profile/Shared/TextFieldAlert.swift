@@ -110,8 +110,8 @@ private struct PhotoURLAlertView: View {
                         .textFieldStyle(.plain)
                         .font(.system(size: 17, weight: .regular))
                         .kerning(-0.41)
-                        .foregroundStyle(Color("AppTextPrimary"))
-                        .tint(Color.appBlue) 
+                        .foregroundStyle(.appTextPrimary)
+                        .tint(Color.appBlue)
                         .textInputAutocapitalization(.never)
                         .autocorrectionDisabled()
                         .keyboardType(model.keyboardType)
@@ -143,7 +143,7 @@ private struct PhotoURLAlertView: View {
                             .kerning(-0.41)
                             .frame(maxWidth: .infinity, maxHeight: .infinity)
                     }
-                    .foregroundStyle(Color("AppBlue"))
+                    .foregroundStyle(.appBlue)
 
                     Rectangle()
                         .fill(Color(uiColor: .separator))
@@ -158,7 +158,7 @@ private struct PhotoURLAlertView: View {
                             .kerning(-0.41)
                             .frame(maxWidth: .infinity, maxHeight: .infinity)
                     }
-                    .foregroundStyle(Color("AppBlue"))
+                    .foregroundStyle(.appBlue)
                 }
                 .frame(height: Layout.buttonsHeight)
             }

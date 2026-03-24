@@ -10,20 +10,9 @@ import SwiftUI
 struct WebViewScreen: View {
     let url: URL
 
-    @State private var isLoading = true
-
     var body: some View {
-        WebView(
-            url: url,
-            fallbackURL: nil,
-            isLoading: $isLoading
-        )
-        .toolbar(.hidden, for: .tabBar)
-        .customNavigationBar(title: "Webview")
-        .overlay {
-            if isLoading {
-                ProgressView()
-            }
-        }
+        WebViewComponent(url: url)
+            .toolbar(.hidden, for: .tabBar)
+            .customNavigationBar(title: "Webview")
     }
 }

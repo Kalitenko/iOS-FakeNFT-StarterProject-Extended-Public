@@ -34,6 +34,3 @@ struct FavoritesEmptyView: View {
     }
 }
 
-#Preview {
-    FavoritesEmptyView()
-}

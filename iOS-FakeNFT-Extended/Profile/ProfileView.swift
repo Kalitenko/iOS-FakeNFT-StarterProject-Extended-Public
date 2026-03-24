@@ -199,7 +199,7 @@ struct ProfileView: View {
                     } label: {
                         Text(profile.website)
                             .font(.system(size: 15, weight: .regular))
-                            .foregroundStyle(Color("AppBlue"))
+                            .foregroundStyle(.appBlue)
                     }
                     .buttonStyle(.plain)
                     .padding(.top, 8)
@@ -207,7 +207,7 @@ struct ProfileView: View {
                 } else {
                     Text(profile.website)
                         .font(.system(size: 15, weight: .regular))
-                        .foregroundStyle(Color("AppBlue"))
+                        .foregroundStyle(.appBlue)
                         .opacity(0.5)
                         .padding(.top, 8)
                         .accessibilityIdentifier("profile.websiteButton")

@@ -34,7 +34,11 @@ struct ProfileEditView: View {
     @State private var isPhotoRemoved: Bool
     
     // Keyboard / Focus
-    private enum Field: Hashable { case name, about, website }
+    private enum Field: Hashable {
+        case name
+        case about
+        case website
+    }
     @FocusState private var focusedField: Field?
     @State private var isKeyboardVisible = false
     
@@ -134,9 +138,10 @@ struct ProfileEditView: View {
         let raw = photoURLText.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !raw.isEmpty else { return nil }
         
-        let candidate = (raw.lowercased().hasPrefix("http://") || raw.lowercased().hasPrefix("https://"))
-        ? raw
-        : "https://\(raw)"
+        let candidate =
+            raw.lowercased().hasPrefix("http://") || raw.lowercased().hasPrefix("https://")
+            ? raw
+            : "https://\(raw)"
         
         guard let components = URLComponents(string: candidate) else { return nil }
         
@@ -299,7 +304,7 @@ struct ProfileEditView: View {
                 .zIndex(999)
             }
         }
-    
+        
         .confirmationDialog(
             L10n.Profile.profilePhoto,
             isPresented: $isPhotoMenuPresented,
@@ -324,226 +329,240 @@ struct ProfileEditView: View {
             }
             Button(L10n.Common.cancel, role: .cancel) {}
         }
-    
-        .onTapGesture { focusedField = nil }
+        
+        .onTapGesture {
+            focusedField = nil
+        }
         .photoURLAlert($photoURLAlert)
-    
-        .onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardWillShowNotification)) { _ in
+        
+        .onReceive(
+            NotificationCenter.default.publisher(for: UIResponder.keyboardWillShowNotification)
+        ) { _ in
             isKeyboardVisible = true
         }
-        .onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardWillHideNotification)) { _ in
+        .onReceive(
+            NotificationCenter.default.publisher(for: UIResponder.keyboardWillHideNotification)
+        ) { _ in
             isKeyboardVisible = false
         }
-}
-
-// MARK: - Actions
-
-private func onBackTap() {
-    guard !isSaving else { return }
-    focusedField = nil
+    }
     
-    if hasChanges {
-        isExitAlertPresented = true
-    } else {
-        dismiss()
-    }
-}
-
-private func saveMock() {
-    isSaving = true
+    // MARK: - Actions
     
-    DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
-        profile.name = name
-        profile.about = about
-        profile.website = website.trimmingCharacters(in: .whitespacesAndNewlines)
-        
-        let trimmedPhoto = photoURLText.trimmingCharacters(in: .whitespacesAndNewlines)
-        profile.photoURL = trimmedPhoto.isEmpty ? nil : trimmedPhoto
-        profile.isPhotoRemoved = trimmedPhoto.isEmpty
-        
-        onSave(profile)
-        
-        isSaving = false
-        print("SAVED photoURL:", profile.photoURL ?? "nil", "removed:", profile.isPhotoRemoved)
-        dismiss()
-    }
-}
-
-// MARK: - Subviews
-
-private var avatarBlock: some View {
-    HStack {
-        Spacer()
-        
-        ZStack(alignment: .bottomTrailing) {
-            
-            Group {
-                if isPhotoRemoved {
-                    Circle()
-                        .fill(Color(.systemGray5))
-                        .overlay {
-                            Image(systemName: "person.fill")
-                                .resizable()
-                                .scaledToFit()
-                                .frame(width: 28, height: 28)
-                                .foregroundStyle(.secondary)
-                        }
-                } else if let url = photoURL {
-                    
-                    AsyncImage(url: url) { phase in
-                        switch phase {
-                        case .empty:
-                            ProgressView()
-                                .frame(maxWidth: .infinity, maxHeight: .infinity)
-                            
-                        case .success(let image):
-                            image
-                                .resizable()
-                                .scaledToFill()
-                            
-                        case .failure:
-                            Image("joaquinPhoenixFoto")
-                                .resizable()
-                                .scaledToFill()
-                            
-                        @unknown default:
-                            Image("joaquinPhoenixFoto")
-                                .resizable()
-                                .scaledToFill()
-                        }
-                    }
-                    .id(url.absoluteString)
-                } else {
-                    Image("joaquinPhoenixFoto")
-                        .resizable()
-                        .scaledToFill()
-                }
-            }
-            .frame(width: Layout.avatarSize, height: Layout.avatarSize)
-            .clipShape(Circle())
-            
-            Button {
-                isPhotoMenuPresented = true
-            } label: {
-                ZStack {
-                    Circle()
-                        .fill(Color("AppSurfaceBackground"))
-                        .frame(width: Layout.cameraBadgeSize, height: Layout.cameraBadgeSize)
-                    
-                    Image("profile.camera")
-                        .renderingMode(.template)
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: Layout.cameraIconWidth, height: Layout.cameraIconHeight)
-                        .foregroundStyle(Color.primary)
-                }
-            }
-            .buttonStyle(.plain)
-            .offset(x: 2, y: 2)
-            .accessibilityIdentifier("editProfile.changePhotoButton")
-            .disabled(isSaving)
+    private func onBackTap() {
+        guard !isSaving else {
+            return
         }
+        focusedField = nil
         
-        Spacer()
-    }
-}
-
-private var form: some View {
-    VStack(alignment: .leading, spacing: 0) {
-        
-        sectionTitle(L10n.Profile.name)
-        RoundedField(
-            fieldHeight: Layout.singleLineFieldHeight,
-            contentInsets: Layout.defaultFieldInsets
-        ) {
-            TextField("", text: $name)
-                .editFieldTextStyle()
-                .focused($focusedField, equals: .name)
-                .submitLabel(.next)
-                .onSubmit { focusedField = .about }
-                .accessibilityIdentifier("editProfile.nameField")
+        if hasChanges {
+            isExitAlertPresented = true
+        } else {
+            dismiss()
         }
+    }
+    
+    private func saveMock() {
+        isSaving = true
         
-        Spacer().frame(height: Layout.sectionTopSpacing)
-        
-        sectionTitle(L10n.Profile.description)
-        
-        let aboutInsets = EdgeInsets(
-            top: Layout.defaultFieldInsets.top,
-            leading: Layout.defaultFieldInsets.leading,
-            bottom: Layout.defaultFieldInsets.bottom + (showAboutCounter ? Layout.aboutCounterReservedBottom : 0),
-            trailing: Layout.defaultFieldInsets.trailing
-        )
-        
-        RoundedField(
-            fieldHeight: Layout.aboutFieldHeight,
-            contentInsets: aboutInsets
-        ) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
+            profile.name = name
+            profile.about = about
+            profile.website = website.trimmingCharacters(in: .whitespacesAndNewlines)
+            
+            let trimmedPhoto = photoURLText.trimmingCharacters(in: .whitespacesAndNewlines)
+            
+            if isPhotoRemoved {
+                profile.photoURL = nil
+                profile.isPhotoRemoved = true
+            } else if !trimmedPhoto.isEmpty {
+                profile.photoURL = trimmedPhoto
+                profile.isPhotoRemoved = false
+            }
+            
+            onSave(profile)
+            
+            isSaving = false
+            print("SAVED photoURL:", profile.photoURL ?? "nil", "removed:", profile.isPhotoRemoved)
+            dismiss()
+        }
+    }
+    
+    // MARK: - Subviews
+    
+    private var avatarBlock: some View {
+        HStack {
+            Spacer()
+            
             ZStack(alignment: .bottomTrailing) {
-                TextEditor(text: $about)
-                    .editFieldTextStyle()
-                    .scrollContentBackground(.hidden)
-                    .focused($focusedField, equals: .about)
-                    .accessibilityIdentifier("editProfile.aboutField")
-                    .onChange(of: about) { newValue in
-                        if newValue.count > Layout.aboutMaxCharacters {
-                            about = String(newValue.prefix(Layout.aboutMaxCharacters))
-                        }
-                    }
                 
-                if showAboutCounter {
-                    Text("\(about.count)/\(Layout.aboutMaxCharacters)")
-                        .font(.system(size: 13, weight: .regular))
-                        .foregroundStyle(about.count >= Layout.aboutMaxCharacters ? .red : .secondary)
-                        .padding(.trailing, 4)
-                        .padding(.bottom, 2)
-                        .accessibilityIdentifier("editProfile.aboutCounter")
-                        .transition(.opacity)
+                Group {
+                    if isPhotoRemoved {
+                        Circle()
+                            .fill(Color(.systemGray5))
+                            .overlay {
+                                Image(systemName: "person.fill")
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(width: 28, height: 28)
+                                    .foregroundStyle(.secondary)
+                            }
+                    } else if let url = photoURL {
+                        
+                        AsyncImage(url: url) { phase in
+                            switch phase {
+                            case .empty:
+                                ProgressView()
+                                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                                
+                            case .success(let image):
+                                image
+                                    .resizable()
+                                    .scaledToFill()
+                                
+                            case .failure:
+                                Image("joaquinPhoenixFoto")
+                                    .resizable()
+                                    .scaledToFill()
+                                
+                            @unknown default:
+                                Image("joaquinPhoenixFoto")
+                                    .resizable()
+                                    .scaledToFill()
+                            }
+                        }
+                        .id(url.absoluteString)
+                    } else {
+                        Image("joaquinPhoenixFoto")
+                            .resizable()
+                            .scaledToFill()
+                    }
                 }
+                .frame(width: Layout.avatarSize, height: Layout.avatarSize)
+                .clipShape(Circle())
+                
+                Button {
+                    isPhotoMenuPresented = true
+                } label: {
+                    ZStack {
+                        Circle()
+                            .fill(Color("AppSurfaceBackground"))
+                            .frame(width: Layout.cameraBadgeSize, height: Layout.cameraBadgeSize)
+                        
+                        Image("profile.camera")
+                            .renderingMode(.template)
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: Layout.cameraIconWidth, height: Layout.cameraIconHeight)
+                            .foregroundStyle(Color.primary)
+                    }
+                }
+                .buttonStyle(.plain)
+                .offset(x: 2, y: 2)
+                .accessibilityIdentifier("editProfile.changePhotoButton")
+                .disabled(isSaving)
             }
-            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
-        }
-        
-        Spacer().frame(height: Layout.sectionTopSpacing)
-        
-        sectionTitle(L10n.Profile.website)
-        RoundedField(
-            isError: websiteErrorText != nil,
-            helperText: websiteErrorText,
-            shake: websiteShake,
-            fieldHeight: Layout.singleLineFieldHeight,
-            contentInsets: Layout.defaultFieldInsets
-        ) {
-            TextField("", text: $website)
-                .editFieldTextStyle()
-                .keyboardType(.URL)
-                .textInputAutocapitalization(.never)
-                .autocorrectionDisabled()
-                .focused($focusedField, equals: .website)
-                .submitLabel(.done)
-                .onSubmit { focusedField = nil }
-                .accessibilityIdentifier("editProfile.websiteField")
-                .onChange(of: website) { newValue in
-                    if newValue.count > Layout.websiteMaxLength {
-                        website = String(newValue.prefix(Layout.websiteMaxLength))
-                    }
-                    if showWebsiteError {
-                        showWebsiteError = true
-                    }
-                }
+            
+            Spacer()
         }
     }
-}
-
-private func sectionTitle(_ text: String) -> some View {
-    Text(text)
-        .font(.system(size: 22, weight: .bold))
-        .kerning(0.35)
-        .lineSpacing(0)
-        .frame(height: 28, alignment: .leading)
-        .foregroundStyle(Color(uiColor: .appTextPrimary))
-        .padding(.bottom, Layout.sectionSpacing)
-}
+    
+    private var form: some View {
+        VStack(alignment: .leading, spacing: 0) {
+            
+            sectionTitle(L10n.Profile.name)
+            RoundedField(
+                fieldHeight: Layout.singleLineFieldHeight,
+                contentInsets: Layout.defaultFieldInsets
+            ) {
+                TextField("", text: $name)
+                    .editFieldTextStyle()
+                    .focused($focusedField, equals: .name)
+                    .submitLabel(.next)
+                    .onSubmit { focusedField = .about }
+                    .accessibilityIdentifier("editProfile.nameField")
+            }
+            
+            Spacer().frame(height: Layout.sectionTopSpacing)
+            
+            sectionTitle(L10n.Profile.description)
+            
+            let aboutInsets = EdgeInsets(
+                top: Layout.defaultFieldInsets.top,
+                leading: Layout.defaultFieldInsets.leading,
+                bottom: Layout.defaultFieldInsets.bottom + (showAboutCounter ? Layout.aboutCounterReservedBottom : 0),
+                trailing: Layout.defaultFieldInsets.trailing
+            )
+            
+            RoundedField(
+                fieldHeight: Layout.aboutFieldHeight,
+                contentInsets: aboutInsets
+            ) {
+                ZStack(alignment: .bottomTrailing) {
+                    TextEditor(text: $about)
+                        .editFieldTextStyle()
+                        .scrollContentBackground(.hidden)
+                        .focused($focusedField, equals: .about)
+                        .accessibilityIdentifier("editProfile.aboutField")
+                        .onChange(of: about) { newValue in
+                            if newValue.count > Layout.aboutMaxCharacters {
+                                about = String(newValue.prefix(Layout.aboutMaxCharacters))
+                            }
+                        }
+                    
+                    if showAboutCounter {
+                        Text("\(about.count)/\(Layout.aboutMaxCharacters)")
+                            .font(.system(size: 13, weight: .regular))
+                            .foregroundStyle(about.count >= Layout.aboutMaxCharacters ? .red : .secondary)
+                            .padding(.trailing, 4)
+                            .padding(.bottom, 2)
+                            .accessibilityIdentifier("editProfile.aboutCounter")
+                            .transition(.opacity)
+                    }
+                }
+                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+            }
+            
+            Spacer().frame(height: Layout.sectionTopSpacing)
+            
+            sectionTitle(L10n.Profile.website)
+            RoundedField(
+                isError: websiteErrorText != nil,
+                helperText: websiteErrorText,
+                shake: websiteShake,
+                fieldHeight: Layout.singleLineFieldHeight,
+                contentInsets: Layout.defaultFieldInsets
+            ) {
+                TextField("", text: $website)
+                    .editFieldTextStyle()
+                    .keyboardType(.URL)
+                    .textInputAutocapitalization(.never)
+                    .autocorrectionDisabled()
+                    .focused($focusedField, equals: .website)
+                    .submitLabel(.done)
+                    .onSubmit { focusedField = nil }
+                    .accessibilityIdentifier("editProfile.websiteField")
+                    .onChange(of: website) { newValue in
+                        if newValue.count > Layout.websiteMaxLength {
+                            website = String(newValue.prefix(Layout.websiteMaxLength))
+                        }
+                        if showWebsiteError {
+                            showWebsiteError = true
+                        }
+                    }
+            }
+        }
+    }
+    
+    private func sectionTitle(_ text: String) -> some View {
+        Text(text)
+            .font(.system(size: 22, weight: .bold))
+            .kerning(0.35)
+            .lineSpacing(0)
+            .frame(height: 28, alignment: .leading)
+            .foregroundStyle(Color(uiColor: .appTextPrimary))
+            .padding(.bottom, Layout.sectionSpacing)
+    }
 }
 
 // MARK: - Text style helper
@@ -572,7 +591,12 @@ private struct RoundedField<Content: View>: View {
         helperText: String? = nil,
         shake: CGFloat = 0,
         fieldHeight: CGFloat? = nil,
-        contentInsets: EdgeInsets = EdgeInsets(top: 11, leading: 16, bottom: 11, trailing: 16),
+        contentInsets: EdgeInsets = EdgeInsets(
+            top: 11,
+            leading: 16,
+            bottom: 11,
+            trailing: 16
+        ),
         @ViewBuilder content: () -> Content
     ) {
         self.isError = isError
@@ -655,7 +679,7 @@ private struct ExitConfirmOverlay: View {
                             .font(.system(size: 17, weight: .regular))
                             .frame(maxWidth: .infinity, maxHeight: .infinity)
                     }
-                    .foregroundStyle(Color("AppBlue"))
+                    .foregroundStyle(.appBlue)
                     
                     Rectangle()
                         .fill(Color(uiColor: .separator))
@@ -666,16 +690,18 @@ private struct ExitConfirmOverlay: View {
                             .font(.system(size: 17, weight: .semibold))
                             .frame(maxWidth: .infinity, maxHeight: .infinity)
                     }
-                    .foregroundStyle(Color("AppBlue"))
+                    .foregroundStyle(.appBlue)
                 }
                 .frame(height: Layout.buttonHeight)
             }
             .frame(width: Layout.width, height: Layout.height)
-            .background(Color("AppAlertBackground"))
+            .background(.appAlertBackground)
             .clipShape(RoundedRectangle(cornerRadius: Layout.cornerRadius, style: .continuous))
             .shadow(color: Color.black.opacity(0.15), radius: 20, x: 0, y: 10)
         }
-        .onTapGesture { onStay() }
+        .onTapGesture {
+            onStay()
+        }
     }
 }
 
