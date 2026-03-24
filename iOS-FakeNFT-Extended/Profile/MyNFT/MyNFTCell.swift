@@ -14,7 +14,7 @@ struct MyNFTCell: View {
         static let heartSize: CGFloat = 42
         
         static let contentWidth: CGFloat = 320
-        static let priceBlockWidth: CGFloat = 75
+        static let priceBlockWidth: CGFloat = 95
         
         static let titleHeight: CGFloat = 22
         static let authorHeight: CGFloat = 20

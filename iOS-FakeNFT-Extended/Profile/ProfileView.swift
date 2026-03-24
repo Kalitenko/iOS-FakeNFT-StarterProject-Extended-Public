@@ -10,6 +10,7 @@ import SafariServices
 
 struct ProfileView: View {
     
+    @Environment(ServicesAssembly.self) private var services
     @State private var viewModel: ProfileViewModel
     @State private var isWebViewPresented = false
     
@@ -160,7 +161,12 @@ struct ProfileView: View {
     private var navigationRows: some View {
         VStack(spacing: 8) {
             NavigationLink {
-                MyNFTsView()
+                MyNFTsView(
+                    viewModel: MyNFTsViewModel(
+                        commonProfileService: services.commonProfileService,
+                        nftService: services.nftService
+                    )
+                )
             } label: {
                 row(title: L10n.Profile.myNFT, value: viewModel.myNFTCount)
             }
@@ -168,8 +174,13 @@ struct ProfileView: View {
             .accessibilityIdentifier("profile.myNFTRow")
             
             NavigationLink {
-                FavoritesNFTView()
-                    .toolbar(.hidden, for: .tabBar)
+                FavoritesNFTView(
+                    viewModel: FavoritesNFTViewModel(
+                        commonProfileService: services.commonProfileService,
+                        nftService: services.nftService
+                    )
+                )
+                .toolbar(.hidden, for: .tabBar)
             } label: {
                 row(title: L10n.Profile.favoriteNFT, value: viewModel.favoriteNFTCount)
             }
