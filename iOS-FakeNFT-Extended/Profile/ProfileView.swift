@@ -164,7 +164,8 @@ struct ProfileView: View {
                 MyNFTsView(
                     viewModel: MyNFTsViewModel(
                         commonProfileService: services.commonProfileService,
-                        nftService: services.nftService
+                        nftService: services.nftService,
+                        likesStore: services.likesStore
                     )
                 )
             } label: {
@@ -176,8 +177,8 @@ struct ProfileView: View {
             NavigationLink {
                 FavoritesNFTView(
                     viewModel: FavoritesNFTViewModel(
-                        commonProfileService: services.commonProfileService,
-                        nftService: services.nftService
+                        nftService: services.nftService,
+                        likesStore: services.likesStore
                     )
                 )
                 .toolbar(.hidden, for: .tabBar)

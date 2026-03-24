@@ -34,13 +34,16 @@ final class MyNFTsViewModel {
     
     private let commonProfileService: CommonProfileServiceProtocol
     private let nftService: NftService
+    private let likesStore: LikesStore
     
     init(
         commonProfileService: CommonProfileServiceProtocol,
-        nftService: NftService
+        nftService: NftService,
+        likesStore: LikesStore
     ) {
         self.commonProfileService = commonProfileService
         self.nftService = nftService
+        self.likesStore = likesStore
         
         let savedSort = UserDefaults.standard.string(forKey: Constants.sortKey)
         self.sort = Sort(rawValue: savedSort ?? "") ?? .name
@@ -63,12 +66,17 @@ final class MyNFTsViewModel {
         !isLoading && sortedNfts.isEmpty
     }
     
+    func isLiked(_ id: String) -> Bool {
+        likesStore.contains(id)
+    }
+    
     func loadMyNFTs() async {
         isLoading = true
         defer { isLoading = false }
         
         do {
             let profile = try await commonProfileService.fetchProfile()
+            await likesStore.loadLikes()
             
             let items = try await withThrowingTaskGroup(of: NftDTOCart.self) { group in
                 for id in profile.nfts {
@@ -85,7 +93,10 @@ final class MyNFTsViewModel {
             }
             
             nfts = items
-            errorMessage = nil
+            errorMessage = likesStore.errorMessage
+            if errorMessage == nil {
+                errorMessage = nil
+            }
         } catch let error as URLError where error.code == .cancelled {
             return
         } catch {

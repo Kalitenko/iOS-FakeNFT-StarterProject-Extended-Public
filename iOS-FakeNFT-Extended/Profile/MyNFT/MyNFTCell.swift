@@ -122,7 +122,6 @@ private extension Double {
         formatted(
             .number
                 .precision(.fractionLength(2))
-                .locale(Locale(identifier: "ru_RU"))
         )
     }
 }

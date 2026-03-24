@@ -1,10 +1,3 @@
-//
-//  FavoritesNFTViewModel.swift
-//  iOS-FakeNFT-Extended
-//
-//  Created by Andrei  Boyarko on 24/03/2026.
-//
-
 import Foundation
 import Observation
 
@@ -13,19 +6,18 @@ import Observation
 final class FavoritesNFTViewModel {
     
     var favorites: [NftDTOCart] = []
-    var currentLikes: [String] = []
     var isLoading = false
     var errorMessage: String?
     
-    private let commonProfileService: CommonProfileServiceProtocol
     private let nftService: NftService
+    private let likesStore: LikesStore
     
     init(
-        commonProfileService: CommonProfileServiceProtocol,
-        nftService: NftService
+        nftService: NftService,
+        likesStore: LikesStore
     ) {
-        self.commonProfileService = commonProfileService
         self.nftService = nftService
+        self.likesStore = likesStore
     }
     
     var isEmpty: Bool {
@@ -36,12 +28,17 @@ final class FavoritesNFTViewModel {
         isLoading = true
         defer { isLoading = false }
         
+        await likesStore.loadLikes()
+        
+        if let storeError = likesStore.errorMessage {
+            errorMessage = storeError
+            favorites = []
+            return
+        }
+        
         do {
-            let profile = try await commonProfileService.fetchProfile()
-            currentLikes = profile.likes
-            
             let items = try await withThrowingTaskGroup(of: NftDTOCart.self) { group in
-                for id in profile.likes {
+                for id in likesStore.likes {
                     group.addTask {
                         try await self.nftService.loadNft(id: id)
                     }
@@ -63,7 +60,11 @@ final class FavoritesNFTViewModel {
         }
     }
     
-    func removeLike(for nft: NftDTOCart) async {
+    func isLiked(_ id: String) -> Bool {
+        likesStore.contains(id)
+    }
+
+    func toggleLike(for nft: NftDTOCart) async {
         guard !isLoading else {
             return
         }
@@ -71,17 +72,13 @@ final class FavoritesNFTViewModel {
         isLoading = true
         defer { isLoading = false }
         
-        let updatedLikes = currentLikes.filter { $0 != nft.id }
+        await likesStore.toggleLike(id: nft.id)
         
-        do {
-            let updatedProfile = try await commonProfileService.updateLikes(likes: updatedLikes)
-            currentLikes = updatedProfile.likes
-            favorites.removeAll { $0.id == nft.id }
-            errorMessage = nil
-        } catch let error as URLError where error.code == .cancelled {
+        if let storeError = likesStore.errorMessage {
+            errorMessage = storeError
             return
-        } catch {
-            errorMessage = L10n.Alerts.somethingWentWrong
         }
+        
+        errorMessage = nil
     }
 }

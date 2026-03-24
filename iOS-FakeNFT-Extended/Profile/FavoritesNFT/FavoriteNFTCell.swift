@@ -10,7 +10,8 @@ import SwiftUI
 struct FavoriteNFTCell: View {
     
     let nft: NftDTOCart
-    let onRemove: () -> Void
+    let isFavorite: Bool
+    let onLikeTap: () -> Void
     
     private enum Layout {
         static let imageSize: CGFloat = 80
@@ -29,12 +30,11 @@ struct FavoriteNFTCell: View {
     
     var body: some View {
         HStack(alignment: .top, spacing: Layout.horizontalSpacing) {
-            
             ZStack(alignment: .topTrailing) {
                 nftImage
                 
-                Button(action: onRemove) {
-                    Image(.favoritesActive)
+                Button(action: onLikeTap) {
+                    Image(isFavorite ? .favoritesActive : .favoritesInactive)
                         .renderingMode(.original)
                         .resizable()
                         .scaledToFit()

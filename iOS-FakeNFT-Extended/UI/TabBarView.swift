@@ -27,7 +27,8 @@ struct TabBarView: View {
         TabView {
             ProfileView(
                 viewModel: ProfileViewModel(
-                    commonProfileService: services.commonProfileService
+                    commonProfileService: services.commonProfileService,
+                    likesStore: services.likesStore
                 )
             )
                 .customBackground(color: .purple)

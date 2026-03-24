@@ -12,10 +12,6 @@ import Observation
 @MainActor
 final class ProfileViewModel {
     
-    
-    // Временное локальное состояние профиля.
-    // Счётчики и likes приходят с сервера, поля профиля будут переведены на серверные данные
-    // после расширения модели CommonProfileDTO.
     var profile = UserProfile(
         name: "Joaquin Phoenix",
         about: "Дизайнер из Казани, люблю цифровое искусство и бейглы. В моей коллекции уже 100+ NFT, и еще больше — на моём сайте. Открыт к коллаборациям.",
@@ -24,24 +20,33 @@ final class ProfileViewModel {
         isPhotoRemoved: false
     )
     
-    var currentLikes: [String] = []
     var myNFTCount = 0
     var favoriteNFTCount = 0
     var errorMessage: String?
     
     private let commonProfileService: CommonProfileServiceProtocol
+    private let likesStore: LikesStore
     
-    init(commonProfileService: CommonProfileServiceProtocol) {
+    init(
+        commonProfileService: CommonProfileServiceProtocol,
+        likesStore: LikesStore
+    ) {
         self.commonProfileService = commonProfileService
+        self.likesStore = likesStore
     }
     
     func loadProfile() async {
         do {
             let profileDTO = try await commonProfileService.fetchProfile()
-            currentLikes = profileDTO.likes
-            favoriteNFTCount = profileDTO.likes.count
             myNFTCount = profileDTO.nfts.count
-            errorMessage = nil
+            
+            await likesStore.loadLikes()
+            favoriteNFTCount = likesStore.likes.count
+            
+            errorMessage = likesStore.errorMessage
+            if errorMessage == nil {
+                errorMessage = nil
+            }
         } catch {
             errorMessage = profileErrorMessage(from: error)
         }
@@ -49,20 +54,18 @@ final class ProfileViewModel {
     
     func updateProfile(with editedProfile: UserProfile) async {
         do {
-            let currentProfile = try await commonProfileService.fetchProfile()
-
             let dto = UpdateProfileDTO(
                 name: editedProfile.name,
                 avatar: editedProfile.photoURL ?? "",
                 description: editedProfile.about,
                 website: editedProfile.website,
-                likes: currentProfile.likes
+                likes: likesStore.likes
             )
-
+            
             let updated = try await commonProfileService.updateProfile(profile: dto)
-
+            
             profile = editedProfile
-            currentLikes = updated.likes
+            likesStore.likes = updated.likes
             favoriteNFTCount = updated.likes.count
             errorMessage = nil
         } catch {

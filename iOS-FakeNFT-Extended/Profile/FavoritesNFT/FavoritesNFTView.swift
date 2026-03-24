@@ -44,9 +44,12 @@ struct FavoritesNFTView: View {
                         spacing: Layout.rowsSpacing
                     ) {
                         ForEach(viewModel.favorites, id: \.id) { nft in
-                            FavoriteNFTCell(nft: nft) {
+                            FavoriteNFTCell(
+                                nft: nft,
+                                isFavorite: viewModel.isLiked(nft.id)
+                            ) {
                                 Task {
-                                    await viewModel.removeLike(for: nft)
+                                    await viewModel.toggleLike(for: nft)
                                 }
                             }
                         }
