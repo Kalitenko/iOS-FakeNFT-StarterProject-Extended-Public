@@ -26,7 +26,7 @@ final class LikesStore {
             let profile = try await commonProfileService.fetchProfile()
             likes = profile.likes
             errorMessage = nil
-        } catch let error as URLError where error.code == .cancelled {
+        } catch let error where error.isCancelled {
             return
         } catch {
             errorMessage = L10n.Alerts.dataLoadFailed
@@ -46,7 +46,7 @@ final class LikesStore {
             let updatedProfile = try await commonProfileService.updateLikes(likes: updatedLikes)
             likes = updatedProfile.likes
             errorMessage = nil
-        } catch let error as URLError where error.code == .cancelled {
+        } catch let error where error.isCancelled {
             return
         } catch {
             errorMessage = L10n.Alerts.somethingWentWrong

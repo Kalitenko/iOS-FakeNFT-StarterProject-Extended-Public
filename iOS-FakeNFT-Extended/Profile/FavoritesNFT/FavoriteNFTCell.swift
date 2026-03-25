@@ -38,7 +38,10 @@ struct FavoriteNFTCell: View {
                         .renderingMode(.original)
                         .resizable()
                         .scaledToFit()
-                        .frame(width: Layout.heartContainerSize, height: Layout.heartContainerSize)
+                        .frame(
+                            width: Layout.heartContainerSize,
+                            height: Layout.heartContainerSize
+                        )
                         .contentShape(Rectangle())
                 }
                 .buttonStyle(.plain)
@@ -67,49 +70,12 @@ struct FavoriteNFTCell: View {
         }
     }
     
-    @ViewBuilder
     private var nftImage: some View {
-        if let imageURL = nft.images.first {
-            AsyncImage(url: imageURL) { phase in
-                switch phase {
-                case .empty:
-                    loadingPlaceholder
-                case .success(let image):
-                    image
-                        .resizable()
-                        .scaledToFill()
-                        .frame(width: Layout.imageSize, height: Layout.imageSize)
-                case .failure:
-                    imagePlaceholder
-                @unknown default:
-                    imagePlaceholder
-                }
-            }
-            .clipShape(
-                RoundedRectangle(
-                    cornerRadius: Layout.imageCornerRadius,
-                    style: .continuous
-                )
-            )
-        } else {
-            imagePlaceholder
-                .clipShape(
-                    RoundedRectangle(
-                        cornerRadius: Layout.imageCornerRadius,
-                        style: .continuous
-                    )
-                )
-        }
-    }
-    
-    private var loadingPlaceholder: some View {
-        ProgressView()
-            .frame(width: Layout.imageSize, height: Layout.imageSize)
-    }
-    
-    private var imagePlaceholder: some View {
-        Color.gray.opacity(0.2)
-            .frame(width: Layout.imageSize, height: Layout.imageSize)
+        NftPreviewImageView(
+            imageURL: nft.images.first,
+            size: Layout.imageSize,
+            cornerRadius: Layout.imageCornerRadius
+        )
     }
 }
 
@@ -118,7 +84,6 @@ private extension Double {
         formatted(
             .number
                 .precision(.fractionLength(2))
-                .locale(Locale(identifier: "ru_RU"))
         )
     }
 }

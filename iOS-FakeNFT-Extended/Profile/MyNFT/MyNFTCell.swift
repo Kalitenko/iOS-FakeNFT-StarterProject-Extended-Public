@@ -26,7 +26,7 @@ struct MyNFTCell: View {
             HStack(spacing: Layout.spacing) {
                 nftImage
                     .overlay(alignment: .topTrailing) {
-                        Image("favorites.inactive")
+                        Image(.favoritesInactive)
                             .resizable()
                             .scaledToFit()
                             .foregroundStyle(.appWhite)
@@ -73,37 +73,11 @@ struct MyNFTCell: View {
     
     @ViewBuilder
     private var nftImage: some View {
-        if let imageURL = nft.images.first {
-            AsyncImage(url: imageURL) { phase in
-                switch phase {
-                case .empty:
-                    loadingPlaceholder
-                case .success(let image):
-                    image
-                        .resizable()
-                        .scaledToFill()
-                        .frame(width: Layout.imageSize, height: Layout.imageSize)
-                case .failure:
-                    imagePlaceholder
-                @unknown default:
-                    imagePlaceholder
-                }
-            }
-            .clipShape(
-                RoundedRectangle(
-                    cornerRadius: Layout.imageCornerRadius,
-                    style: .continuous
-                )
-            )
-        } else {
-            imagePlaceholder
-                .clipShape(
-                    RoundedRectangle(
-                        cornerRadius: Layout.imageCornerRadius,
-                        style: .continuous
-                    )
-                )
-        }
+        NftPreviewImageView(
+            imageURL: nft.images.first,
+            size: Layout.imageSize,
+            cornerRadius: Layout.imageCornerRadius
+        )
     }
     
     private var loadingPlaceholder: some View {
