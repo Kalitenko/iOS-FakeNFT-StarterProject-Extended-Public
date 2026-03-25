@@ -10,6 +10,8 @@ import SafariServices
 
 struct ProfileView: View {
     
+    @Environment(ServicesAssembly.self) private var services
+    
     @State private var isWebViewPresented = false
     
     @State private var profile = UserProfile(
@@ -20,8 +22,12 @@ struct ProfileView: View {
         isPhotoRemoved: false
     )
     
-    private let myNFTCount = 112
-    private let favoriteNFTCount = 11
+    @State private var currentLikes: [String] = []
+    
+    @State private var errorMessage: String?
+        
+    @State private var myNFTCount = 0
+    @State private var favoriteNFTCount = 0
     
     private enum Layout {
         static let screenPadding: CGFloat = 16
@@ -35,6 +41,25 @@ struct ProfileView: View {
         static let headerSpacing: CGFloat = 20
         static let headerBottomPadding: CGFloat = 40
         static let headerRowSpacing: CGFloat = 12
+    }
+    
+    private func profileErrorMessage(from error: Error) -> String? {
+        if let urlError = error as? URLError {
+            switch urlError.code {
+            case .cancelled:
+                return nil
+            case .notConnectedToInternet, .timedOut:
+                return L10n.Alerts.dataLoadFailed
+            default:
+                return L10n.Alerts.somethingWentWrong
+            }
+        }
+
+        if error is DecodingError {
+            return L10n.Alerts.dataLoadFailed
+        }
+
+        return L10n.Alerts.somethingWentWrong
     }
     
     private var websiteURL: URL? {
@@ -67,7 +92,30 @@ struct ProfileView: View {
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
                     NavigationLink {
-                        ProfileEditView(profile: $profile)
+                        ProfileEditView(profile: $profile) { editedProfile in
+                            Task {
+                                let currentProfile = try await services.commonProfileService.fetchProfile()
+                                
+                                let dto = UpdateProfileDTO(
+                                    name: editedProfile.name,
+                                    avatar: editedProfile.photoURL ?? "",
+                                    description: editedProfile.about,
+                                    website: editedProfile.website,
+                                    likes: currentProfile.likes
+                                )
+                                
+                                print("🚀 SENDING UPDATE PROFILE DTO:", dto)
+
+                                do {
+                                    let updated = try await services.commonProfileService.updateProfile(profile: dto)
+                                    currentLikes = updated.likes
+                                    favoriteNFTCount = updated.likes.count
+                                               print("✅ UPDATE SUCCESS, likes:", updated.likes)
+                                } catch {
+                                    errorMessage = profileErrorMessage(from: error)
+                                }
+                            }
+                        }
                     } label: {
                         Image("edit")
                             .renderingMode(.template)
@@ -88,8 +136,32 @@ struct ProfileView: View {
                     Text("Некорректная ссылка")
                         .font(.system(size: 17, weight: .regular))
                         .padding()
+                } 
+            }
+            .task {
+                do {
+                    let profileDTO = try await services.commonProfileService.fetchProfile()
+                    currentLikes = profileDTO.likes
+                    favoriteNFTCount = profileDTO.likes.count
+                    myNFTCount = profileDTO.nfts.count
+                } catch {
+                    errorMessage = profileErrorMessage(from: error)
                 }
             }
+            .alert(
+                L10n.Alerts.somethingWentWrong,
+                isPresented: Binding(
+                    get: { errorMessage != nil },
+                    set: { if !$0 { errorMessage = nil } }
+                )
+            ) {
+                Button(L10n.Alerts.okay, role: .cancel) {
+                    errorMessage = nil
+                }
+            } message: {
+                Text(errorMessage ?? "")
+            }
+        
         }
     }
     
@@ -127,7 +199,7 @@ struct ProfileView: View {
                     } label: {
                         Text(profile.website)
                             .font(.system(size: 15, weight: .regular))
-                            .foregroundStyle(Color("AppBlue"))
+                            .foregroundStyle(.appBlue)
                     }
                     .buttonStyle(.plain)
                     .padding(.top, 8)
@@ -135,7 +207,7 @@ struct ProfileView: View {
                 } else {
                     Text(profile.website)
                         .font(.system(size: 15, weight: .regular))
-                        .foregroundStyle(Color("AppBlue"))
+                        .foregroundStyle(.appBlue)
                         .opacity(0.5)
                         .padding(.top, 8)
                         .accessibilityIdentifier("profile.websiteButton")
@@ -148,7 +220,7 @@ struct ProfileView: View {
         VStack(spacing: 8) {
             NavigationLink {
                 //                MyNFTsView(nfts: []) проверить пустой экран My NFT
-                MyNFTsView(nfts: NFTMock.sampleFavoritesNFTs)
+                MyNFTsView()
             } label: {
                 row(title: L10n.Profile.myNFT, value: myNFTCount)
             }

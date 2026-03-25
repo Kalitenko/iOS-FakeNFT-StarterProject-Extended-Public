@@ -9,26 +9,19 @@ import SwiftUI
 
 struct FavoriteNFTCell: View {
     
-    let nft: NFTMock
+    let nft: NftDTOCart
     let onRemove: () -> Void
     
     private enum Layout {
-        
         static let imageSize: CGFloat = 80
         static let imageCornerRadius: CGFloat = 12
-        
         static let heartContainerSize: CGFloat = 42
-        
         static let heartOuterInset: CGFloat = -5
-        
         static let horizontalSpacing: CGFloat = 12
         static let verticalSpacing: CGFloat = 6
-        
         static let rightBlockTopPadding: CGFloat = 7
-        
         static let titleFontSize: CGFloat = 17
         static let titleLineHeight: CGFloat = 22
-        
         static let priceFontSize: CGFloat = 15
         static let priceLineHeight: CGFloat = 20
         static let priceKerning: CGFloat = -0.24
@@ -37,29 +30,23 @@ struct FavoriteNFTCell: View {
     var body: some View {
         HStack(alignment: .top, spacing: Layout.horizontalSpacing) {
             
-            Image(nft.imageName)
-                .resizable()
-                .scaledToFill()
-                .frame(width: Layout.imageSize, height: Layout.imageSize)
-                .clipShape(
-                    RoundedRectangle(cornerRadius: Layout.imageCornerRadius, style: .continuous)
-                )
-                .overlay(alignment: .topTrailing) {
-                    Button(action: onRemove) {
-                        Image(.favoritesActive)
-                            .renderingMode(.original)
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: Layout.heartContainerSize, height: Layout.heartContainerSize)
-                            .contentShape(Rectangle())
-                    }
-                    .buttonStyle(.plain)
-                    .padding(.top, Layout.heartOuterInset)
-                    .padding(.trailing, Layout.heartOuterInset)
+            ZStack(alignment: .topTrailing) {
+                nftImage
+                
+                Button(action: onRemove) {
+                    Image(.favoritesActive)
+                        .renderingMode(.original)
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: Layout.heartContainerSize, height: Layout.heartContainerSize)
+                        .contentShape(Rectangle())
                 }
+                .buttonStyle(.plain)
+                .padding(.top, Layout.heartOuterInset)
+                .padding(.trailing, Layout.heartOuterInset)
+            }
             
             VStack(alignment: .leading, spacing: Layout.verticalSpacing) {
-                
                 Text(nft.name)
                     .font(.system(size: Layout.titleFontSize, weight: .bold))
                     .foregroundStyle(Color(uiColor: .appTextPrimary))
@@ -67,7 +54,7 @@ struct FavoriteNFTCell: View {
                 
                 StarRatingView(rating: nft.rating)
                 
-                Text("\(nft.priceFormattedRu) ETH")
+                Text("\(nft.price.formattedETH) ETH")
                     .font(.system(size: Layout.priceFontSize, weight: .regular))
                     .kerning(Layout.priceKerning)
                     .foregroundStyle(Color(uiColor: .appTextPrimary))
@@ -79,9 +66,59 @@ struct FavoriteNFTCell: View {
             Spacer(minLength: 0)
         }
     }
+    
+    @ViewBuilder
+    private var nftImage: some View {
+        if let imageURL = nft.images.first {
+            AsyncImage(url: imageURL) { phase in
+                switch phase {
+                case .empty:
+                    loadingPlaceholder
+                case .success(let image):
+                    image
+                        .resizable()
+                        .scaledToFill()
+                        .frame(width: Layout.imageSize, height: Layout.imageSize)
+                case .failure:
+                    imagePlaceholder
+                @unknown default:
+                    imagePlaceholder
+                }
+            }
+            .clipShape(
+                RoundedRectangle(
+                    cornerRadius: Layout.imageCornerRadius,
+                    style: .continuous
+                )
+            )
+        } else {
+            imagePlaceholder
+                .clipShape(
+                    RoundedRectangle(
+                        cornerRadius: Layout.imageCornerRadius,
+                        style: .continuous
+                    )
+                )
+        }
+    }
+    
+    private var loadingPlaceholder: some View {
+        ProgressView()
+            .frame(width: Layout.imageSize, height: Layout.imageSize)
+    }
+    
+    private var imagePlaceholder: some View {
+        Color.gray.opacity(0.2)
+            .frame(width: Layout.imageSize, height: Layout.imageSize)
+    }
 }
 
-#Preview("Favorite cell") {
-    FavoriteNFTCell(nft: NFTMock.sampleFavoritesNFTs.first!) { }
-        .padding()
+private extension Double {
+    var formattedETH: String {
+        formatted(
+            .number
+                .precision(.fractionLength(2))
+                .locale(Locale(identifier: "ru_RU"))
+        )
+    }
 }
