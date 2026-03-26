@@ -159,7 +159,7 @@ struct ProfileEditView: View {
     }
     
     private enum WebsiteState: Equatable {
-        case ok
+        case valid
         case invalid(String)
     }
     
@@ -169,7 +169,7 @@ struct ProfileEditView: View {
     
     private var websiteState: WebsiteState {
         let raw = normalizedWebsiteForValidation
-        guard !raw.isEmpty else { return .ok }
+        guard !raw.isEmpty else { return .valid }
         
         if raw.contains(" ") { return .invalid(L10n.Profile.invalidWebsite) }
         
@@ -190,7 +190,7 @@ struct ProfileEditView: View {
             return .invalid(L10n.Profile.invalidWebsite)
         }
         
-        return .ok
+        return .valid
     }
     
     private var canSave: Bool {
