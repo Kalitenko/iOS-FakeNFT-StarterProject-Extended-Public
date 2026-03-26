@@ -14,7 +14,7 @@ struct MyNFTCell: View {
         static let heartSize: CGFloat = 42
         
         static let contentWidth: CGFloat = 320
-        static let priceBlockWidth: CGFloat = 75
+        static let priceBlockWidth: CGFloat = 95
         
         static let titleHeight: CGFloat = 22
         static let authorHeight: CGFloat = 20
@@ -26,7 +26,7 @@ struct MyNFTCell: View {
             HStack(spacing: Layout.spacing) {
                 nftImage
                     .overlay(alignment: .topTrailing) {
-                        Image("favorites.inactive")
+                        Image(.favoritesInactive)
                             .resizable()
                             .scaledToFit()
                             .foregroundStyle(.appWhite)
@@ -73,37 +73,11 @@ struct MyNFTCell: View {
     
     @ViewBuilder
     private var nftImage: some View {
-        if let imageURL = nft.images.first {
-            AsyncImage(url: imageURL) { phase in
-                switch phase {
-                case .empty:
-                    loadingPlaceholder
-                case .success(let image):
-                    image
-                        .resizable()
-                        .scaledToFill()
-                        .frame(width: Layout.imageSize, height: Layout.imageSize)
-                case .failure:
-                    imagePlaceholder
-                @unknown default:
-                    imagePlaceholder
-                }
-            }
-            .clipShape(
-                RoundedRectangle(
-                    cornerRadius: Layout.imageCornerRadius,
-                    style: .continuous
-                )
-            )
-        } else {
-            imagePlaceholder
-                .clipShape(
-                    RoundedRectangle(
-                        cornerRadius: Layout.imageCornerRadius,
-                        style: .continuous
-                    )
-                )
-        }
+        NftPreviewImageView(
+            imageURL: nft.images.first,
+            size: Layout.imageSize,
+            cornerRadius: Layout.imageCornerRadius
+        )
     }
     
     private var loadingPlaceholder: some View {
@@ -122,7 +96,6 @@ private extension Double {
         formatted(
             .number
                 .precision(.fractionLength(2))
-                .locale(Locale(identifier: "ru_RU"))
         )
     }
 }

@@ -7,12 +7,19 @@ final class ServicesAssembly {
     private let networkClient: NetworkClient
     private let nftStorage: NftStorage
 
+    let commonProfileService: CommonProfileServiceProtocol
+    let likesStore: LikesStore
+
     init(
         networkClient: NetworkClient,
         nftStorage: NftStorage
     ) {
         self.networkClient = networkClient
         self.nftStorage = nftStorage
+
+        let commonProfileService = CommonProfileService(networkClient: networkClient)
+        self.commonProfileService = commonProfileService
+        self.likesStore = LikesStore(commonProfileService: commonProfileService)
     }
 
     var nftService: NftService {
@@ -51,12 +58,6 @@ final class ServicesAssembly {
     
     var commonOrderService: CommonOrderServiceProtocol {
         CommonOrderService(
-            networkClient: networkClient
-        )
-    }
-    
-    var commonProfileService: CommonProfileServiceProtocol {
-        CommonProfileService(
             networkClient: networkClient
         )
     }

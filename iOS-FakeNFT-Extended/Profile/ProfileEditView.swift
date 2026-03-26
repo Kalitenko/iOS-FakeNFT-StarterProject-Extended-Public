@@ -139,9 +139,9 @@ struct ProfileEditView: View {
         guard !raw.isEmpty else { return nil }
         
         let candidate =
-            raw.lowercased().hasPrefix("http://") || raw.lowercased().hasPrefix("https://")
-            ? raw
-            : "https://\(raw)"
+        raw.lowercased().hasPrefix("http://") || raw.lowercased().hasPrefix("https://")
+        ? raw
+        : "https://\(raw)"
         
         guard let components = URLComponents(string: candidate) else { return nil }
         
@@ -159,7 +159,7 @@ struct ProfileEditView: View {
     }
     
     private enum WebsiteState: Equatable {
-        case ok
+        case valid
         case invalid(String)
     }
     
@@ -169,7 +169,7 @@ struct ProfileEditView: View {
     
     private var websiteState: WebsiteState {
         let raw = normalizedWebsiteForValidation
-        guard !raw.isEmpty else { return .ok }
+        guard !raw.isEmpty else { return .valid }
         
         if raw.contains(" ") { return .invalid(L10n.Profile.invalidWebsite) }
         
@@ -190,7 +190,7 @@ struct ProfileEditView: View {
             return .invalid(L10n.Profile.invalidWebsite)
         }
         
-        return .ok
+        return .valid
     }
     
     private var canSave: Bool {
@@ -446,7 +446,7 @@ struct ProfileEditView: View {
                 } label: {
                     ZStack {
                         Circle()
-                            .fill(Color("AppSurfaceBackground"))
+                            .fill(Color(.appSurfaceBackground))
                             .frame(width: Layout.cameraBadgeSize, height: Layout.cameraBadgeSize)
                         
                         Image("profile.camera")
@@ -504,9 +504,9 @@ struct ProfileEditView: View {
                         .scrollContentBackground(.hidden)
                         .focused($focusedField, equals: .about)
                         .accessibilityIdentifier("editProfile.aboutField")
-                        .onChange(of: about) { newValue in
-                            if newValue.count > Layout.aboutMaxCharacters {
-                                about = String(newValue.prefix(Layout.aboutMaxCharacters))
+                        .onChange(of: about) {
+                            if about.count > Layout.aboutMaxCharacters {
+                                about = String(about.prefix(Layout.aboutMaxCharacters))
                             }
                         }
                     
@@ -542,12 +542,9 @@ struct ProfileEditView: View {
                     .submitLabel(.done)
                     .onSubmit { focusedField = nil }
                     .accessibilityIdentifier("editProfile.websiteField")
-                    .onChange(of: website) { newValue in
-                        if newValue.count > Layout.websiteMaxLength {
-                            website = String(newValue.prefix(Layout.websiteMaxLength))
-                        }
-                        if showWebsiteError {
-                            showWebsiteError = true
+                    .onChange(of: website) {
+                        if website.count > Layout.websiteMaxLength {
+                            website = String(website.prefix(Layout.websiteMaxLength))
                         }
                     }
             }

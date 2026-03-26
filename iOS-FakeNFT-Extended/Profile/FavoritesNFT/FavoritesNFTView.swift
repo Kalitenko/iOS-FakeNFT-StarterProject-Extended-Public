@@ -4,17 +4,11 @@
 //
 //  Created by Andrei  Boyarko on 01/03/2026.
 //
-
 import SwiftUI
 
 struct FavoritesNFTView: View {
     
-    @Environment(ServicesAssembly.self) private var services
-    
-    @State private var favorites: [NftDTOCart] = []
-    @State private var currentLikes: [String] = []
-    @State private var isLoading = false
-    @State private var errorMessage: String?
+    @State private var viewModel: FavoritesNFTViewModel
     
     private enum Layout {
         static let horizontalPadding: CGFloat = 16
@@ -25,8 +19,6 @@ struct FavoritesNFTView: View {
         static let rowsSpacing: CGFloat = 20
     }
     
-    private var isEmpty: Bool { favorites.isEmpty && !isLoading }
-    
     private var columns: [GridItem] {
         [
             GridItem(.flexible(), spacing: Layout.columnsSpacing),
@@ -34,12 +26,16 @@ struct FavoritesNFTView: View {
         ]
     }
     
+    init(viewModel: FavoritesNFTViewModel) {
+        _viewModel = State(initialValue: viewModel)
+    }
+    
     var body: some View {
         Group {
-            if isLoading {
-                ProgressView()
+            if viewModel.isLoading {
+                LoaderTileView()
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
-            } else if isEmpty {
+            } else if viewModel.isEmpty {
                 FavoritesEmptyView()
             } else {
                 ScrollView {
@@ -47,10 +43,13 @@ struct FavoritesNFTView: View {
                         columns: columns,
                         spacing: Layout.rowsSpacing
                     ) {
-                        ForEach(favorites, id: \.id) { nft in
-                            FavoriteNFTCell(nft: nft) {
+                        ForEach(viewModel.favorites, id: \.id) { nft in
+                            FavoriteNFTCell(
+                                nft: nft,
+                                isFavorite: viewModel.isLiked(nft.id)
+                            ) {
                                 Task {
-                                    await removeLike(for: nft)
+                                    await viewModel.toggleLike(for: nft)
                                 }
                             }
                         }
@@ -65,70 +64,20 @@ struct FavoritesNFTView: View {
         .toolbar(.hidden, for: .tabBar)
         .customNavigationBar(title: L10n.Profile.favoriteNFT)
         .task {
-            await loadFavorites()
+            await viewModel.loadFavorites()
         }
         .alert(
             L10n.Alerts.somethingWentWrong,
             isPresented: Binding(
-                get: { errorMessage != nil },
-                set: { if !$0 { errorMessage = nil } }
+                get: { viewModel.errorMessage != nil },
+                set: { if !$0 { viewModel.errorMessage = nil } }
             )
         ) {
             Button(L10n.Alerts.okay, role: .cancel) {
-                errorMessage = nil
+                viewModel.errorMessage = nil
             }
         } message: {
-            Text(errorMessage ?? "")
-        }
-    }
-    
-    @MainActor
-    private func loadFavorites() async {
-        isLoading = true
-        defer { isLoading = false }
-        
-        do {
-            let profile = try await services.commonProfileService.fetchProfile()
-            currentLikes = profile.likes
-            
-            let items = try await withThrowingTaskGroup(of: NftDTOCart.self) { group in
-                for id in profile.likes {
-                    group.addTask {
-                        try await services.nftService.loadNft(id: id)
-                    }
-                }
-                
-                var loaded: [NftDTOCart] = []
-                for try await item in group {
-                    loaded.append(item)
-                }
-                return loaded
-            }
-            
-            favorites = items
-        } catch let error as URLError where error.code == .cancelled {
-            return
-        } catch {
-            errorMessage = L10n.Alerts.dataLoadFailed
-        }
-    }
-    
-    @MainActor
-    private func removeLike(for nft: NftDTOCart) async {
-        guard !isLoading else { return }
-        isLoading = true
-        defer { isLoading = false }
-        
-        let updatedLikes = currentLikes.filter { $0 != nft.id }
-        
-        do {
-            let updatedProfile = try await services.commonProfileService.updateLikes(likes: updatedLikes)
-            currentLikes = updatedProfile.likes
-            favorites.removeAll { $0.id == nft.id }
-        } catch let error as URLError where error.code == .cancelled {
-            return
-        } catch {
-            errorMessage = L10n.Alerts.somethingWentWrong
+            Text(viewModel.errorMessage ?? "")
         }
     }
 }
