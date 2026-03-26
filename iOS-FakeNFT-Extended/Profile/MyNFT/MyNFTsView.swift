@@ -35,7 +35,7 @@ struct MyNFTsView: View {
                 }
             }
         }
-        .background(Color(uiColor: .systemBackground))
+        .background(Color(uiColor: .appBackground))
         .navigationBarBackButtonHidden(true)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar(.hidden, for: .tabBar)

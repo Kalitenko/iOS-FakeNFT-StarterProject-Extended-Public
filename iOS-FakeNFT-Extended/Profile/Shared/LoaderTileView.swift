@@ -9,7 +9,7 @@ struct LoaderTileView: View {
     var body: some View {
         ZStack {
             RoundedRectangle(cornerRadius: 8, style: .continuous)
-                .fill(Color(uiColor: .appAlertBackground))
+                .fill(Color(uiColor: .appProgressViewBackground))
 
             SpinnerBarsView(
                 spinnerSize: 30,

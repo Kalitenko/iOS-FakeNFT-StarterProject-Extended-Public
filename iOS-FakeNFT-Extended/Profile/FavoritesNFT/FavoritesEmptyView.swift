@@ -29,7 +29,7 @@ struct FavoritesEmptyView: View {
             Spacer()
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(Color(uiColor: .systemBackground))
+        .background(Color(uiColor: .appBackground))
     
     }
 }

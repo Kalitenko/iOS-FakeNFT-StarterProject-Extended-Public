@@ -209,7 +209,8 @@ struct ProfileEditView: View {
     // MARK: - Body
     var body: some View {
         ZStack(alignment: .bottom) {
-            
+            Color(uiColor: .appBackground)
+                .ignoresSafeArea()
             ScrollView {
                 VStack(alignment: .leading, spacing: 0) {
                     
@@ -254,7 +255,7 @@ struct ProfileEditView: View {
                             .font(.system(size: 17, weight: .bold))
                             .frame(maxWidth: .infinity)
                             .frame(height: Layout.saveButtonHeight)
-                            .foregroundStyle(Color(uiColor: .systemBackground))
+                            .foregroundStyle(Color(uiColor: .appBackground))
                             .background(Color(uiColor: .appTextPrimary))
                             .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
                     }
@@ -609,7 +610,7 @@ private struct RoundedField<Content: View>: View {
             content
                 .padding(contentInsets)
                 .frame(height: fieldHeight, alignment: .topLeading)
-                .background(Color(.systemGray6))
+                .background(Color(.appSurfaceBackground))
                 .overlay {
                     RoundedRectangle(cornerRadius: 16, style: .continuous)
                         .stroke(isError ? Color.red : Color.clear, lineWidth: 1)

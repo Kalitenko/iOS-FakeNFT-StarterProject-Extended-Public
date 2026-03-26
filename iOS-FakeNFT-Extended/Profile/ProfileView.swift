@@ -49,66 +49,70 @@ struct ProfileView: View {
     
     var body: some View {
         NavigationStack {
-            ScrollView {
-                VStack(alignment: .leading, spacing: 16) {
-                    header
-                        .padding(.bottom, Layout.headerBottomPadding)
-                    
-                    navigationRows
-                    
-                    Spacer(minLength: 0)
-                }
-                .padding(.horizontal, Layout.screenPadding)
-                .padding(.top, Layout.screenPadding)
-            }
-            .navigationTitle("")
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .topBarTrailing) {
-                    NavigationLink {
-                        ProfileEditView(profile: $viewModel.profile) { editedProfile in
-                            Task {
-                                await viewModel.updateProfile(with: editedProfile)
-                            }
-                        }
-                    } label: {
-                        Image("edit")
-                            .renderingMode(.template)
-                            .resizable()
-                            .frame(width: 26, height: 26)
-                            .foregroundStyle(.appTextPrimary)
-                            .frame(width: 44, height: 44)
+            ZStack {
+                Color(uiColor: .appBackground)
+                    .ignoresSafeArea()
+                ScrollView {
+                    VStack(alignment: .leading, spacing: 16) {
+                        header
+                            .padding(.bottom, Layout.headerBottomPadding)
+                        
+                        navigationRows
+                        
+                        Spacer(minLength: 0)
                     }
-                    .buttonStyle(.plain)
-                    .contentShape(Rectangle())
-                    .accessibilityIdentifier("profile.editButton")
+                    .padding(.horizontal, Layout.screenPadding)
+                    .padding(.top, Layout.screenPadding)
                 }
-            }
-            .sheet(isPresented: $isWebViewPresented) {
-                if let url = websiteURL {
-                    SafariView(url: url)
-                        .ignoresSafeArea()
-                } else {
-                    Text("Некорректная ссылка")
-                        .font(.system(size: 17, weight: .regular))
-                        .padding()
+                .navigationTitle("")
+                .navigationBarTitleDisplayMode(.inline)
+                .toolbar {
+                    ToolbarItem(placement: .topBarTrailing) {
+                        NavigationLink {
+                            ProfileEditView(profile: $viewModel.profile) { editedProfile in
+                                Task {
+                                    await viewModel.updateProfile(with: editedProfile)
+                                }
+                            }
+                        } label: {
+                            Image("edit")
+                                .renderingMode(.template)
+                                .resizable()
+                                .frame(width: 26, height: 26)
+                                .foregroundStyle(.appTextPrimary)
+                                .frame(width: 44, height: 44)
+                        }
+                        .buttonStyle(.plain)
+                        .contentShape(Rectangle())
+                        .accessibilityIdentifier("profile.editButton")
+                    }
                 }
-            }
-            .task {
-                await viewModel.loadProfile()
-            }
-            .alert(
-                L10n.Alerts.somethingWentWrong,
-                isPresented: Binding(
-                    get: { viewModel.errorMessage != nil },
-                    set: { if !$0 { viewModel.errorMessage = nil } }
-                )
-            ) {
-                Button(L10n.Alerts.okay, role: .cancel) {
-                    viewModel.errorMessage = nil
+                .sheet(isPresented: $isWebViewPresented) {
+                    if let url = websiteURL {
+                        SafariView(url: url)
+                            .ignoresSafeArea()
+                    } else {
+                        Text("Некорректная ссылка")
+                            .font(.system(size: 17, weight: .regular))
+                            .padding()
+                    }
                 }
-            } message: {
-                Text(viewModel.errorMessage ?? "")
+                .task {
+                    await viewModel.loadProfile()
+                }
+                .alert(
+                    L10n.Alerts.somethingWentWrong,
+                    isPresented: Binding(
+                        get: { viewModel.errorMessage != nil },
+                        set: { if !$0 { viewModel.errorMessage = nil } }
+                    )
+                ) {
+                    Button(L10n.Alerts.okay, role: .cancel) {
+                        viewModel.errorMessage = nil
+                    }
+                } message: {
+                    Text(viewModel.errorMessage ?? "")
+                }
             }
         }
     }

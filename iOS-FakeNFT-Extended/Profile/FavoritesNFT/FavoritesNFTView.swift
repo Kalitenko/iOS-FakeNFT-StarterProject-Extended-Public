@@ -60,7 +60,7 @@ struct FavoritesNFTView: View {
                 }
             }
         }
-        .background(Color(uiColor: .systemBackground))
+        .background(Color(uiColor: .appBackground))
         .toolbar(.hidden, for: .tabBar)
         .customNavigationBar(title: L10n.Profile.favoriteNFT)
         .task {
