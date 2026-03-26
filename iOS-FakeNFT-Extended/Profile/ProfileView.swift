@@ -35,10 +35,15 @@ struct ProfileView: View {
     private var websiteURL: URL? {
         Self.makeWebURL(from: viewModel.profile.website)
     }
-    
+
     private var avatarURL: URL? {
-        guard !viewModel.profile.isPhotoRemoved else { return nil }
-        guard let raw = viewModel.profile.photoURL else { return nil }
+        guard
+            !viewModel.profile.isPhotoRemoved,
+            let raw = viewModel.profile.photoURL
+        else {
+            return nil
+        }
+        
         return Self.makeWebURL(from: raw)
     }
     
@@ -165,7 +170,8 @@ struct ProfileView: View {
                     viewModel: MyNFTsViewModel(
                         commonProfileService: services.commonProfileService,
                         nftService: services.nftService,
-                        likesStore: services.likesStore
+                        likesStore: services.likesStore,
+                        sortSettingsService: SortSettingsService()
                     )
                 )
             } label: {

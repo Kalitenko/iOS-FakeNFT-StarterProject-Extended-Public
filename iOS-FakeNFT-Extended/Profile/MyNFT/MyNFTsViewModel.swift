@@ -12,41 +12,38 @@ import Observation
 @MainActor
 final class MyNFTsViewModel {
     
-    enum Sort: String {
+    enum NFTSortType: String {
         case price
         case rating
         case name
-    }
-    
-    private enum Constants {
-        static let sortKey = "myNFTs.sort"
     }
     
     var isLoading = false
     var errorMessage: String?
     var nfts: [NftDTOCart] = []
     
-    var sort: Sort {
+    var sort: NFTSortType {
         didSet {
-            UserDefaults.standard.set(sort.rawValue, forKey: Constants.sortKey)
+            sortSettingsService.save(sort: sort)
         }
     }
     
     private let commonProfileService: CommonProfileServiceProtocol
     private let nftService: NftService
     private let likesStore: LikesStore
+    private let sortSettingsService: SortSettingsService
     
     init(
         commonProfileService: CommonProfileServiceProtocol,
         nftService: NftService,
-        likesStore: LikesStore
+        likesStore: LikesStore,
+        sortSettingsService: SortSettingsService
     ) {
         self.commonProfileService = commonProfileService
         self.nftService = nftService
         self.likesStore = likesStore
-        
-        let savedSort = UserDefaults.standard.string(forKey: Constants.sortKey)
-        self.sort = Sort(rawValue: savedSort ?? "") ?? .name
+        self.sortSettingsService = sortSettingsService
+        self.sort = sortSettingsService.load()
     }
     
     var sortedNfts: [NftDTOCart] {
@@ -94,10 +91,7 @@ final class MyNFTsViewModel {
             
             nfts = items
             errorMessage = likesStore.errorMessage
-            if errorMessage == nil {
-                errorMessage = nil
-            }
-        } catch let error where error.isCancelled{
+        } catch let error where error.isCancelled {
             return
         } catch {
             errorMessage = L10n.Alerts.dataLoadFailed
